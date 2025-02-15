@@ -24,6 +24,7 @@ function App() {
        {
             clients
                 .filter(c => !c.id.includes("dashboard"))
+                .filter(c => !c.exclude_from_dashboard)
                 .filter(c => (c.requires.debug && debugRef.current) || !c.requires.debug)
                 .map(
                     c => <Grid2 size={6}>
