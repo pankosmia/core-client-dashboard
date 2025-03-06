@@ -14,12 +14,12 @@ function App() {
         },
         []
     );
-    const i18n = useContext(i18nContext);
+    const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
     return <Grid2 container spacing={2}>
         <Grid2 size={12}>
-            <p><b>{doI18n("pages:core-dashboard:summary", i18n)}</b></p>
+            <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
         </Grid2>
        {
             clients
@@ -36,13 +36,13 @@ function App() {
                             p={2}
                         >
                             <h2>
-                                {doI18n(`pages:${c.id}:title`, i18n)}
+                                {doI18n(`pages:${c.id}:title`, i18nRef.current)}
                                 {(enabledRef.current || !c.requires.net) && <ArrowForward
                                     sx={{float: "right"}}
                                     onClick={()=> {window.location.href = c.url}}
                                 />}
                             </h2>
-                            <p>{doI18n(`pages:${c.id}:summary`, i18n)}</p>
+                            <p>{doI18n(`pages:${c.id}:summary`, i18nRef.current)}</p>
                         </Box>
                     </Grid2>
                 )
