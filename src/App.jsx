@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Box, Grid2, Card, CardContent, CardMedia, CardActionArea, Typography} from "@mui/material";
+import {Grid2, Card, CardContent, CardActionArea} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext} from 'pithekos-lib';
-import ArrowForward from '@mui/icons-material/ArrowForward';
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -19,6 +18,7 @@ function App() {
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
+
     return <Grid2 
                 container
                 spacing={2}
@@ -46,18 +46,18 @@ function App() {
                                                         window.location.href = c.url
                                                     }
                                                 }}
-                                                sx={{
-                                                    border: "1px black solid",
+                                                sx={{ 
+                                                    border: (enabledRef.current || !c.requires.net) ? "1px #000 solid" : "1px #9E9E9E solid",
                                                     borderRadius: "5px",
-                                                    backgroundColor: (enabledRef.current || !c.requires.net) ? "#FFF" : "#CCC",
-                                                    height: '100%',
-                                                    width: '100%',
-                                                    '&:hover': (enabledRef.current || !c.requires.net) && { backgroundColor: '#7e6282' }
-                                                }}
+                                                    backgroundColor: "#FFF",
+                                                    color: (enabledRef.current || !c.requires.net) ? "#000" : "#9E9E9E",
+
+                                                    '&:hover': { backgroundColor: '#F5F5F5' } }}
+                                                disabled={(enabledRef.current || !c.requires.net) ? false : true }
                                             >
-                                                <CardContent >
+                                                <CardContent>
                                                     <h2>
-                                                    {doI18n(`pages:${c.id}:title`, i18nRef.current)}
+                                                        {doI18n(`pages:${c.id}:title`, i18nRef.current)}
                                                     </h2>
                                                     <p>{doI18n(`pages:${c.id}:summary`, i18nRef.current)}</p>
                                                 </CardContent>
