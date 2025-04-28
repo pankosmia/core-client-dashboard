@@ -22,7 +22,11 @@ function App() {
     return <Grid2 
                 container
                 spacing={2}
-                alignItems="stretch"
+                direction="row"
+                sx={{
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
+                }}
            >
                 <Grid2 item size={12}>
                     <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
@@ -34,11 +38,21 @@ function App() {
                             .filter(c => (c.requires.debug && debugRef.current) || !c.requires.debug)
                             .map(
                                 c => <Grid2 
-                                        item
+                                         item /*
                                         sx={{ display: 'flex' }}
-                                        size={{ xs: 12, sm: 6, lg: 4 }}
+                                        size={"grow"/* { xs: 12, sm: 6, lg: 4 } */
                                     >
-                                        <Card sx={{ display: 'flex', flexDirection: 'row' }}>
+                                        <Card 
+                                            sx={{ 
+                                                display: 'flex', 
+                                                flexDirection: 'row',
+                                                border: (enabledRef.current || !c.requires.net) ? "1px #000 solid" : "1px #9E9E9E solid",
+                                                borderRadius: 1,
+                                                backgroundColor: "#FFF",
+                                                color: (enabledRef.current || !c.requires.net) ? "#000" : "#9E9E9E",
+                                                '&:hover': { backgroundColor: '#F5F5F5' } 
+                                                }}
+                                        >
                                             <CardActionArea
                                                 onClick={()=> {
                                                     if (enabledRef.current || !c.requires.net) {
@@ -46,11 +60,7 @@ function App() {
                                                     }
                                                 }}
                                                 sx={{ 
-                                                    border: (enabledRef.current || !c.requires.net) ? "1px #000 solid" : "1px #9E9E9E solid",
-                                                    borderRadius: 1,
-                                                    backgroundColor: "#FFF",
-                                                    color: (enabledRef.current || !c.requires.net) ? "#000" : "#9E9E9E",
-                                                    '&:hover': { backgroundColor: '#F5F5F5' } }}
+                                                     }}
                                                 disabled={(enabledRef.current || !c.requires.net) ? false : true }
                                             >
                                                 <CardContent>
