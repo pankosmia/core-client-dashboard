@@ -13,10 +13,9 @@
       "ar": "الفهرس"
     },
     "summary": {
-      "ar": "المحرر ,بانكوسميا, أداة لخلق الترجمات و مراجع الكتاب المقدس. هذه الصفحة تظهر بشكل ملخص الوظائف المتاحة. و يمكنكم كذلك التنقل انطلاقا من المحتوى, الموجود في الأعلى. بعض الصفحات ممكن أن تتطلب الاتصال بالأنترنيت. لا تقوموا بذلك اذا كانت الأنترنيت غير مؤمن.  ",
-      "en": "Pankosmia Editor is a tool for creating Scripture and related resources. This page gives a summary of what is available. You can also navigate using the menu, top left. For some pages you need internet access, which you can enable by clicking on the globe, top-right. (Only do this if it is safe to do so.)",
-      "fr": "Pankosmia Editor est un outil pour la création de traductions et de ressources bibliques. Cette page-ci montre en survol les fonctionnalités disponibles. Vous pouvez aussi naviguer à partir du menu, en haut à gauche. Certaines pages peuvent exiger une connexion internet. Vous pouvez permettre cette connexion en cliquant sur le mappemonde en haut à droite, mais ne faites cela que si la connexion est sécurisée.",
-      "id": "Editor Pankosmia adalah aplikasi untuk membuat Kitab Suci dan sumber daya terkait. Halaman ini memberikan ringkasan tentang apa yang tersedia. Anda juga dapat menavigasi menggunakan menu di kiri atas. Ada beberapa halaman yang memerlukan akses internet, yang datap diaktifkan dengan klik bola dunia di kanan atas. (Lakukan ini hanya kalau aman digunakan.)" 
+      "en": "This editor is a tool for creating Scripture and related resources. This page gives a summary of what is available. You can also navigate using the menu, top left. For some pages you need internet access, which you can enable by clicking on the switch, top-right. (Only do this if it is safe to do so.)",
+      "fr": "Voici un outil pour la création de traductions et de ressources bibliques. Cette page-ci montre en survol les fonctionnalités disponibles. Vous pouvez aussi naviguer à partir du menu, en haut à gauche. Certaines pages peuvent exiger une connexion internet. Vous pouvez permettre cette connexion en cliquant sur l'interrupteur en haut à droite, mais ne faites cela que si la connexion est sécurisée.",
+      "es": "Este editor es una herramienta para crear Escrituras y recursos relacionados. Esta página ofrece un resumen de los recursos disponibles. También puede navegar utilizando el menú, arriba a la izquierda. Para acceder a algunas páginas necesita tener acceso a Internet, que puede activar pulsando en el interruptor de la parte superior derecha. (Hágalo sólo si es seguro hacerlo)."
     }
   }
 }
