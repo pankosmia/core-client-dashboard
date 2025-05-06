@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
-import {Grid2, Card, CardContent, CardActionArea, Box, Chip} from "@mui/material";
+import {Grid2, Card, CardContent, CardActionArea, Box, Typography} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext} from 'pithekos-lib';
 
 function App() {
@@ -29,9 +29,6 @@ function App() {
     );
 
     const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_'));
-    console.log(editableRepos);
-    console.log(clients);
-
 
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
@@ -65,7 +62,26 @@ function App() {
                     <Grid2 item size={12}>
                         <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
                     </Grid2>
-                    { !(editableRepos.length > 0) && <Chip label="Create New Project" variant="outlined" onClick={handleClick} /> }
+                    { !(editableRepos.length > 0) && 
+                        <Card 
+                            sx={{ 
+                                maxWidth: 345,
+                                border: "1px #000 solid",
+                                borderRadius: "5px",
+                                backgroundColor: "#FFF",
+                                color: 'text.primary',
+                                '&:hover': {backgroundColor: '#F5F5F5'}
+                            }}
+                        >
+                            <CardActionArea onClick={handleClick} >
+                                <CardContent>
+                                    <Typography>
+                                        You have not yet created your first content. Would you like to start now?
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
+                    }
                     {
                         clients
                             .filter(c => !c.id.includes("dashboard"))
