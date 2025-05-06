@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
-import {Grid2, Card, CardContent, CardActionArea, Box} from "@mui/material";
+import {Grid2, Card, CardContent, CardActionArea, Box, Chip} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext} from 'pithekos-lib';
 
 function App() {
     const [clients, setClients] = useState([]);
-    const [selectedCard, setSelectedCard] = useState(0);
+//    const [selectedCard, setSelectedCard] = useState(0);
+    const [localRepos, setLocalRepos] = useState([]);
+
 
     useEffect(
         () => {
@@ -15,6 +17,22 @@ function App() {
         },
         []
     );
+
+    useEffect(
+        () => {
+            getAndSetJson({
+                url: "/git/list-local-repos",
+                setter: setLocalRepos
+            }).then();
+        },
+        []
+    );
+
+    const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_'));
+    console.log(editableRepos);
+    console.log(clients);
+
+
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
@@ -32,6 +50,11 @@ function App() {
         };
     }, [handleWindowResize]);
 
+    const handleClick = () => {
+        console.info('You clicked the Chip.');
+        window.location.href = 'content';
+      };
+
     return <Box sx={{maxHeight: maxWindowHeight}}>
                 <Grid2
                     container
@@ -42,6 +65,7 @@ function App() {
                     <Grid2 item size={12}>
                         <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
                     </Grid2>
+                    { !(editableRepos.length > 0) && <Chip label="Create New Project" variant="outlined" onClick={handleClick} /> }
                     {
                         clients
                             .filter(c => !c.id.includes("dashboard"))
