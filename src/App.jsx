@@ -1,12 +1,10 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {Grid2, Card, CardContent, CardActionArea, Box, Typography} from "@mui/material";
-import {getAndSetJson, i18nContext, netContext, doI18n, debugContext} from 'pithekos-lib';
+import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
 
 function App() {
     const [clients, setClients] = useState([]);
-//    const [selectedCard, setSelectedCard] = useState(0);
     const [localRepos, setLocalRepos] = useState([]);
-
 
     useEffect(
         () => {
@@ -29,6 +27,7 @@ function App() {
     );
 
     const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_'));
+    const translationResources = localRepos.filter((local) => local.startsWith('git.door43.org'));
 
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
@@ -47,10 +46,14 @@ function App() {
         };
     }, [handleWindowResize]);
 
-    const handleClick = () => {
-        console.info('You clicked the Chip.');
-        window.location.href = 'content';
-      };
+    const cardStyle = {
+        maxWidth: 345,
+        border: "1px #000 solid",
+        borderRadius: "5px",
+        backgroundColor: "#FFF",
+        color: 'text.primary',
+        '&:hover': {backgroundColor: '#F5F5F5'}
+    }
 
     return <Box sx={{maxHeight: maxWindowHeight}}>
                 <Grid2
@@ -62,25 +65,68 @@ function App() {
                     <Grid2 item size={12}>
                         <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
                     </Grid2>
-                    { !(editableRepos.length > 0) && 
-                        <Card 
-                            sx={{ 
-                                maxWidth: 345,
-                                border: "1px #000 solid",
-                                borderRadius: "5px",
-                                backgroundColor: "#FFF",
-                                color: 'text.primary',
-                                '&:hover': {backgroundColor: '#F5F5F5'}
-                            }}
-                        >
-                            <CardActionArea onClick={handleClick} >
-                                <CardContent>
-                                    <Typography>
-                                        You have not yet created your first content. Would you like to start now?
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
+                    { (editableRepos.length > 0)
+                        ?
+                            <Grid2 item size={4}>
+                                {editableRepos.map((repoPath) =>
+                                    <Card sx={cardStyle}>
+                                        <CardActionArea onClick={
+                                            async () => { 
+                                                const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repoPath}`);
+                                                if (fullMetadataResponse.ok) {
+                                                    const bookCodes =
+                                                        Object.entries(fullMetadataResponse.json.ingredients)
+                                                            .map(
+                                                                i =>
+                                                                    Object.keys(i[1].scope || {})
+                                                            )
+                                                            .reduce(
+                                                                (a, b) => [...a, ...b],
+                                                                []
+                                                            );
+                                                    await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`);
+                                                    await postEmptyJson(`/app-state/current-project/${repoPath}`);
+                                                    window.location.href = '/clients/local-projects'
+                                                } else {
+                                                    console.log("Metadata fetch failed");
+                                                    console.log(fullMetadataResponse);
+                                                }
+                                            }
+                                        }>
+                                            <CardContent>
+                                                <Typography>
+                                                Project code: {repoPath.split('/')[2]}
+                                                </Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                )}
+                            </Grid2>
+                        :
+                            <Grid2 item size={4}>
+                                <Card sx={cardStyle}>
+                                    <CardActionArea onClick={() => { window.location.href = '/clients/content' }} >
+                                        <CardContent>
+                                            <Typography>
+                                                You have not yet created your first content. Would you like to start now?
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid2>
+                    }
+                    { (!(translationResources.length > 0) && (enabledRef.current) ) &&
+                        <Grid2 item size={4}>
+                            <Card sx={cardStyle}>
+                                <CardActionArea onClick={() => { window.location.href = '/clients/download' }} >
+                                    <CardContent>
+                                        <Typography>
+                                            You have not downloaded any translation resources. Would you like to do that now?
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Grid2>
                     }
                     {
                         clients
