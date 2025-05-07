@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext, useCallback} from 'react';
 import {Grid2, Card, CardContent, CardActionArea, Box, Typography} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
+import {PlayArrow} from "@mui/icons-material";
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -94,8 +95,11 @@ function App() {
                                             }
                                         }>
                                             <CardContent>
-                                                <Typography>
-                                                Project code: {repoPath.split('/')[2]}
+                                                <Typography variant="h6">
+                                                    {doI18n("pages:core-dashboard:edit", i18nRef.current)}
+                                                    {" "}
+                                                    {repoPath.split("/")[2]}
+                                                    <PlayArrow size="large" sx={{ml: 1}}/>
                                                 </Typography>
                                             </CardContent>
                                         </CardActionArea>
@@ -161,9 +165,9 @@ function App() {
                                             disabled={(enabledRef.current || !c.requires.net) ? false : true}
                                         >
                                             <CardContent sx={{height: "auto"}}>
-                                                <h2>
+                                                <Typography variant="h6">
                                                     {doI18n(`pages:${c.id}:title`, i18nRef.current)}
-                                                </h2>
+                                                </Typography>
                                                 <p>{doI18n(`pages:${c.id}:summary`, i18nRef.current)}</p>
                                             </CardContent>
                                         </CardActionArea>
