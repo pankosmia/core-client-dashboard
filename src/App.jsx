@@ -168,7 +168,9 @@ function App() {
                                                 <Typography variant="h6">
                                                     {doI18n(`pages:${c.id}:title`, i18nRef.current)}
                                                 </Typography>
-                                                <p>{doI18n(`pages:${c.id}:summary`, i18nRef.current)}</p>
+                                                <Typography>
+                                                    {doI18n(`pages:${c.id}:summary`, i18nRef.current)}
+                                                </Typography>
                                             </CardContent>
                                         </CardActionArea>
                                     </Card>
