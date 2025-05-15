@@ -20,6 +20,14 @@
     "edit": {
       "en": "Edit your content",
       "fr": "Editer votre contenu"
+    },
+    "maybe_create_first_content": {
+      "en": "You have not yet created your first content. Would you like to start now?",
+      "fr": "Vous n'avez pas encore créé votre premier contenu. Voulez-vous vous y lancer maintenant ?"
+    },
+    "maybe_install_first_resources": {
+      "en": "You have not downloaded any translation resources. Would you like to do that now?",
+      "fr": "Vous n'avez pas encore téléchargé des ressources de traduction. Voulez-vous le faire maintenant ?"
     }
   }
 }

@@ -112,7 +112,7 @@ function App() {
                                     <CardActionArea onClick={() => { window.location.href = '/clients/content' }} >
                                         <CardContent>
                                             <Typography>
-                                                You have not yet created your first content. Would you like to start now?
+                                                {doI18n("pages:core-dashboard:maybe_create_first_content", i18nRef.current)}
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
@@ -125,7 +125,7 @@ function App() {
                                 <CardActionArea onClick={() => { window.location.href = '/clients/download' }} >
                                     <CardContent>
                                         <Typography>
-                                            You have not downloaded any translation resources. Would you like to do that now?
+                                            {doI18n("pages:core-dashboard:maybe_install_first_resources", i18nRef.current)}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
