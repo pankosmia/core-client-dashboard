@@ -33,19 +33,6 @@ function App() {
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
-    const [maxWindowHeight, setMaxWindowHeight] = useState(window.innerHeight - 64);
-
-    const handleWindowResize = useCallback(() => {
-        setMaxWindowHeight(window.innerHeight - 64);
-    }, []);
-
-
-    useEffect(() => {
-        window.addEventListener('resize', handleWindowResize);
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    }, [handleWindowResize]);
 
     const cardStyle = {
         maxWidth: 345,
@@ -56,15 +43,16 @@ function App() {
         '&:hover': {backgroundColor: '#F5F5F5'}
     }
 
-    return <Box sx={{maxHeight: maxWindowHeight}}>
+    return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'scroll', width: '100%' }}>
                 <Grid2
                     container
+                    sx={{mx:2}}
                     spacing={2}
                     justifyItems = "flex-end"
                     alignItems = "stretch"
                 >
                     <Grid2 item size={12}>
-                        <p><b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b></p>
+                        <b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b>
                     </Grid2>
                     { (editableRepos.length > 0)
                         ?
