@@ -6,6 +6,21 @@ import {PlayArrow} from "@mui/icons-material";
 function App() {
     const [clients, setClients] = useState([]);
     const [localRepos, setLocalRepos] = useState([]);
+    const [projectSummaries, setProjectSummaries] = useState({});
+
+    const getProjectSummaries = async () => {
+        const summariesResponse = await getJson(`/burrito/metadata/summaries`, debugRef.current);
+        if (summariesResponse.ok) {
+            setProjectSummaries(summariesResponse.json);
+        }
+    }
+
+    useEffect(
+        () => {
+            getProjectSummaries().then();
+        },
+        []
+    );
 
     useEffect(
         () => {
@@ -17,7 +32,7 @@ function App() {
         []
     );
 
-    useEffect(
+  /*   useEffect(
         () => {
             getAndSetJson({
                 url: "/git/list-local-repos",
@@ -25,16 +40,23 @@ function App() {
             }).then();
         },
         []
-    );
+    ); */
 
-    const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_'));
-    const translationResources = localRepos.filter((local) => local.startsWith('git.door43.org'));
+/*     const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_')); */
+    const editableRepos2 = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_"));
+    const translationResources = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("git.door43.org"));
+    //const translationResources = localRepos.filter((local) => local.startsWith('git.door43.org'));
+
+
+    console.log(localRepos);
+    console.log(editableRepos2);
 
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
 
     const cardStyle = {
+        display: "flex",
         maxWidth: 345,
         border: "1px #000 solid",
         borderRadius: "5px",
@@ -54,14 +76,14 @@ function App() {
                     <Grid2 item size={12}>
                         <b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b>
                     </Grid2>
-                    { (editableRepos.length > 0)
+                    { (editableRepos2.length > 0)
                         ?
                             <Grid2 item size={4}>
-                                {editableRepos.map((repoPath) =>
+                                {editableRepos2.map((repo) =>
                                     <Card sx={cardStyle}>
                                         <CardActionArea onClick={
                                             async () => { 
-                                                const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repoPath}`);
+                                                const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`);
                                                 if (fullMetadataResponse.ok) {
                                                     const bookCodes =
                                                         Object.entries(fullMetadataResponse.json.ingredients)
@@ -74,7 +96,7 @@ function App() {
                                                                 []
                                                             );
                                                     await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`);
-                                                    await postEmptyJson(`/app-state/current-project/${repoPath}`);
+                                                    await postEmptyJson(`/app-state/current-project/${repo[0]}`);
                                                     window.location.href = '/clients/local-projects'
                                                 } else {
                                                     console.log("Metadata fetch failed");
@@ -82,14 +104,37 @@ function App() {
                                                 }
                                             }
                                         }>
-                                            <CardContent>
-                                                <Typography variant="h6">
-                                                    {doI18n("pages:core-dashboard:edit", i18nRef.current)}
-                                                    {" "}
-                                                    {repoPath.split("/")[2]}
-                                                    <PlayArrow size="large" sx={{ml: 1}}/>
-                                                </Typography>
-                                            </CardContent>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                <CardContent sx={{ flex: '1 0 auto' }}>
+                                                    <Typography component="div" variant="h6">
+                                                        {doI18n("pages:core-dashboard:edit", i18nRef.current)}
+                                                        {" "}
+                                                        {repo[1].name}
+                                                    </Typography>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "space-between", flexDirection: 'row' }}>
+                                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                component="div"
+                                                                sx={{ color: 'text.secondary' }}
+                                                            >
+                                                                {repo[1].flavor}
+                                                            </Typography>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                component="div"
+                                                                sx={{ color: 'text.secondary' }}
+                                                            >
+                                                                {repo[1].abbreviation}
+                                                            </Typography>
+                                                        </Box>
+                                                        <PlayArrow size="large" sx={{ml: 1}}/>
+                                                        {/* <Box sx={{ display: 'flex', alignItems: "end" }}>
+                                                            
+                                                        </Box> */}
+                                                    </Box>
+                                                </CardContent>
+                                            </Box>
                                         </CardActionArea>
                                     </Card>
                                 )}
