@@ -5,7 +5,6 @@ import {PlayArrow} from "@mui/icons-material";
 
 function App() {
     const [clients, setClients] = useState([]);
-    const [localRepos, setLocalRepos] = useState([]);
     const [projectSummaries, setProjectSummaries] = useState({});
 
     const getProjectSummaries = async () => {
@@ -32,24 +31,8 @@ function App() {
         []
     );
 
-  /*   useEffect(
-        () => {
-            getAndSetJson({
-                url: "/git/list-local-repos",
-                setter: setLocalRepos
-            }).then();
-        },
-        []
-    ); */
-
-/*     const editableRepos = localRepos.filter((local) => local.startsWith('_local_/_local_')); */
-    const editableRepos2 = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_"));
+    const editableRepos = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_"));
     const translationResources = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("git.door43.org"));
-    //const translationResources = localRepos.filter((local) => local.startsWith('git.door43.org'));
-
-
-    console.log(localRepos);
-    console.log(editableRepos2);
 
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
@@ -76,10 +59,10 @@ function App() {
                     <Grid2 item size={12}>
                         <b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b>
                     </Grid2>
-                    { (editableRepos2.length > 0)
+                    { (editableRepos.length > 0)
                         ?
                             <Grid2 item size={4}>
-                                {editableRepos2.map((repo) =>
+                                {editableRepos.map((repo) =>
                                     <Card sx={cardStyle}>
                                         <CardActionArea onClick={
                                             async () => { 
@@ -129,9 +112,6 @@ function App() {
                                                             </Typography>
                                                         </Box>
                                                         <PlayArrow size="large" sx={{ml: 1}}/>
-                                                        {/* <Box sx={{ display: 'flex', alignItems: "end" }}>
-                                                            
-                                                        </Box> */}
                                                     </Box>
                                                 </CardContent>
                                             </Box>
