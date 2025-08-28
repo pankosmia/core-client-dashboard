@@ -40,13 +40,29 @@ function App() {
 
     const cardStyle = {
         display: "flex",
-        maxWidth: 345,
         border: "1px #000 solid",
         borderRadius: "5px",
         backgroundColor: "#FFF",
         color: 'text.primary',
         '&:hover': {backgroundColor: '#F5F5F5'}
     }
+
+    const flavorTypes = {
+        texttranslation: "scripture",
+        audiotranslation: "scripture",
+        "x-bcvnotes": "parascriptural",
+        "x-bnotes": "parascriptural",
+        "x-bcvarticles": "parascriptural",
+        "x-bcvquestions": "parascriptural",
+        "x-bcvimages": "parascriptural",
+        "x-juxtalinear": "scripture",
+        "x-parallel": "parascriptural",
+        textstories: "gloss",
+        "x-obsquestions": "peripheral",
+        "x-obsnotes": "peripheral",
+        "x-obsarticles": "peripheral",
+        "x-obsimages": "peripheral",
+    };
 
     return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'scroll', width: '100%' }}>
                 <Grid2
@@ -61,7 +77,7 @@ function App() {
                     </Grid2>
                     { (editableRepos.length > 0)
                         ?
-                            <Grid2 item size={4}>
+                            <Grid2 item size={3}>
                                 {editableRepos.map((repo) =>
                                     <Card sx={cardStyle}>
                                         <CardActionArea onClick={
@@ -89,19 +105,19 @@ function App() {
                                         }>
                                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                                                 <CardContent sx={{ flex: '1 0 auto' }}>
-                                                    <Typography component="div" variant="h6">
-                                                        {doI18n("pages:core-dashboard:edit", i18nRef.current)}
-                                                        {" "}
-                                                        {repo[1].name}
-                                                    </Typography>
                                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "space-between", flexDirection: 'row' }}>
                                                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                                            <Typography component="div" variant="h6">
+                                                                {doI18n("pages:core-dashboard:edit", i18nRef.current)}
+                                                                {" "}
+                                                                {repo[1].name}
+                                                            </Typography>
                                                             <Typography
                                                                 variant="subtitle1"
                                                                 component="div"
                                                                 sx={{ color: 'text.secondary' }}
                                                             >
-                                                                {repo[1].flavor}
+                                                                {doI18n(`flavors:names:${flavorTypes[repo[1].flavor.toLowerCase()]}/${repo[1].flavor}`, i18nRef.current)}
                                                             </Typography>
                                                             <Typography
                                                                 variant="subtitle1"
