@@ -18,8 +18,9 @@
       "es": "Este editor es una herramienta para crear Escrituras y recursos relacionados. Esta página ofrece un resumen de los recursos disponibles. También puede navegar utilizando el menú, arriba a la izquierda. Para acceder a algunas páginas necesita tener acceso a Internet, que puede activar pulsando en el interruptor de la parte superior derecha. (Hágalo sólo si es seguro hacerlo)."
     },
     "edit": {
-      "en": "Edit your content",
-      "fr": "Editer votre contenu"
+      "en": "Edit",
+      "fr": "Editer",
+      "es": "Editar"
     },
     "maybe_create_first_content": {
       "en": "You have not yet created your first content. Would you like to start now?",
