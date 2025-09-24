@@ -6,29 +6,33 @@
   "i18n": {
     "title": {
       "ar": "جدول الوظائف",
+      "ar": "الفهرس",
       "en": "Dashboard",
       "fr": "Tableau de bord",
       "id": "Dasbor",
-      "grc": "Πινακίδιον",
-      "ar": "الفهرس"
+      "grc": "Πινακίδιον"
     },
     "summary": {
       "en": "This editor is a tool for creating Scripture and related resources. This page gives a summary of what is available. You can also navigate using the menu, top left. For some pages you need internet access, which you can enable by clicking on the switch, top-right. (Only do this if it is safe to do so.)",
       "fr": "Voici un outil pour la création de traductions et de ressources bibliques. Cette page-ci montre en survol les fonctionnalités disponibles. Vous pouvez aussi naviguer à partir du menu, en haut à gauche. Certaines pages peuvent exiger une connexion internet. Vous pouvez permettre cette connexion en cliquant sur l'interrupteur en haut à droite, mais ne faites cela que si la connexion est sécurisée.",
-      "es": "Este editor es una herramienta para crear Escrituras y recursos relacionados. Esta página ofrece un resumen de los recursos disponibles. También puede navegar utilizando el menú, arriba a la izquierda. Para acceder a algunas páginas necesita tener acceso a Internet, que puede activar pulsando en el interruptor de la parte superior derecha. (Hágalo sólo si es seguro hacerlo)."
+      "es": "Este editor es una herramienta para crear Escrituras y recursos relacionados. Esta página ofrece un resumen de los recursos disponibles. También puede navegar utilizando el menú, arriba a la izquierda. Para acceder a algunas páginas necesita tener acceso a Internet, que puede activar pulsando en el interruptor de la parte superior derecha. (Hágalo sólo si es seguro hacerlo).",
+      "id": "Editor ini adalah alat untuk menerjemahkan Kitab Suci dan sumber daya terkait. Halaman ini memberikan ringkasan tentang apa yang tersedia. Juga dapat menavigasi menggunakan menu di kiri atas. Beberapa halaman memerlukan akses internet, yang dapat diaktifkan dengan mengeklik tombol di kanan atas. (Lakukan ini hanya jika aman.)"
     },
     "edit": {
       "en": "Edit",
       "fr": "Editer",
-      "es": "Editar"
+      "es": "Editar",
+      "id": "Edit"
     },
     "maybe_create_first_content": {
       "en": "You have not yet created your first content. Would you like to start now?",
-      "fr": "Vous n'avez pas encore créé votre premier contenu. Voulez-vous vous y lancer maintenant ?"
+      "fr": "Vous n'avez pas encore créé votre premier contenu. Voulez-vous vous y lancer maintenant ?",
+      "id": "Belum membuat konten pertama. Ingin mulai sekarang?"
     },
     "maybe_install_first_resources": {
       "en": "You have not downloaded any translation resources. Would you like to do that now?",
-      "fr": "Vous n'avez pas encore téléchargé des ressources de traduction. Voulez-vous le faire maintenant ?"
+      "fr": "Vous n'avez pas encore téléchargé des ressources de traduction. Voulez-vous le faire maintenant ?",
+      "id": "Belum mengunduh sumber daya terjemahan apa pun. Ingin mengunduhnya sekarang?"
     }
   }
 }
