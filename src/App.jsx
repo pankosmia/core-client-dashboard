@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Grid2, Card, CardContent, CardActionArea, CardActions, Box, Button, Typography, Stack, Chip, Tooltip} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
-import {PlayArrow} from "@mui/icons-material";
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -33,17 +32,13 @@ function App() {
     );
 
     const editableRepos = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_") && !repo[0].includes("images"));
-    //const translationResources = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("git.door43.org"));
 
     const {i18nRef} = useContext(i18nContext);
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
 
     const cardStyle = {
-        /* border: "1px #000 solid",
-        borderRadius: "5px", */
         backgroundColor: "#FFF",
-        /* color: 'text.primary', */
         '&:hover': {backgroundColor: '#F5F5F5'}
     }
 
@@ -70,9 +65,6 @@ function App() {
             spacing={2}
             sx={{m: 2}}
         >
-            {/* <Grid2 item size={12}>
-                <b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b>
-            </Grid2> */}
             {showWelcome &&
                 <Grid2 item size={12}>
                     <Card elevation={1}>
@@ -112,7 +104,6 @@ function App() {
                                     color='secondary' 
                                     variant="outlined"
                                     disabled
-                                    /* onClick={() => window.location.href = '/clients/content'} */
                                 />
                             </span>
                         </Tooltip>
@@ -128,13 +119,12 @@ function App() {
                 </Stack>
             </Grid2>
             <Grid2 item size={12} sx={{mt: 2}}>
-                <Typography variant='h5' /* fontWeight='bold' */ /* sx={{ my: 3 }} */>{doI18n("pages:core-dashboard:my_work", i18nRef.current)}</Typography>
+                <Typography variant='h5' >{doI18n("pages:core-dashboard:my_work", i18nRef.current)}</Typography>
             </Grid2>
             {(editableRepos.length > 0)
                 ?
-                editableRepos.map((repo) => {
-                    console.log(repo);
-                    return <Grid2 item size={{xs: 12, md: 6, xl: 4}} /* sx={{ my: 2 }} */> 
+                editableRepos.map(
+                    repo => <Grid2 item size={{xs: 12, md: 6, xl: 4}} > 
                         <Card sx={cardStyle} elevation={1}>
                             <CardActionArea onClick={
                                 async () => {
@@ -197,39 +187,15 @@ function App() {
                             </CardActionArea>
                         </Card>
                     </Grid2>
-                    }
                 )
                 :
                 <Grid2 item>
                     <Typography variant='body1' color='gray'>{doI18n("pages:core-dashboard:my_work_desc", i18nRef.current)}</Typography>
                 </Grid2>
             }
-                {/* <Card sx={cardStyle}>
-                    <CardActionArea onClick={() => {
-                        window.location.href = '/clients/content'
-                    }}>
-                        <CardContent>
-                            <Typography>
-                                {doI18n("pages:core-dashboard:maybe_create_first_content", i18nRef.current)}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Card> */}
-            {/* {(!(translationResources.length > 0) && (enabledRef.current)) &&
-                <Grid2 item size={{xs: 12}}>
-                    <Card sx={cardStyle}>
-                        <CardActionArea onClick={() => {
-                            window.location.href = '/clients/download'
-                        }}>
-                            <CardContent>
-                                <Typography>
-                                    {doI18n("pages:core-dashboard:maybe_install_first_resources", i18nRef.current)}
-                                </Typography>
-                            </CardContent>
-                        </CardActionArea>
-                    </Card>
-                </Grid2>
-            } */}
+            <Grid2 item size={12} sx={{mt:2}}>
+                <Typography variant='h5'>{doI18n("pages:core-dashboard:navigate_to", i18nRef.current)}</Typography>
+            </Grid2>
             <Grid2
                 justifyItems="flex"
                 justifyDirection="row"
@@ -237,15 +203,12 @@ function App() {
                 item
                 size={12}
             >
-                <Typography variant='h5' /* fontWeight='bold' */ sx={{ mb: 3, mt: 1 }}>{doI18n("pages:core-dashboard:navigate_to", i18nRef.current)}</Typography>
                 {clients
                     .filter(c => !c.id.includes("dashboard"))
                     .filter(c => !c.exclude_from_dashboard)
                     .filter(c => (c.requires.debug && debugRef.current) || !c.requires.debug)
                     .map(
-                        c => {
-                        console.log(c);
-                        return <Card sx={{height: "auto", width: "100%", mb: 2}} elevation={1}>
+                        c => <Card sx={{height: "auto", width: "100%", mb: 2}} elevation={1}>
                             <CardActionArea
                                 onClick={() => {
                                     if (enabledRef.current || !c.requires.net) {
@@ -254,8 +217,6 @@ function App() {
                                 }}
                                 sx={{
                                     height: "auto",
-                                    /* border: (enabledRef.current || !c.requires.net) ? "1px #000 solid" : "1px #9E9E9E solid", */
-                                    /* borderRadius: "5px", */
                                     backgroundColor: "#FFF",
                                     color: (enabledRef.current || !c.requires.net) ? "#000" : "#9E9E9E",
                                     '&:hover': {backgroundColor: '#F5F5F5'}
@@ -272,7 +233,6 @@ function App() {
                                 </CardContent>
                             </CardActionArea>
                         </Card>
-                        }
                     )
                 }
             </Grid2>
