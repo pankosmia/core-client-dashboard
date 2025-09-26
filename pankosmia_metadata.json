@@ -66,12 +66,12 @@
       "es": "Navegar a"
     },
     "download_from_internet":{
-      "en": "Download a Content from Internet",
-      "es": "Descargar un Contenido de Internet"
+      "en": "Download content the Internet",
+      "es": "Descargar contenido de Internet"
     },
     "create_content":{
-      "en": "Create a Content",
-      "es": "Crear un Contenido"
+      "en": "Create content",
+      "es": "Crear contenido"
     },
     "connect_to_internet":{
       "en": "Connect to the internet in the hamburguer menu",
