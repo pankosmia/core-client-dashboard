@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Grid2, Card, CardContent, CardActionArea, Box, Typography} from "@mui/material";
+import {Grid2, Card, CardContent, CardActionArea, CardActions, Box, Button, Typography} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
 import {PlayArrow} from "@mui/icons-material";
 
 function App() {
     const [clients, setClients] = useState([]);
     const [projectSummaries, setProjectSummaries] = useState({});
+    const [showWelcome, setShowWelcome] = useState(localStorage.getItem('showWelcome') === null ? true : false);
 
     const getProjectSummaries = async () => {
         const summariesResponse = await getJson(`/burrito/metadata/summaries`, debugRef.current);
@@ -31,7 +32,13 @@ function App() {
         []
     );
 
-    const editableRepos = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_"));
+    /* useEffect(() => {
+        setShowWelcome(JSON.parse(localStorage.getItem('showWelcome')));
+    },[]) */
+
+   /*  console.log(JSON.parse(localStorage.getItem('showWelcome'))); */
+
+    const editableRepos = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("_local_/_local_") && !repo[0].includes("images"));
     const translationResources = Object.entries(projectSummaries).filter((repo) => repo[0].startsWith("git.door43.org"));
 
     const {i18nRef} = useContext(i18nContext);
@@ -72,11 +79,34 @@ function App() {
             <Grid2 item size={12}>
                 <b>{doI18n("pages:core-dashboard:summary", i18nRef.current)}</b>
             </Grid2>
+            {showWelcome &&
+            <Grid2 item size={12}>
+                <Card>
+                    <CardContent>
+                        <Typography  variant="h5" component="div">
+                            {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
+                        </Typography>
+                        <Typography sx={{mt: 2}} color="gray" variant="body2">
+                            {doI18n("pages:core-dashboard:welcome_desc1", i18nRef.current)}
+                            <br />
+                            {doI18n("pages:core-dashboard:welcome_desc2", i18nRef.current)}
+                            <br />
+                            <br />
+                            {doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current)}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small" onClick={() => { setShowWelcome(false); localStorage.setItem('showWelcome', 'welcomeIsDisabled') }}>
+                            {doI18n("pages:core-dashboard:close", i18nRef.current)}
+                        </Button>
+                    </CardActions>
+                </Card>
+            </Grid2>}
             {(editableRepos.length > 0)
                 ?
                 editableRepos.map((repo) =>
                     <Grid2 item size={{xs: 12, md: 6, xl: 4}}>
-                        <Card sx={cardStyle}>
+                        <Card sx={cardStyle} elevation={1}>
                             <CardActionArea onClick={
                                 async () => {
                                     const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`);

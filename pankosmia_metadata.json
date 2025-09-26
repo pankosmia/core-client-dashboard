@@ -32,6 +32,26 @@
       "en": "You have not downloaded any translation resources. Would you like to do that now?",
       "fr": "Vous n'avez pas encore téléchargé des ressources de traduction. Voulez-vous le faire maintenant ?",
       "id": "Belum mengunduh sumber daya terjemahan apa pun. Ingin mengunduhnya sekarang?"
+    },
+    "close":{
+      "en": "CLOSE",
+      "es": "CERRAR"
+    },
+    "welcome":{
+      "en": "Welcome!",
+      "es": "¡Bienvenido!"
+    },
+    "welcome_desc1":{
+      "en": "This app is a tool for creating Scripture and related resources.",
+      "es": "Esta aplicación es una herramienta para crear Escrituras y recursos relacionados."
+    },
+    "welcome_desc2":{
+      "en": "This Dashboard shows common actions, recently edited work, and where to navigate. You can also get around and find other options in the top-left hamburger menu.",
+      "es": "Este panel de control muestra acciones recurrentes, trabajo recientemente editado, y a donde navegar. También puedes moverte y encontrar otras opciones en el menu situado en la parte superior izquierda."
+    },
+    "welcome_desc3":{
+      "en": "This app is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the top-left menu. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
+      "es": "Esta aplicación es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la parte superior izquierda. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
     }
   }
 }
