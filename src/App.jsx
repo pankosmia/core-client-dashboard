@@ -67,7 +67,7 @@ function App() {
         >
             {showWelcome &&
                 <Grid2 item size={12}>
-                    <Card elevation={1} sx={{ backgroundColor:'#A7C7E7' }}>
+                    <Card elevation={1} sx={{ backgroundColor:'#E5F6FD' }}>
                         <CardContent>
                             <Typography  variant="h5" component="div">
                                 {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
