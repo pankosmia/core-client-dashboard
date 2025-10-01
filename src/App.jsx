@@ -67,7 +67,7 @@ function App() {
         >
             {showWelcome &&
                 <Grid2 item size={12}>
-                    <Card elevation={1}>
+                    <Card elevation={1} sx={{ backgroundColor:'#A7C7E7' }}>
                         <CardContent>
                             <Typography  variant="h5" component="div">
                                 {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
@@ -228,7 +228,7 @@ function App() {
                                         {doI18n(`pages:${c.id}:title`, i18nRef.current)}
                                     </Typography>
                                     <Typography color='gray'>
-                                        {`${doI18n(`pages:core-dashboard:${c.id}_description`, i18nRef.current)} ${doI18n("branding:software:name", i18nRef.current)}`}
+                                        {`${doI18n(`pages:core-dashboard:${c.id}_description`, i18nRef.current)}${c.id === "i18n-editor" ? ` ${doI18n("branding:software:name", i18nRef.current)}.` : "."}`}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
