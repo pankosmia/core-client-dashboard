@@ -112,7 +112,7 @@ function App() {
                             label={doI18n("pages:core-dashboard:download_from_internet", i18nRef.current)} 
                             color='secondary' 
                             variant="outlined"
-                            onClick={() => window.location.href = '/clients/content'}
+                            onClick={() => window.location.href = '/clients/download'}
                         />
                     }
                     <Chip label={doI18n("pages:core-dashboard:create_content", i18nRef.current)} color='secondary' variant="outlined" onClick={() => window.location.href = '/clients/content'} />
