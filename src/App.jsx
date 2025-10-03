@@ -115,7 +115,7 @@ function App() {
                             onClick={() => window.location.href = '/clients/download'}
                         />
                     }
-                    <Chip label={doI18n("pages:core-dashboard:create_content", i18nRef.current)} color='secondary' variant="outlined" onClick={() => window.location.href = '/clients/modal-create-content?name=download'} />
+                    <Chip label={doI18n("pages:core-dashboard:create_content", i18nRef.current)} color='secondary' variant="outlined" onClick={() => window.location.href = '/clients/modal-create-content?returntypepage=dashboard'} />
                 </Stack>
             </Grid2>
             <Grid2 item size={12} sx={{mt: 2}}>
