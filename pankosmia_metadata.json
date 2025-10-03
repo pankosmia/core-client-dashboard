@@ -58,7 +58,7 @@
       "es": "Mis proyectos"
     },
     "my_work_desc":{
-      "en": "Your editable Content will show up here.",
+      "en": "Your editable content will show up here.",
       "es": "Tu contenido editable aparecerá aquí."
     },
     "navigate_to":{
@@ -74,12 +74,12 @@
       "es": "Crear contenido"
     },
     "connect_to_internet":{
-      "en": "Connect to the internet in the hamburguer menu",
+      "en": "Connect to the internet in the hamburger menu",
       "es": "Conéctate a la internet en el menu de la esquina superior izquierda"
     },
     "content_description":{
-      "en": "Create, import, download, manage and open content, including content created with others and resources used.",
-      "es": "Crear, importar, descargar, administrar y abrir contenido, incluido el contenido creado con otras personas y los recursos utilizados."
+      "en": "Create, import, download, manage and open content, including content created with others and resources used",
+      "es": "Crear, importar, descargar, administrar y abrir contenido, incluido el contenido creado con otras personas y los recursos utilizados"
     },
     "i18n-editor_description":{
       "en": "Add or edit your local translation for the interface of",
@@ -92,23 +92,6 @@
     "books":{
       "en": "books",
       "es": "libros"
-    },
-    "":{
-      "en": "",
-      "es": ""
-    },
-
-    "":{
-      "en": "",
-      "es": ""
-    },
-    "":{
-      "en": "",
-      "es": ""
-    },
-    "":{
-      "en": "",
-      "es": ""
     }
   }
 }
