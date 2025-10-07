@@ -37,11 +37,6 @@ function App() {
     const {enabledRef} = useContext(netContext);
     const {debugRef} = useContext(debugContext);
 
-    const cardStyle = {
-        backgroundColor: "#FFF",
-        '&:hover': {backgroundColor: '#F5F5F5'}
-    }
-
     const flavorTypes = {
         texttranslation: "scripture",
         audiotranslation: "scripture",
@@ -125,7 +120,7 @@ function App() {
                 ?
                 editableRepos.map(
                     repo => <Grid2 item size={{xs: 12, md: 6, xl: 4}} > 
-                        <Card sx={cardStyle} elevation={1}>
+                        <Card elevation={1}>
                             <CardActionArea onClick={
                                 async () => {
                                     const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`);
