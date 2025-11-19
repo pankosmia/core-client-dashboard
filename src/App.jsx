@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Grid2, Card, CardContent, CardActionArea, CardActions, Box, Button, Typography, Stack, Chip, Tooltip} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
+import panRcl from 'pankosmia-rcl';
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -230,6 +231,9 @@ function App() {
                         </Card>
                     )
                 }
+            </Grid2>
+            <Grid2 item>
+                <panRcl.PanDialog/>
             </Grid2>
         </Grid2>
     </Box>
