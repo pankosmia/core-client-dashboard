@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import {Grid2, Card, CardContent, CardActionArea, CardActions, Box, Button, Typography, Stack, Chip, Tooltip} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
 import panRcl from 'pankosmia-rcl';
+import {PanDialog} from 'pankosmia-rcl';
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -54,6 +55,8 @@ function App() {
         "x-obsarticles": "peripheral",
         "x-obsimages": "peripheral",
     };
+
+    console.log("panRcl", panRcl);
 
     return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'scroll', width: '100%'}}>
         <Grid2
@@ -233,7 +236,7 @@ function App() {
                 }
             </Grid2>
             <Grid2 item>
-                <panRcl.PanDialog/>
+                {false && <PanDialog/>}
             </Grid2>
         </Grid2>
     </Box>
