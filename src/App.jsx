@@ -54,7 +54,7 @@ function App() {
         "x-obsimages": "peripheral",
     };
 
-    return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'scroll', width: '100%'}}>
+    return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'auto', width: '100%'}}>
         <Grid2
             container
             spacing={2}
