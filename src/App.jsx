@@ -1,7 +1,20 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Grid2, Card, CardContent, CardActionArea, CardActions, Box, Button, Typography, Stack, Chip, Tooltip} from "@mui/material";
+import {
+    Grid2,
+    Card,
+    CardContent,
+    CardActionArea,
+    CardActions,
+    Box,
+    Button,
+    Typography,
+    Stack,
+    Chip,
+    Tooltip,
+    DialogContent, DialogContentText, FormGroup, Checkbox, FormControlLabel
+} from "@mui/material";
 import {getAndSetJson, i18nContext, netContext, doI18n, debugContext, postEmptyJson, getJson} from 'pithekos-lib';
-import {InternetSwitch} from 'pankosmia-rcl';
+import {PanDialog, PanDialogActions} from 'pankosmia-rcl';
 
 function App() {
     const [clients, setClients] = useState([]);
@@ -71,6 +84,13 @@ function App() {
             disableInternet();
         }
     };
+
+    // Test PanDialog
+    const [openDialog, setOpenDialog] = useState(null);
+    const [pointlessInput, setPointlessInput] = useState(false);
+
+    const actionFn = () => alert("Doing it!!!");
+    // End of Test PanDialog
 
     return <Box sx={{mb: 2, position: 'fixed', top: '64px', bottom: 0, right: 0, overflow: 'scroll', width: '100%'}}>
         <Grid2
@@ -250,13 +270,42 @@ function App() {
                 }
             </Grid2>
             <Grid2 item>
-                <InternetSwitch
-                    internetState={enabledRef.current}
-                enableInternet={enableInternet}
-                handleInternetToggleClick={handleInternetToggleClick}
-                internetDialogOpen={internetDialogOpen}
-                setInternetDialogOpen={setInternetDialogOpen}
-            />
+                <Button onClick={(event) => {
+                    setOpenDialog(event.target)
+                }}> open dialog </Button>
+                <PanDialog
+                    titleLabel="A Pointless Dialog"
+                    isOpen={!!openDialog}
+                    closeFn={() => setOpenDialog(false)}
+                >
+                    <DialogContent>
+                        <DialogContentText>
+                            Text within dialog content goes within DialogContentText.
+                        </DialogContentText>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={pointlessInput}
+                                        onChange={() => setPointlessInput(!pointlessInput)}
+                                        slotProps={
+                                            {
+                                                input: {'aria-label': 'pointless-dialog-input'},
+                                            }
+                                        }
+                                    />
+                                } label="Pointless required input"
+                            />
+                        </FormGroup>
+                    </DialogContent>
+                    <PanDialogActions
+                        actionFn={actionFn}
+                        actionLabel="Do it!"
+                        closeFn={() => setOpenDialog(false)}
+                        closeLabel="Don't do it!"
+                        isDisabled={!pointlessInput}
+                    />
+                </PanDialog>
             </Grid2>
         </Grid2>
     </Box>
