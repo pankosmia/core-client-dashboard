@@ -13,13 +13,13 @@
     },
     "summary": {
       "en": "This editor is a tool for creating Scripture and related resources. This page gives a summary of what is available. You can also navigate using the menu, top left. For some pages you need internet access, which you can enable by clicking on the switch, top-right. (Only do this if it is safe to do so.)",
-      "fr": "Voici un outil pour la création de traductions et de ressources bibliques. Cette page-ci montre en survol les fonctionnalités disponibles. Vous pouvez aussi naviguer à partir du menu, en haut à gauche. Certaines pages peuvent exiger une connexion internet. Vous pouvez permettre cette connexion en cliquant sur l'interrupteur en haut à droite, mais ne faites cela que si la connexion est sécurisée.",
+      "fr": "Cet éditeur est un outil pour la création de traductions et de ressources bibliques. Cette page donne un résumé de ce qui est disponible. Vous pouvez aussi naviguer en utilisant le menu, en haut à gauche. Certaines pages peuvent exiger une connexion internet. Vous pouvez activer cette connexion en cliquant sur le bouton, en haut à droite. (Ne faites ça que si c'est sûr et sécurisé.)",
       "es": "Este editor es una herramienta para crear Escrituras y recursos relacionados. Esta página ofrece un resumen de los recursos disponibles. También puede navegar utilizando el menú, arriba a la izquierda. Para acceder a algunas páginas necesita tener acceso a Internet, que puede activar pulsando en el interruptor de la parte superior derecha. (Hágalo sólo si es seguro hacerlo).",
       "id": "Editor ini adalah alat untuk menerjemahkan Kitab Suci dan sumber daya terkait. Halaman ini memberikan ringkasan tentang apa yang tersedia. Juga dapat menavigasi menggunakan menu di kiri atas. Beberapa halaman memerlukan akses internet, yang dapat diaktifkan dengan mengeklik tombol di kanan atas. (Lakukan ini hanya jika aman.)"
     },
     "edit": {
       "en": "Edit",
-      "fr": "Editer",
+      "fr": "Éditer",
       "es": "Editar",
       "id": "Edit"
     },
@@ -34,11 +34,13 @@
       "id": "Belum mengunduh sumber daya terjemahan apa pun. Ingin mengunduhnya sekarang?"
     },
     "close":{
-      "en": "CLOSE",
-      "es": "CERRAR"
+      "en": "Close",
+      "es": "Cerrar",
+      "fr": "Fermer"
     },
     "welcome":{
       "en": "Welcome!",
+      "fr": "Bienvenue !",
       "es": "¡Bienvenido!"
     },
     "welcome_desc1":{
@@ -55,43 +57,53 @@
     },
     "my_work":{
       "en": "My work",
+      "fr": "Mon travail",
       "es": "Mis proyectos"
     },
     "my_work_desc":{
-      "en": "Your editable content will show up here.",
-      "es": "Tu contenido editable aparecerá aquí."
+      "en": "Your editable documents will appear here.",
+      "es": "@Tu contenido editable aparecerá aquí.",
+      "fr": "Vos documents éditables s'afficheront ici."
     },
     "navigate_to":{
       "en": "Navigate to",
+      "fr": "Naviguer vers",
       "es": "Navegar a"
     },
     "download_from_internet":{
-      "en": "Download content from the Internet",
-      "es": "Descargar contenido de Internet"
+      "en": "Download from internet",
+      "es": "@Descargar contenido de Internet",
+      "fr": "Télécharger depuis internet"
     },
     "create_content":{
-      "en": "Create content",
-      "es": "Crear contenido"
+      "en": "Create document",
+      "es": "@Crear contenido",
+      "fr": "Créer un document"
     },
     "connect_to_internet":{
-      "en": "Connect to the internet in the hamburger menu",
-      "es": "Conéctate a la internet en el menu de la esquina superior izquierda"
+      "en": "Disable offline mode in the top-right corner",
+      "es": "@Conéctate a la internet en el menu de la esquina superior izquierda",
+      "fr": "Désactivez le mode hors-ligne en haut à droite"
     },
     "content_description":{
-      "en": "Create, import, download, manage and open content, including content created with others and resources used",
-      "es": "Crear, importar, descargar, administrar y abrir contenido, incluido el contenido creado con otras personas y los recursos utilizados"
+      "en": "Add, manage and open documents, including those created with other people or non-editable resources",
+      "es": "@Crear, importar, descargar, administrar y abrir contenido, incluido el contenido creado con otras personas y los recursos utilizados",
+      "fr": "Ajoutez, gérez et ouvrez des documents, y compris ceux créés avec d'autres personnes ou des ressources non-éditables"
     },
     "i18n-editor_description":{
       "en": "Add or edit your local translation for the interface of",
-      "es": "Agregue o edite su traducción local para la interfaz de"
+      "es": "Agregue o edite su traducción local para la interfaz de",
+      "fr": "Ajoutez ou éditez votre traduction locale pour l'interface de"
     },
     "book":{
       "en": "book",
-      "es": "libro"
+      "es": "libro",
+      "fr": "livre"
     },
     "books":{
       "en": "books",
-      "es": "libros"
+      "es": "libros",
+      "fr": "livres"
     }
   }
 }
