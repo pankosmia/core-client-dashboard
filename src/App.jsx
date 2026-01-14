@@ -233,7 +233,7 @@ function App() {
                       await postEmptyJson(
                         `/app-state/current-project/${repo[0]}`
                       );
-                      window.location.href = "/clients/local-projects";
+                      window.location.href = "/clients/core-local-workspace";
                     } else {
                       console.log("Metadata fetch failed");
                       console.log(fullMetadataResponse);
