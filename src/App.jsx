@@ -73,7 +73,7 @@ function App() {
 
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
-      !repoPath.startsWith("_local_/_local_") &&
+      repoPath.startsWith("_local_/_local_") &&
       !repoPath.includes("images") &&
       endpoints?.includes(project.flavor)
   );
