@@ -77,7 +77,6 @@ function App() {
       !repoPath.includes("images") &&
       endpoints?.includes(project.flavor)
   );
-  console.log(editableRepos)
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
