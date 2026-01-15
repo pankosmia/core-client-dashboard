@@ -22,13 +22,31 @@ import {
   getJson,
 } from "pithekos-lib";
 
+const getEditDocumentKeys = (data) => {
+  let map = {};
+  for (let [l, v] of Object.entries(data)) {
+    if (!v.endpoints) continue;
+    for (let [k, t] of Object.entries(v.endpoints)) {
+      if (t.edit) {
+        if (!map[k]) {
+          map[k] = [];
+        }
+
+        map[k].push(`${l}#${t.edit.url}`);
+      }
+    }
+  }
+  return map;
+};
+
 function App() {
   const [clients, setClients] = useState([]);
-  const [endpoints, setEndpoints] = useState();
+  const [editTable, setEditTable] = useState();
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false
   );
+
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(
       `/burrito/metadata/summaries`,
@@ -50,24 +68,10 @@ function App() {
     }).then();
   }, []);
 
-  const getCreateDocumentKeys = (data) => {
-    let arry = [];
-    for (let v of Object.values(data)) {
-      if (!v.endpoints) continue;
-      for (let [k, t] of Object.entries(v.endpoints)) {
-        if (t.create_document) {
-          arry.push(k);
-        }
-      }
-    }
-
-    return arry;
-  };
-
   useEffect(() => {
     getJson("/client-interfaces")
       .then((res) => res.json)
-      .then((data) => setEndpoints(getCreateDocumentKeys(data)))
+      .then((data) => setEditTable(getEditDocumentKeys(data)))
       .catch((err) => console.error("Error :", err));
   }, []);
 
@@ -75,8 +79,9 @@ function App() {
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
       !repoPath.includes("images") &&
-      endpoints?.includes(project.flavor)
+      editTable[project.flavor]
   );
+  console.log(editableRepos);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
@@ -233,7 +238,8 @@ function App() {
                       await postEmptyJson(
                         `/app-state/current-project/${repo[0]}`
                       );
-                      window.location.href = "/clients/core-local-workspace";
+                      window.location.href =
+                        "/clients/" + editTable[repo[1].flavor];
                     } else {
                       console.log("Metadata fetch failed");
                       console.log(fullMetadataResponse);
@@ -276,18 +282,20 @@ function App() {
                         >
                           {repo[1].abbreviation}
                         </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          component="div"
-                          sx={{ color: "text.secondary" }}
-                        >
-                          {`${repo[1].book_codes.length} ${doI18n(
-                            `pages:core-dashboard:book${
-                              repo[1].book_codes.length === 1 ? "" : "s"
-                            }`,
-                            i18nRef.current
-                          )}`}
-                        </Typography>
+                        {repo[1].book_codes.length > 0 && (
+                          <Typography
+                            variant="subtitle1"
+                            component="div"
+                            sx={{ color: "text.secondary" }}
+                          >
+                            {`${repo[1].book_codes.length} ${doI18n(
+                              `pages:core-dashboard:book${
+                                repo[1].book_codes.length === 1 ? "" : "s"
+                              }`,
+                              i18nRef.current
+                            )}`}
+                          </Typography>
+                        )}
                       </Box>
                     </Box>
                   </CardContent>
