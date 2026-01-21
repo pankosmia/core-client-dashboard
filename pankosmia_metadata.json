@@ -52,8 +52,8 @@
       "es": "Este panel de control muestra acciones recurrentes, trabajo recientemente editado, y a donde navegar. También puedes moverte y encontrar otras opciones en el menu situado en la parte superior izquierda."
     },
     "welcome_desc3":{
-      "en": "is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the top-left menu. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
-      "es": "es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la parte superior izquierda. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
+      "en": "is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the header. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
+      "es": "es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la cabecera. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
     },
     "my_work":{
       "en": "My work",
