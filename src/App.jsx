@@ -74,7 +74,6 @@ function App() {
       !repoPath.includes("images") &&
       editTable[project.flavor],
   );
-  console.log(editableRepos);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
