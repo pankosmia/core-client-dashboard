@@ -12,15 +12,8 @@ import {
   Chip,
   Tooltip,
 } from "@mui/material";
-import {
-  getAndSetJson,
-  i18nContext,
-  netContext,
-  doI18n,
-  debugContext,
-  postEmptyJson,
-  getJson,
-} from "pithekos-lib";
+import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
+import {i18nContext,netContext,debugContext} from "pankosmia-rcl"
 
 const getEditDocumentKeys = (data) => {
   let map = {};
@@ -44,13 +37,13 @@ function App() {
   const [editTable, setEditTable] = useState();
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(
-    localStorage.getItem("showWelcome") === null ? true : false
+    localStorage.getItem("showWelcome") === null ? true : false,
   );
 
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(
       `/burrito/metadata/summaries`,
-      debugRef.current
+      debugRef.current,
     );
     if (summariesResponse.ok) {
       setProjectSummaries(summariesResponse.json);
@@ -79,7 +72,7 @@ function App() {
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
       !repoPath.includes("images") &&
-      editTable[project.flavor]
+      editTable[project.flavor],
   );
   console.log(editableRepos);
   const { i18nRef } = useContext(i18nContext);
@@ -127,24 +120,24 @@ function App() {
                 <Typography sx={{ mt: 2 }} color="gray" variant="body2">
                   {`${doI18n(
                     "branding:software:name",
-                    i18nRef.current
+                    i18nRef.current,
                   )} ${doI18n(
                     "pages:core-dashboard:welcome_desc1",
-                    i18nRef.current
+                    i18nRef.current,
                   )}`}
                   <br />
                   {doI18n(
                     "pages:core-dashboard:welcome_desc2",
-                    i18nRef.current
+                    i18nRef.current,
                   )}
                   <br />
                   <br />
                   {`${doI18n(
                     "branding:software:name",
-                    i18nRef.current
+                    i18nRef.current,
                   )} ${doI18n(
                     "pages:core-dashboard:welcome_desc3",
-                    i18nRef.current
+                    i18nRef.current,
                   )}`}
                 </Typography>
               </CardContent>
@@ -164,7 +157,7 @@ function App() {
         )}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
-            {!enabledRef.current ? (
+            {!enabledRef?.current ? (
               <Tooltip
                 slotProps={{
                   popper: {
@@ -175,14 +168,14 @@ function App() {
                 }}
                 title={doI18n(
                   "pages:core-dashboard:connect_to_internet",
-                  i18nRef.current
+                  i18nRef.current,
                 )}
               >
                 <span>
                   <Chip
                     label={doI18n(
                       "pages:core-dashboard:download_from_internet",
-                      i18nRef.current
+                      i18nRef.current,
                     )}
                     color="secondary"
                     variant="outlined"
@@ -194,7 +187,7 @@ function App() {
               <Chip
                 label={doI18n(
                   "pages:core-dashboard:download_from_internet",
-                  i18nRef.current
+                  i18nRef.current,
                 )}
                 color="secondary"
                 variant="outlined"
@@ -204,7 +197,7 @@ function App() {
             <Chip
               label={doI18n(
                 "pages:core-dashboard:create_content",
-                i18nRef.current
+                i18nRef.current,
               )}
               color="secondary"
               variant="outlined"
@@ -224,19 +217,19 @@ function App() {
                 <CardActionArea
                   onClick={async () => {
                     const fullMetadataResponse = await getJson(
-                      `/burrito/metadata/raw/${repo[0]}`
+                      `/burrito/metadata/raw/${repo[0]}`,
                     );
                     if (fullMetadataResponse.ok) {
                       const bookCodes = Object.entries(
-                        fullMetadataResponse.json.ingredients
+                        fullMetadataResponse.json.ingredients,
                       )
                         .map((i) => Object.keys(i[1].scope || {}))
                         .reduce((a, b) => [...a, ...b], []);
                       await postEmptyJson(
-                        `/navigation/bcv/${bookCodes[0]}/1/1`
+                        `/navigation/bcv/${bookCodes[0]}/1/1`,
                       );
                       await postEmptyJson(
-                        `/app-state/current-project/${repo[0]}`
+                        `/app-state/current-project/${repo[0]}`,
                       );
                       window.location.href =
                         "/clients/" + editTable[repo[1].flavor];
@@ -272,7 +265,7 @@ function App() {
                             `flavors:names:${
                               flavorTypes[repo[1].flavor.toLowerCase()]
                             }/${repo[1].flavor}`,
-                            i18nRef.current
+                            i18nRef.current,
                           )}
                         </Typography>
                         <Typography
@@ -292,7 +285,7 @@ function App() {
                               `pages:core-dashboard:book${
                                 repo[1].book_codes.length === 1 ? "" : "s"
                               }`,
-                              i18nRef.current
+                              i18nRef.current,
                             )}`}
                           </Typography>
                         )}
@@ -326,7 +319,8 @@ function App() {
             .filter((c) => !c.id.includes("dashboard"))
             .filter((c) => !c.exclude_from_dashboard)
             .filter(
-              (c) => (c.requires.debug && debugRef.current) || !c.requires.debug
+              (c) =>
+                (c.requires.debug && debugRef.current) || !c.requires.debug,
             )
             .map((c) => (
               <Card sx={{ height: "auto", width: "100%", mb: 2 }} elevation={1}>
@@ -354,12 +348,12 @@ function App() {
                     <Typography color="gray">
                       {`${doI18n(
                         `pages:core-dashboard:${c.id}_description`,
-                        i18nRef.current
+                        i18nRef.current,
                       )}${
                         c.id === "i18n-editor"
                           ? ` ${doI18n(
                               "branding:software:name",
-                              i18nRef.current
+                              i18nRef.current,
                             )}.`
                           : "."
                       }`}
