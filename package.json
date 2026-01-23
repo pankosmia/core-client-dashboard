@@ -6,7 +6,6 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
     "eslint-config-react-app": "^7.0.1",
     "pankosmia-rcl": "^0.1.11",
@@ -15,9 +14,7 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@vitejs/plugin-react": "^4.3.4",
-    "react-scripts": "5.0.1",
     "vite": "^6.0.7"
   },
   "peerDependencies": {
@@ -25,8 +22,8 @@
     "react-dom": "^17.0.0 || ^18.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite",
+    "build": "vite build",
     "build:vite": "vite build",
     "dev": "vite"
   },
