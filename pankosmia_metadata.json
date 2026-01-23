@@ -76,14 +76,15 @@
       "fr": "Télécharger depuis internet"
     },
     "create_content":{
-      "en": "Create document",
+      "en": "New document",
       "es": "@Crear contenido",
-      "fr": "Créer un document"
+      "fr": "Nouveau document",
+      "id": "Dokem baru"
     },
     "connect_to_internet":{
-      "en": "Disable offline mode in the top-right corner",
+      "en": "Disable offline mode in the header",
       "es": "@Conéctate a la internet en el menu de la esquina superior izquierda",
-      "fr": "Désactivez le mode hors-ligne en haut à droite"
+      "fr": "Désactivez le mode hors-ligne dans l'en-tête"
     },
     "content_description":{
       "en": "Add, manage and open documents, including those created with other people or non-editable resources",
