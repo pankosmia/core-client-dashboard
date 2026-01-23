@@ -34,7 +34,7 @@ const getEditDocumentKeys = (data) => {
 
 function App() {
   const [clients, setClients] = useState([]);
-  const [editTable, setEditTable] = useState();
+  const [editTable, setEditTable] = useState({});
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
