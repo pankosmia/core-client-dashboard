@@ -76,10 +76,10 @@
       "fr": "Télécharger depuis internet"
     },
     "create_content":{
-      "en": "New document",
-      "es": "@Crear contenido",
-      "fr": "Nouveau document",
-      "id": "Dokem baru"
+      "en": "Documents",
+      "es": "@Mi contenido",
+      "fr": "Documents",
+      "id": "Dokem"
     },
     "connect_to_internet":{
       "en": "Disable offline mode in the header",
