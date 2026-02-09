@@ -62,7 +62,7 @@
     },
     "my_work_desc":{
       "en": "Your editable documents will appear here.",
-      "es": "@Tu contenido editable aparecerá aquí.",
+      "es": "Tus documentos editables aparecerá aquí.",
       "fr": "Vos documents éditables s'afficheront ici."
     },
     "navigate_to":{
@@ -72,23 +72,23 @@
     },
     "download_from_internet":{
       "en": "Download from internet",
-      "es": "@Descargar contenido de Internet",
+      "es": "Descargar de Internet",
       "fr": "Télécharger depuis internet"
     },
     "create_content":{
       "en": "Documents",
-      "es": "@Mi contenido",
+      "es": "Documentos",
       "fr": "Documents",
       "id": "Dokem"
     },
     "connect_to_internet":{
       "en": "Disable offline mode in the header",
-      "es": "@Conéctate a la internet en el menu de la esquina superior izquierda",
+      "es": "Desactivar el modo fuera de línea en el menu de la esquina superior izquierda",
       "fr": "Désactivez le mode hors-ligne dans l'en-tête"
     },
     "content_description":{
       "en": "Add, manage and open documents, including those created with other people or non-editable resources",
-      "es": "@Crear, importar, descargar, administrar y abrir contenido, incluido el contenido creado con otras personas y los recursos utilizados",
+      "es": "Agregar, administrar y abrir documentos, incluidos aquellos creados con otras personas o recursos no editables",
       "fr": "Ajoutez, gérez et ouvrez des documents, y compris ceux créés avec d'autres personnes ou des ressources non-éditables"
     },
     "i18n-editor_description":{
