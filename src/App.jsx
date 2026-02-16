@@ -78,7 +78,7 @@ function App() {
   useEffect(() => {
     getJson("/client-interfaces")
       .then((res) => res.json)
-      .then((data) => { setEditTable(getEditDocumentKeys(data)), setClientInterfaces((data)) })
+      .then((data) => { setEditTable(getEditDocumentKeys(data)); setClientInterfaces((data)) })
       .catch((err) => console.error("Error :", err));
   }, []);
 
