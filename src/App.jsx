@@ -11,6 +11,8 @@ import {
   Stack,
   Chip,
   Tooltip,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   getAndSetJson,
@@ -42,6 +44,8 @@ const getEditDocumentKeys = (data) => {
 function App() {
   const [clients, setClients] = useState([]);
   const [editTable, setEditTable] = useState({});
+  const [clientInterfaces, setClientInterfaces] = useState({});
+  const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false
@@ -55,6 +59,9 @@ function App() {
     if (summariesResponse.ok) {
       setProjectSummaries(summariesResponse.json);
     }
+  };
+  const handleCreateClose = () => {
+    setCreateAnchorEl(null);
   };
 
   useEffect(() => {
@@ -71,7 +78,7 @@ function App() {
   useEffect(() => {
     getJson("/client-interfaces")
       .then((res) => res.json)
-      .then((data) => setEditTable(getEditDocumentKeys(data)))
+      .then((data) => { setEditTable(getEditDocumentKeys(data)), setClientInterfaces((data)) })
       .catch((err) => console.error("Error :", err));
   }, []);
 
@@ -104,6 +111,26 @@ function App() {
     "x-tcore": "parascriptural",
   };
 
+  const matchPart = '/createDocument/textTranslation';
+
+  const createItems = (() => {
+    if (!clientInterfaces) return [];
+
+    const all = Object.entries(clientInterfaces).flatMap(([category, cv]) =>
+      Object.values(cv?.endpoints || {}).flatMap(ev =>
+        (ev?.create_document || []).map(doc => ({
+          category,
+          label: doI18n(doc.label, i18nRef.current),
+          url:`/clients/${category}?returntypepage=dashboard#${doc.url}`,
+        }))
+      )
+    );
+    // move "Biblical Text" to the front if present
+    const idx = all.findIndex(i => i.url === matchPart || i.url.includes(matchPart));
+    if (idx > -1) all.unshift(all.splice(idx, 1)[0]);
+
+    return all;
+  })();
   return (
     <Box
       sx={{
@@ -208,8 +235,18 @@ function App() {
               )}
               color="secondary"
               variant="outlined"
-              onClick={() => (window.location.href = "/clients/content")}
+              onClick={(event) => setCreateAnchorEl(event.currentTarget)}
             />
+            <Menu
+              id="grouped-menu"
+              anchorEl={createAnchorEl}
+              open={!!createAnchorEl}
+              onClose={handleCreateClose}
+            >
+              {createItems.map((item) => (
+                <MenuItem onClick={() => (window.location.href = item.url)}>{item.label}</MenuItem>
+              ))}
+            </Menu>
           </Stack>
         </Grid2>
         <Grid2 item size={12} sx={{ mt: 2 }}>
@@ -269,8 +306,7 @@ function App() {
                           sx={{ color: "text.secondary" }}
                         >
                           {doI18n(
-                            `flavors:names:${
-                              flavorTypes[repo[1].flavor.toLowerCase()]
+                            `flavors:names:${flavorTypes[repo[1].flavor.toLowerCase()]
                             }/${repo[1].flavor}`,
                             i18nRef.current
                           )}
@@ -289,8 +325,7 @@ function App() {
                             sx={{ color: "text.secondary" }}
                           >
                             {`${repo[1].book_codes.length} ${doI18n(
-                              `pages:core-dashboard:book${
-                                repo[1].book_codes.length === 1 ? "" : "s"
+                              `pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"
                               }`,
                               i18nRef.current
                             )}`}
@@ -355,14 +390,13 @@ function App() {
                       {`${doI18n(
                         `pages:core-dashboard:${c.id}_description`,
                         i18nRef.current
-                      )}${
-                        c.id === "i18n-editor"
-                          ? ` ${doI18n(
-                              "branding:software:name",
-                              i18nRef.current
-                            )}.`
-                          : "."
-                      }`}
+                      )}${c.id === "i18n-editor"
+                        ? ` ${doI18n(
+                          "branding:software:name",
+                          i18nRef.current
+                        )}.`
+                        : "."
+                        }`}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
