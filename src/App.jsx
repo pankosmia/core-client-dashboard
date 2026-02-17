@@ -16,13 +16,16 @@ import {
 } from "@mui/material";
 import {
   getAndSetJson,
-  i18nContext,
-  netContext,
   doI18n,
-  debugContext,
   postEmptyJson,
   getJson,
 } from "pithekos-lib";
+
+import {
+  i18nContext,
+  netContext,
+  debugContext,
+} from "pankosmia-rcl";
 
 const getEditDocumentKeys = (data) => {
   let map = {};
