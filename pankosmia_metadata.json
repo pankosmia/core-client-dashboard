@@ -75,7 +75,8 @@
       "es": "Descargar de Internet",
       "fr": "Télécharger depuis internet"
     },
-     "en": "New document",
+    "create_content":{
+      "en": "New document",
       "es": "@Crear contenido",
       "fr": "Nouveau document",
       "id": "Dokem baru"
