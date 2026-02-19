@@ -291,8 +291,7 @@ function App() {
                             sx={{ color: "text.secondary" }}
                           >
                             {doI18n(
-                              `flavors:names:${
-                                flavorTypes[repo[1].flavor.toLowerCase()]
+                              `flavors:names:${flavorTypes[repo[1].flavor.toLowerCase()]
                               }/${repo[1].flavor}`,
                               i18nRef.current,
                             )}
@@ -311,8 +310,7 @@ function App() {
                               sx={{ color: "text.secondary" }}
                             >
                               {`${repo[1].book_codes.length} ${doI18n(
-                                `pages:core-dashboard:book${
-                                  repo[1].book_codes.length === 1 ? "" : "s"
+                                `pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"
                                 }`,
                                 i18nRef.current,
                               )}`}
@@ -381,14 +379,13 @@ function App() {
                         {`${doI18n(
                           `pages:core-dashboard:${c.id}_description`,
                           i18nRef.current,
-                        )}${
-                          c.id === "i18n-editor"
+                        )}${c.id === "i18n-editor"
                             ? ` ${doI18n(
-                                "branding:software:name",
-                                i18nRef.current,
-                              )}.`
+                              "branding:software:name",
+                              i18nRef.current,
+                            )}.`
                             : "."
-                        }`}
+                          }`}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
