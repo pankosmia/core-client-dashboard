@@ -53,7 +53,7 @@ function App() {
     const all = Object.entries(clientInterfaces).flatMap(([category, cv]) => Object.values(cv?.endpoints || {}).flatMap(ev => (ev?.create_document || []).map(doc => ({
       category,
       label: doI18n(doc.label, i18nRef.current),
-      url: `/clients/${category}?returntypepage=dashboard#${doc.url}`,
+      url: `/clients/${category}#${doc.url}?returntypepage=dashboard`,
     }))));
     // move "Biblical Text" to the front if present
     const idx = all.findIndex(i => i.url === matchPart || i.url.includes(matchPart));
