@@ -263,51 +263,6 @@ function App() {
             {doI18n("pages:core-dashboard:my_work_desc", i18nRef.current)}
           </Typography>
         </Grid2>)}
-        <Grid2 item size={12} sx={{ mt: 2 }}>
-          <Typography variant="h5">
-            {doI18n("pages:core-dashboard:navigate_to", i18nRef.current)}
-          </Typography>
-        </Grid2>
-        <Grid2
-          justifyItems="flex"
-          justifyDirection="row"
-          alignItems="stretch"
-          item
-          size={12}
-        >
-          {clients
-            .filter((c) => !c.id.includes("dashboard"))
-            .filter((c) => !c.exclude_from_dashboard)
-            .filter((c) => (c.requires.debug && debugRef.current) || !c.requires.debug,)
-            .map((c) => (<Card
-              sx={{ height: "auto", width: "100%", mb: 2 }}
-              elevation={1}
-            >
-              <CardActionArea
-                onClick={() => {
-                  if (enabledRef.current || !c.requires.net) {
-                    window.location.href = c.url;
-                  }
-                }}
-                sx={{
-                  height: "auto",
-                  backgroundColor: "#FFF",
-                  color: enabledRef.current || !c.requires.net ? "#000" : "#9E9E9E",
-                  "&:hover": { backgroundColor: "#F5F5F5" },
-                }}
-                disabled={!enabledRef.current && c.requires.net}
-              >
-                <CardContent sx={{ height: "auto" }}>
-                  <Typography variant="h5" sx={{ mb: 1 }}>
-                    {doI18n(`pages:${c.id}:title`, i18nRef.current)}
-                  </Typography>
-                  <Typography color="gray">
-                    {`${doI18n(`pages:core-dashboard:${c.id}_description`, i18nRef.current,)}${c.id === "i18n-editor" ? ` ${doI18n("branding:software:name", i18nRef.current,)}.` : "."}`}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>))}
-        </Grid2>
       </Grid2>
     </Box>
   );
