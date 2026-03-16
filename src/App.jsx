@@ -13,10 +13,13 @@ import {
   Tooltip,
   Menu,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
 import { i18nContext, netContext, debugContext } from "pankosmia-rcl";
-
+import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SvgVersionManager from "./fileIcons/iconVersionManager";
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -253,6 +256,17 @@ function App() {
                     >
                       {`${repo[1].book_codes.length} ${doI18n(`pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"}`, i18nRef.current,)}`}
                     </Typography>)}
+                  </Box>
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <IconButton>
+                      <SvgVersionManager/>
+                    </IconButton>
+                    <IconButton>
+                      <SaveAsOutlinedIcon />
+                    </IconButton>
+                    <IconButton>
+                      <InfoOutlinedIcon />
+                    </IconButton>
                   </Box>
                 </Box>
               </CardContent>
