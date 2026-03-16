@@ -202,31 +202,31 @@ function App() {
         </Grid2>
         {editableRepos.length > 0 ? (editableRepos.map((repo) => (<Grid2 item size={{ xs: 12, md: 6, xl: 4 }}>
           <Card elevation={1}>
-            <CardActionArea
-              onClick={async () => {
-                const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`,);
-                if (fullMetadataResponse.ok) {
-                  const bookCodes = Object.entries(fullMetadataResponse.json.ingredients,)
-                    .map((i) => Object.keys(i[1].scope || {}))
-                    .reduce((a, b) => [...a, ...b], []);
-                  await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`,);
-                  await postEmptyJson(`/app-state/current-project/${repo[0]}`,);
-                  window.location.href = "/clients/" + editTable[repo[1].flavor];
-                } else {
-                  console.log("Metadata fetch failed");
-                  console.log(fullMetadataResponse);
-                }
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
               }}
             >
-              <CardContent sx={{ flex: "1 0 auto" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                  }}
-                >
+              <CardActionArea
+                onClick={async () => {
+                  const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`,);
+                  if (fullMetadataResponse.ok) {
+                    const bookCodes = Object.entries(fullMetadataResponse.json.ingredients,)
+                      .map((i) => Object.keys(i[1].scope || {}))
+                      .reduce((a, b) => [...a, ...b], []);
+                    await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`,);
+                    await postEmptyJson(`/app-state/current-project/${repo[0]}`,);
+                    window.location.href = "/clients/" + editTable[repo[1].flavor];
+                  } else {
+                    console.log("Metadata fetch failed");
+                    console.log(fullMetadataResponse);
+                  }
+                }}
+              >
+                <CardContent sx={{ flex: "1 0 auto" }}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography
                       component="div"
@@ -257,20 +257,26 @@ function App() {
                       {`${repo[1].book_codes.length} ${doI18n(`pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"}`, i18nRef.current,)}`}
                     </Typography>)}
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column", background:"gray", borderRadius:"100px", }}>
-                    <IconButton sx={{margin:"4px"}}>
-                      <SvgVersionManager/>
-                    </IconButton>
-                    <IconButton sx={{margin:"4px"}}>
-                      <SaveAsOutlinedIcon />
-                    </IconButton>
-                    <IconButton sx={{margin:"4px"}}>
-                      <InfoOutlinedIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-              </CardContent>
-            </CardActionArea>
+                </CardContent>
+              </CardActionArea>
+              <Box sx={{ display: "flex", flexDirection: "column", background: "lightgray", borderRadius: "100px", marginRight: "10px" }}>
+                <Tooltip title="Version manager">
+                  <IconButton sx={{ margin: "4px" }}>
+                    <SvgVersionManager />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Save as...">
+                  <IconButton sx={{ margin: "4px" }}>
+                    <SaveAsOutlinedIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Properties">
+                  <IconButton sx={{ margin: "4px" }}>
+                    <InfoOutlinedIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Box>
           </Card>
         </Grid2>))) : (<Grid2 item>
           <Typography variant="body1" color="gray">
