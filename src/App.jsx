@@ -257,14 +257,14 @@ function App() {
                       {`${repo[1].book_codes.length} ${doI18n(`pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"}`, i18nRef.current,)}`}
                     </Typography>)}
                   </Box>
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <IconButton>
+                  <Box sx={{ display: "flex", flexDirection: "column", background:"gray", borderRadius:"100px", }}>
+                    <IconButton sx={{margin:"4px"}}>
                       <SvgVersionManager/>
                     </IconButton>
-                    <IconButton>
+                    <IconButton sx={{margin:"4px"}}>
                       <SaveAsOutlinedIcon />
                     </IconButton>
-                    <IconButton>
+                    <IconButton sx={{margin:"4px"}}>
                       <InfoOutlinedIcon />
                     </IconButton>
                   </Box>
