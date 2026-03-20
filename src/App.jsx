@@ -19,7 +19,7 @@ import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
 import { i18nContext, netContext, debugContext } from "pankosmia-rcl";
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import SvgVersionManager from "./fileIcons/iconVersionManager";
+import SvgVersionManager from "./fileIcon/iconVersionManager";
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -43,19 +43,16 @@ function App() {
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(localStorage.getItem("showWelcome") === null ? true : false,);
   const [clientInterfaces, setClientInterfaces] = useState({});
-  console.log("clientInterfaces", clientInterfaces)
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const matchPart = '/createDocument/textTranslation';
   const editableRepos = Object.entries(projectSummaries).filter(([repoPath, project]) => repoPath.startsWith("_local_/_local_") && !repoPath.includes("images") && editTable[project.flavor],);
-  console.log("edit", editableRepos)
   const [chooseRepo, setChooseRepo] = useState(null);
-  console.log("chooseRepo", chooseRepo);
-  const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
-  const contentRowOpen = Boolean(contentRowAnchorEl);
-  const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
+  //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
+  const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
+  const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
   const createItems = (() => {
     if (!clientInterfaces) return [];
 
@@ -90,7 +87,7 @@ function App() {
   }, []);
 
   const handleSubMenuClick = (event) => {
-    setSubMenuAnchorEl(event.currentTarget);
+    setSubMenuButtonSave(event.currentTarget);
   };
 
   useEffect(() => {
@@ -104,7 +101,23 @@ function App() {
   }, []);
 
   let createItemExport;
+  let createAboutRepo;
   if (clientInterfaces) {
+    createAboutRepo = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+        return Object.entries(endpoints).flatMap(([key, endpointValue]) => {
+          const docs = endpointValue?.about_repo;
+          if (!Array.isArray(docs)) return [];
+
+          return docs.map((doc) => ({
+            category: key,
+            label: doI18n(doc.label, i18nRef.current),
+            url: `/clients/${category}#${doc.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
+          }));
+        });
+      },
+    );
     createItemExport = Object.entries(clientInterfaces).flatMap(
       ([category, categoryValue]) => {
         const endpoints = categoryValue?.endpoints ?? {};
@@ -262,7 +275,7 @@ function App() {
                       .reduce((a, b) => [...a, ...b], []);
                     await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`,);
                     await postEmptyJson(`/app-state/current-project/${repo[0]}`,);
-                    window.location.href = "/clients/" + editTable[repo[1].flavor];
+                    window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
                   } else {
                     console.log("Metadata fetch failed");
                     console.log(fullMetadataResponse);
@@ -309,21 +322,21 @@ function App() {
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Save as..." disableInteractive placement="right" onClick={(event) => {
-                  handleSubMenuClick(event);
-                  setChooseRepo(repo[0]);
-                }}>
-                  <IconButton>
+                <Tooltip title="Save as..." disableInteractive placement="right">
+                  <IconButton onClick={(event) => {
+                    handleSubMenuClick(event);
+                    setChooseRepo(repo[0]);
+                  }}>
                     <SaveAsOutlinedIcon />
                   </IconButton>
                 </Tooltip>
                 <Menu
                   id="basic-sub-menu"
-                  anchorEl={subMenuAnchorEl}
-                  open={Boolean(subMenuAnchorEl)}
+                  anchorEl={subMenuButtonSave}
+                  open={repo[0] === chooseRepo}
                   onClose={() => {
-                    setContentRowAnchorEl(null);
-                    setSubMenuAnchorEl(null);
+                    setSubMenuButtonSave(null);
+                    setChooseRepo(null)
                   }}
                   anchorOrigin={{ vertical: "top", horizontal: "left" }}
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
@@ -342,17 +355,35 @@ function App() {
                       ))}
                   <MenuItem
                     onClick={(event) => {
-                      //setExportBurritoAnchorEl(event.currentTarget);
-                      setContentRowAnchorEl(null);
-                      setSubMenuAnchorEl(null);
+                      setSubMenuButtonSave(null);
                     }}
                   >
                     {doI18n("pages:content:export_burrito", i18nRef.current)}
                   </MenuItem>
                 </Menu>
 
+                {createAboutRepo &&
+                  createAboutRepo.filter(
+                    (item) => item.category === repo[1].flavor,
+                  ).length > 0 && (
+                    <>
+                      {createAboutRepo &&
+                        createAboutRepo
+                          .filter((item) => item.category === repo[1].flavor)
+                          .map((item) => (
+                            <MenuItem
+                              key={`new-${item.label}`}
+                              onClick={() => (window.location.href = item.url)}
+                            >
+                              {item.label}
+                            </MenuItem>
+                          ))}
+                    </>
+                  )}
                 <Tooltip title="Properties" disableInteractive placement="right">
-                  <IconButton>
+                  <IconButton onClick={(event) => {
+                    setChooseRepo(repo[0]);
+                  }}>
                     <InfoOutlinedIcon />
                   </IconButton>
                 </Tooltip>
