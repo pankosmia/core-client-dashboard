@@ -102,6 +102,7 @@ function App() {
 
   let createItemExport;
   let createAboutRepo;
+  let createVersionManager;
   if (clientInterfaces) {
     createAboutRepo = Object.entries(clientInterfaces).flatMap(
       ([category, categoryValue]) => {
@@ -146,6 +147,23 @@ function App() {
             });
           },
         );
+      },
+    );
+    createVersionManager = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+
+        return Object.values(endpoints).flatMap((endpointValue) => {
+          const managerArray = endpointValue?.manager;
+
+          if (!Array.isArray(managerArray)) return [];
+
+          return managerArray.map((item) => ({
+            category,
+            label: doI18n(item.label, i18nRef.current),
+            url: "/clients/" + category + "#" + item.url,
+          }));
+        });
       },
     );
   }
@@ -206,6 +224,12 @@ function App() {
         </Grid2>)}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
+            <Chip
+              label={doI18n("pages:core-dashboard:create_content", i18nRef.current)}
+              color="secondary"
+              variant="outlined"
+              onClick={(event) => setCreateAnchorEl(event.currentTarget)}
+            />
             {!enabledRef?.current ? (<Tooltip
               slotProps={{
                 popper: {
@@ -233,12 +257,6 @@ function App() {
               color="secondary"
               variant="outlined"
               onClick={() => (window.location.href = "/clients/content")}
-            />
-            <Chip
-              label={doI18n("pages:core-dashboard:create_content", i18nRef.current)}
-              color="secondary"
-              variant="outlined"
-              onClick={(event) => setCreateAnchorEl(event.currentTarget)}
             />
             <Menu
               id="grouped-menu"
@@ -316,11 +334,23 @@ function App() {
                 </CardContent>
               </CardActionArea>
               <Box sx={{ display: "flex", flexDirection: "column", margin: "4px" }}>
-                <Tooltip title="Version manager" disableInteractive placement="right">
-                  <IconButton onClick={() => (window.location.href = `/clients/core-contenthandler_version_manager#/versionManager/?repoPath=${repo[0]}`)}>
-                    <SvgVersionManager />
-                  </IconButton>
-                </Tooltip>
+                {repo[0].includes("_local_/_local_") && createVersionManager.length > 0 &&
+                  <Tooltip title="Version manager" disableInteractive placement="right">
+                    <IconButton
+                      onClick={() => {
+                        {
+                          const vm = createVersionManager[0];
+                          window.location.href = `${vm.url}?repoPath=${repo[0]}`;
+                        }
+                      }}
+                      disabled={
+                        createVersionManager.length === 0
+                      }
+                    >
+                      <SvgVersionManager />
+                    </IconButton>
+                  </Tooltip>
+                }
 
                 <Tooltip title="Save as..." disableInteractive placement="right">
                   <IconButton onClick={(event) => {
@@ -363,30 +393,29 @@ function App() {
                 </Menu>
 
                 {createAboutRepo &&
-                  createAboutRepo.filter(
-                    (item) => item.category === repo[1].flavor,
-                  ).length > 0 && (
-                    <>
-                      {createAboutRepo &&
-                        createAboutRepo
-                          .filter((item) => item.category === repo[1].flavor)
-                          .map((item) => (
-                            <MenuItem
-                              key={`new-${item.label}`}
-                              onClick={() => (window.location.href = item.url)}
-                            >
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                    </>
+                  createAboutRepo.some(
+                    (item) => item.category === repo[1].flavor
+                  ) && (
+                    <Tooltip title="Properties" disableInteractive placement="right">
+                      <IconButton
+                        onClick={() => {
+                          const item = createAboutRepo.find(
+                            (i) => i.category === repo[1].flavor
+                          );
+
+                          if (item) {
+                            const url = item.url.replace(chooseRepo, repo[0]);
+
+                            setChooseRepo(repo[0]);
+                            window.location.href = url;
+                          }
+                        }}
+                      >
+                        <InfoOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
                   )}
-                <Tooltip title="Properties" disableInteractive placement="right">
-                  <IconButton onClick={(event) => {
-                    setChooseRepo(repo[0]);
-                  }}>
-                    <InfoOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
+
               </Box>
             </Box>
           </Card>
