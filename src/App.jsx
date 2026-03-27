@@ -161,7 +161,7 @@ function App() {
           return managerArray.map((item) => ({
             category,
             label: doI18n(item.label, i18nRef.current),
-            url: "/clients/" + category + "#" + item.url,
+            url:`/clients/${category}#${item.url}`,
           }));
         });
       },
@@ -340,7 +340,7 @@ function App() {
                       onClick={() => {
                         {
                           const vm = createVersionManager[0];
-                          window.location.href = `${vm.url}?repoPath=${repo[0]}`;
+                          window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
                         }
                       }}
                       disabled={
@@ -402,10 +402,8 @@ function App() {
                           const item = createAboutRepo.find(
                             (i) => i.category === repo[1].flavor
                           );
-
                           if (item) {
                             const url = item.url.replace(chooseRepo, repo[0]);
-
                             setChooseRepo(repo[0]);
                             window.location.href = url;
                           }
