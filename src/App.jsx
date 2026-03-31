@@ -137,12 +137,9 @@ function App() {
                   endpoint: endpointKey, // endpoint name
                   key, // flavor type (pdf/usfm/zip)
                   label: doI18n(item.label, i18nRef.current),
-                  url:
-                    "/clients/" +
-                    category +
-                    "#" +
-                    item.url.replace("%%REPO_PATH%%", chooseRepo),
+                  url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`
                 })),
+                console.log("flavorItems", flavorItems)
               );
             });
           },
@@ -161,7 +158,7 @@ function App() {
           return managerArray.map((item) => ({
             category,
             label: doI18n(item.label, i18nRef.current),
-            url:`/clients/${category}#${item.url}`,
+            url: `/clients/${category}#${item.url}`,
           }));
         });
       },
@@ -352,14 +349,16 @@ function App() {
                   </Tooltip>
                 }
 
-                <Tooltip title="Save as..." disableInteractive placement="right">
-                  <IconButton onClick={(event) => {
-                    handleSubMenuClick(event);
-                    setChooseRepo(repo[0]);
-                  }}>
-                    <SaveAsOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
+                {createItemExport?.filter((item) => item.endpoint === repo[1].flavor).length > 0 &&
+                  <Tooltip title="Save as..." disableInteractive placement="right">
+                    <IconButton onClick={(event) => {
+                      handleSubMenuClick(event);
+                      setChooseRepo(repo[0]);
+                    }}>
+                      <SaveAsOutlinedIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
                 <Menu
                   id="basic-sub-menu"
                   anchorEl={subMenuButtonSave}
@@ -383,13 +382,6 @@ function App() {
                           {item.label}
                         </MenuItem>
                       ))}
-                  <MenuItem
-                    onClick={(event) => {
-                      setSubMenuButtonSave(null);
-                    }}
-                  >
-                    {doI18n("pages:content:export_burrito", i18nRef.current)}
-                  </MenuItem>
                 </Menu>
 
                 {createAboutRepo &&
