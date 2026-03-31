@@ -13,10 +13,13 @@ import {
   Tooltip,
   Menu,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
 import { i18nContext, netContext, debugContext } from "pankosmia-rcl";
-
+import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SvgVersionManager from "./fileIcon/iconVersionManager";
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -46,7 +49,10 @@ function App() {
   const { debugRef } = useContext(debugContext);
   const matchPart = '/createDocument/textTranslation';
   const editableRepos = Object.entries(projectSummaries).filter(([repoPath, project]) => repoPath.startsWith("_local_/_local_") && !repoPath.includes("images") && editTable[project.flavor],);
-
+  const [chooseRepo, setChooseRepo] = useState(null);
+  //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
+  const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
+  const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
   const createItems = (() => {
     if (!clientInterfaces) return [];
 
@@ -61,7 +67,6 @@ function App() {
 
     return all;
   })();
-
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(`/burrito/metadata/summaries`, debugRef.current,);
     if (summariesResponse.ok) {
@@ -81,6 +86,10 @@ function App() {
     }).then();
   }, []);
 
+  const handleSubMenuClick = (event) => {
+    setSubMenuButtonSave(event.currentTarget);
+  };
+
   useEffect(() => {
     getJson("/client-interfaces")
       .then((res) => res.json)
@@ -90,6 +99,71 @@ function App() {
       })
       .catch((err) => console.error("Error :", err));
   }, []);
+
+  let createItemExport;
+  let createAboutRepo;
+  let createVersionManager;
+  if (clientInterfaces) {
+    createAboutRepo = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+        return Object.entries(endpoints).flatMap(([key, endpointValue]) => {
+          const docs = endpointValue?.about_repo;
+          if (!Array.isArray(docs)) return [];
+
+          return docs.map((doc) => ({
+            category: key,
+            label: doI18n(doc.label, i18nRef.current),
+            url: `/clients/${category}#${doc.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
+          }));
+        });
+      },
+    );
+    createItemExport = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+        return Object.entries(endpoints).flatMap(
+          ([endpointKey, endpointValue]) => {
+            const exportsArray = endpointValue?.export;
+            if (!Array.isArray(exportsArray)) return [];
+
+            return exportsArray.flatMap((doc) => {
+              const flavorItems = doc?.subMenu?.[0];
+              if (!flavorItems) return [];
+
+              return Object.entries(flavorItems).flatMap(([key, items]) =>
+                items.map((item) => ({
+                  category: endpointKey, // top-level category
+                  endpoint: endpointKey, // endpoint name
+                  key, // flavor type (pdf/usfm/zip)
+                  label: doI18n(item.label, i18nRef.current),
+                  url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`
+                })),
+                console.log("flavorItems", flavorItems)
+              );
+            });
+          },
+        );
+      },
+    );
+    createVersionManager = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+
+        return Object.values(endpoints).flatMap((endpointValue) => {
+          const managerArray = endpointValue?.manager;
+
+          if (!Array.isArray(managerArray)) return [];
+
+          return managerArray.map((item) => ({
+            category,
+            label: doI18n(item.label, i18nRef.current),
+            url: `/clients/${category}#${item.url}`,
+          }));
+        });
+      },
+    );
+  }
 
 
   const flavorTypes = {
@@ -147,6 +221,12 @@ function App() {
         </Grid2>)}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
+            <Chip
+              label={doI18n("pages:core-dashboard:create_content", i18nRef.current)}
+              color="secondary"
+              variant="outlined"
+              onClick={(event) => setCreateAnchorEl(event.currentTarget)}
+            />
             {!enabledRef?.current ? (<Tooltip
               slotProps={{
                 popper: {
@@ -175,12 +255,6 @@ function App() {
               variant="outlined"
               onClick={() => (window.location.href = "/clients/content")}
             />
-            <Chip
-              label={doI18n("pages:core-dashboard:create_content", i18nRef.current)}
-              color="secondary"
-              variant="outlined"
-              onClick={(event) => setCreateAnchorEl(event.currentTarget)}
-            />
             <Menu
               id="grouped-menu"
               anchorEl={createAnchorEl}
@@ -199,31 +273,31 @@ function App() {
         </Grid2>
         {editableRepos.length > 0 ? (editableRepos.map((repo) => (<Grid2 item size={{ xs: 12, md: 6, xl: 4 }}>
           <Card elevation={1}>
-            <CardActionArea
-              onClick={async () => {
-                const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`,);
-                if (fullMetadataResponse.ok) {
-                  const bookCodes = Object.entries(fullMetadataResponse.json.ingredients,)
-                    .map((i) => Object.keys(i[1].scope || {}))
-                    .reduce((a, b) => [...a, ...b], []);
-                  await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`,);
-                  await postEmptyJson(`/app-state/current-project/${repo[0]}`,);
-                  window.location.href = "/clients/" + editTable[repo[1].flavor];
-                } else {
-                  console.log("Metadata fetch failed");
-                  console.log(fullMetadataResponse);
-                }
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
               }}
             >
-              <CardContent sx={{ flex: "1 0 auto" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                  }}
-                >
+              <CardActionArea
+                onClick={async () => {
+                  const fullMetadataResponse = await getJson(`/burrito/metadata/raw/${repo[0]}`,);
+                  if (fullMetadataResponse.ok) {
+                    const bookCodes = Object.entries(fullMetadataResponse.json.ingredients,)
+                      .map((i) => Object.keys(i[1].scope || {}))
+                      .reduce((a, b) => [...a, ...b], []);
+                    await postEmptyJson(`/navigation/bcv/${bookCodes[0]}/1/1`,);
+                    await postEmptyJson(`/app-state/current-project/${repo[0]}`,);
+                    window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
+                  } else {
+                    console.log("Metadata fetch failed");
+                    console.log(fullMetadataResponse);
+                  }
+                }}
+              >
+                <CardContent sx={{ flex: "1 0 auto" }}>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <Typography
                       component="div"
@@ -254,9 +328,86 @@ function App() {
                       {`${repo[1].book_codes.length} ${doI18n(`pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"}`, i18nRef.current,)}`}
                     </Typography>)}
                   </Box>
-                </Box>
-              </CardContent>
-            </CardActionArea>
+                </CardContent>
+              </CardActionArea>
+              <Box sx={{ display: "flex", flexDirection: "column", margin: "4px" }}>
+                {repo[0].includes("_local_/_local_") && createVersionManager.length > 0 &&
+                  <Tooltip title="Version manager" disableInteractive placement="right">
+                    <IconButton
+                      onClick={() => {
+                        {
+                          const vm = createVersionManager[0];
+                          window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
+                        }
+                      }}
+                      disabled={
+                        createVersionManager.length === 0
+                      }
+                    >
+                      <SvgVersionManager />
+                    </IconButton>
+                  </Tooltip>
+                }
+
+                {createItemExport?.filter((item) => item.endpoint === repo[1].flavor).length > 0 &&
+                  <Tooltip title="Save as..." disableInteractive placement="right">
+                    <IconButton onClick={(event) => {
+                      handleSubMenuClick(event);
+                      setChooseRepo(repo[0]);
+                    }}>
+                      <SaveAsOutlinedIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+                <Menu
+                  id="basic-sub-menu"
+                  anchorEl={subMenuButtonSave}
+                  open={repo[0] === chooseRepo}
+                  onClose={() => {
+                    setSubMenuButtonSave(null);
+                    setChooseRepo(null)
+                  }}
+                  anchorOrigin={{ vertical: "top", horizontal: "left" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  slotProps={{ list: { "aria-labelledby": "basic-button" } }}
+                >
+                  {createItemExport &&
+                    createItemExport
+                      .filter((item) => item.endpoint === repo[1].flavor)
+                      .map((item) => (
+                        <MenuItem
+                          key={item.label}
+                          onClick={() => (window.location.href = item.url)}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                </Menu>
+
+                {createAboutRepo &&
+                  createAboutRepo.some(
+                    (item) => item.category === repo[1].flavor
+                  ) && (
+                    <Tooltip title="Properties" disableInteractive placement="right">
+                      <IconButton
+                        onClick={() => {
+                          const item = createAboutRepo.find(
+                            (i) => i.category === repo[1].flavor
+                          );
+                          if (item) {
+                            const url = item.url.replace(chooseRepo, repo[0]);
+                            setChooseRepo(repo[0]);
+                            window.location.href = url;
+                          }
+                        }}
+                      >
+                        <InfoOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+
+              </Box>
+            </Box>
           </Card>
         </Grid2>))) : (<Grid2 item>
           <Typography variant="body1" color="gray">
