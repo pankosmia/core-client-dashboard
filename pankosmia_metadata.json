@@ -33,80 +33,80 @@
       "fr": "Vous n'avez pas encore téléchargé des ressources de traduction. Voulez-vous le faire maintenant ?",
       "id": "Belum mengunduh sumber daya terjemahan apa pun. Ingin mengunduhnya sekarang?"
     },
-    "close":{
+    "close": {
       "en": "Close",
       "es": "Cerrar",
       "fr": "Fermer"
     },
-    "welcome":{
+    "welcome": {
       "en": "Welcome!",
       "fr": "Bienvenue !",
       "es": "¡Bienvenido!"
     },
-    "welcome_desc1":{
+    "welcome_desc1": {
       "en": "is a tool for creating Scripture and related resources.",
       "es": "es una herramienta para crear Escrituras y recursos relacionados."
     },
-    "welcome_desc2":{
+    "welcome_desc2": {
       "en": "This Dashboard shows common actions, recently edited work, and where to navigate. You can also get around and find other options in the top-left hamburger menu.",
       "es": "Este panel de control muestra acciones recurrentes, trabajo recientemente editado, y a donde navegar. También puedes moverte y encontrar otras opciones en el menu situado en la parte superior izquierda."
     },
-    "welcome_desc3":{
+    "welcome_desc3": {
       "en": "is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the header. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
       "es": "es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la cabecera. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
     },
-    "my_work":{
+    "my_work": {
       "en": "My work",
       "fr": "Mon travail",
       "es": "Mis proyectos"
     },
-    "my_work_desc":{
+    "my_work_desc": {
       "en": "Your editable documents will appear here.",
       "es": "Tus documentos editables aparecerá aquí.",
       "fr": "Vos documents éditables s'afficheront ici."
     },
-    "navigate_to":{
+    "navigate_to": {
       "en": "Navigate to",
       "fr": "Naviguer vers",
       "es": "Navegar a"
     },
-    "download_from_internet":{
+    "download_from_internet": {
       "en": "Download documents",
       "es": "Descargar documentos",
       "fr": "Télécharger des documents"
     },
-    "create_content":{
+    "create_content": {
       "en": "New document",
       "es": "@Crear contenido",
       "fr": "Nouveau document",
       "id": "Dokem baru"
     },
-    "connect_to_internet":{
+    "connect_to_internet": {
       "en": "Disable offline mode in the header",
       "es": "Desactivar el modo fuera de línea en el menu de la esquina superior izquierda",
       "fr": "Désactivez le mode hors-ligne dans l'en-tête"
     },
-    "content_description":{
+    "content_description": {
       "en": "Add, manage and open documents, including those created with other people or non-editable resources",
       "es": "Agregar, administrar y abrir documentos, incluidos aquellos creados con otras personas o recursos no editables",
       "fr": "Ajoutez, gérez et ouvrez des documents, y compris ceux créés avec d'autres personnes ou des ressources non-éditables"
     },
-    "i18n-editor_description":{
+    "i18n-editor_description": {
       "en": "Add or edit your local translation for the interface of",
       "es": "Agregue o edite su traducción local para la interfaz de",
       "fr": "Ajoutez ou éditez votre traduction locale pour l'interface de"
     },
-    "book":{
+    "book": {
       "en": "book",
       "es": "libro",
       "fr": "livre"
     },
-    "books":{
+    "books": {
       "en": "books",
       "es": "libros",
       "fr": "livres"
     },
-    "go_to_documents":{
+    "go_to_documents": {
       "en": "Go to documents",
       "es": "Ver documentos"
     }
