@@ -109,6 +109,18 @@
     "go_to_documents":{
       "en": "Go to documents",
       "es": "Ver documentos"
+    },
+    "getting_started":{
+      "en": "Getting started",
+      "es": "Primeros pasos"
+    },
+    "translation":{
+      "en": "Translation",
+      "es": "Traducción"
+    },
+    "alignment":{
+      "en": "Alignment",
+      "es": "Alineación"
     }
   }
 }

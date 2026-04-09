@@ -16,10 +16,13 @@ import {
   IconButton,
 } from "@mui/material";
 import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
-import { i18nContext, netContext, debugContext } from "pankosmia-rcl";
+import { i18nContext, netContext, debugContext, PanStepperPicker } from "pankosmia-rcl";
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SvgVersionManager from "./fileIcon/iconVersionManager";
+import Markdown from 'react-markdown';
+import { contentStep1, contentStep2, contentStep3 } from './content';
+
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -42,6 +45,7 @@ function App() {
   const [editTable, setEditTable] = useState({});
   const [projectSummaries, setProjectSummaries] = useState({});
   const [showWelcome, setShowWelcome] = useState(localStorage.getItem("showWelcome") === null ? true : false,);
+  const [showInitialWorkflow, setShowInitialWorkflow] = useState(localStorage.getItem("showInitialWorkflow") === null ? true : localStorage.getItem("showInitialWorkflow"),);
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
@@ -53,6 +57,8 @@ function App() {
   //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
+  const [currentLanguages, setCurrentLanguages] = useState();
+
   const createItems = (() => {
     if (!clientInterfaces) return [];
 
@@ -84,6 +90,15 @@ function App() {
     getAndSetJson({
       url: "/list-clients", setter: setClients,
     }).then();
+  }, []);
+
+  useEffect(() => {
+    getJson("/settings/languages")
+      .then((res) => res.json)
+      .then((data) => {
+        setCurrentLanguages(data)
+      })
+      .catch((err) => console.error("Error :", err));
   }, []);
 
   const handleSubMenuClick = (event) => {
@@ -184,6 +199,69 @@ function App() {
     "x-tcore": "parascriptural",
   };
 
+  const steps = [
+    `${doI18n("pages:core-dashboard:getting_started", i18nRef.current)}`,
+    `${doI18n("pages:core-dashboard:translation", i18nRef.current)}`,
+    `${doI18n("pages:core-dashboard:alignment", i18nRef.current)}`,
+  ];
+
+  const renderStepContent = (step) => {
+    const lang = currentLanguages?.find(l => contentStep1[l]) || 'en';
+
+    switch (step) {
+      case 0:
+        return (
+          <Markdown fullWidth>
+              {contentStep1[lang]}
+          </Markdown>
+        );
+      case 1:
+        return (
+          <Markdown fullWidth>
+              {contentStep2[lang]}
+          </Markdown>
+        );
+      case 2:
+        return (
+          <Markdown fullWidth>
+              {contentStep3[lang]}
+          </Markdown>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const isStepValid = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          showInitialWorkflow
+        );
+
+      case 1:
+        return (
+          showInitialWorkflow
+        );
+      case 2:
+        return (
+          showInitialWorkflow
+        );
+      default:
+        return true;
+    }
+  };
+
+  const handleCreate = async () => {
+    setShowInitialWorkflow(false);
+    localStorage.setItem("showInitialWorkflow", false);
+  };
+  
+  const handleClose = () => {
+    setShowInitialWorkflow(false);
+    localStorage.setItem("showInitialWorkflow", false);
+  };
+
   return (
     <Box
       sx={{
@@ -219,6 +297,26 @@ function App() {
             </CardActions>
           </Card>
         </Grid2>)}
+        {
+        (!showWelcome && showInitialWorkflow) 
+        && 
+          <Grid2 item size={12}>
+            <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
+                </Typography>
+                <PanStepperPicker
+                  steps={steps}
+                  renderStepContent={renderStepContent}
+                  isStepValid={isStepValid}
+                  handleCreate={handleCreate}
+                  handleClose={handleClose}
+                />
+              </CardContent>
+            </Card>
+          </Grid2>
+        }
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
             <Chip
