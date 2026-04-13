@@ -16,12 +16,17 @@ import {
   IconButton,
 } from "@mui/material";
 import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
-import { i18nContext, netContext, debugContext, PanStepperPicker } from "pankosmia-rcl";
+import {
+  i18nContext,
+  netContext,
+  debugContext,
+  PanStepperPicker,
+} from "pankosmia-rcl";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
-import Markdown from 'react-markdown';
-import { contentStep1, contentStep2, contentStep3 } from './content';
+import Markdown from "react-markdown";
+import { contentStep1, contentStep2, contentStep3 } from "./content";
 
 const getEditDocumentKeys = (data) => {
   let map = {};
@@ -44,8 +49,14 @@ function App() {
   const [clients, setClients] = useState([]);
   const [editTable, setEditTable] = useState({});
   const [projectSummaries, setProjectSummaries] = useState({});
-  const [showWelcome, setShowWelcome] = useState(localStorage.getItem("showWelcome") === null ? true : false,);
-  const [showInitialWorkflow, setShowInitialWorkflow] = useState(localStorage.getItem("showInitialWorkflow") === null ? true : localStorage.getItem("showInitialWorkflow"),);
+  const [showWelcome, setShowWelcome] = useState(
+    localStorage.getItem("showWelcome") === null ? true : false,
+  );
+  const [showInitialWorkflow, setShowInitialWorkflow] = useState(
+    localStorage.getItem("showInitialWorkflow") === null
+      ? true
+      : localStorage.getItem("showInitialWorkflow"),
+  );
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
@@ -111,7 +122,7 @@ function App() {
     getJson("/settings/languages")
       .then((res) => res.json)
       .then((data) => {
-        setCurrentLanguages(data)
+        setCurrentLanguages(data);
       })
       .catch((err) => console.error("Error :", err));
   }, []);
@@ -215,33 +226,21 @@ function App() {
   };
 
   const steps = [
-    `${doI18n("pages:core-dashboard:getting_started", i18nRef.current)}`,
-    `${doI18n("pages:core-dashboard:translation", i18nRef.current)}`,
-    `${doI18n("pages:core-dashboard:alignment", i18nRef.current)}`,
+    `${doI18n("pages:core-dashboard:overview", i18nRef.current)}`,
+    `${doI18n("pages:core-dashboard:setup_translation", i18nRef.current)}`,
+    `${doI18n("pages:core-dashboard:setup_checks", i18nRef.current)}`,
   ];
 
   const renderStepContent = (step) => {
-    const lang = currentLanguages?.find(l => contentStep1[l]) || 'en';
+    const lang = currentLanguages?.find((l) => contentStep1[l]) || "en";
 
     switch (step) {
       case 0:
-        return (
-          <Markdown fullWidth>
-              {contentStep1[lang]}
-          </Markdown>
-        );
+        return <Markdown fullWidth>{contentStep1[lang]}</Markdown>;
       case 1:
-        return (
-          <Markdown fullWidth>
-              {contentStep2[lang]}
-          </Markdown>
-        );
+        return <Markdown fullWidth>{contentStep2[lang]}</Markdown>;
       case 2:
-        return (
-          <Markdown fullWidth>
-              {contentStep3[lang]}
-          </Markdown>
-        );
+        return <Markdown fullWidth>{contentStep3[lang]}</Markdown>;
       default:
         return null;
     }
@@ -250,18 +249,12 @@ function App() {
   const isStepValid = (step) => {
     switch (step) {
       case 0:
-        return (
-          showInitialWorkflow
-        );
+        return showInitialWorkflow;
 
       case 1:
-        return (
-          showInitialWorkflow
-        );
+        return showInitialWorkflow;
       case 2:
-        return (
-          showInitialWorkflow
-        );
+        return showInitialWorkflow;
       default:
         return true;
     }
@@ -271,7 +264,7 @@ function App() {
     setShowInitialWorkflow(false);
     localStorage.setItem("showInitialWorkflow", false);
   };
-  
+
   const handleClose = () => {
     setShowInitialWorkflow(false);
     localStorage.setItem("showInitialWorkflow", false);
@@ -290,42 +283,45 @@ function App() {
       }}
     >
       <Grid2 container spacing={2} sx={{ m: 2 }}>
-        {showWelcome && (<Grid2 item size={12}>
-          <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
-            <CardContent>
-              <Typography variant="h5" component="div">
-                {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
-              </Typography>
-              <Typography sx={{ mt: 2 }} color="gray" variant="body2">
-                {`${doI18n("branding:software:name", i18nRef.current,)} ${doI18n("pages:core-dashboard:welcome_desc1", i18nRef.current,)}`}
-                <br />
-                {doI18n("pages:core-dashboard:welcome_desc2", i18nRef.current,)}
-                <br />
-                <br />
-                {`${doI18n("branding:software:name", i18nRef.current,)} ${doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current,)}`}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                onClick={() => {
-                  setShowWelcome(false);
-                  localStorage.setItem("showWelcome", "welcomeIsDisabled");
-                }}
-              >
-                {doI18n("pages:core-dashboard:close", i18nRef.current)}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid2>)}
-        {
-        (!showWelcome && showInitialWorkflow) 
-        && 
+        {showWelcome && (
           <Grid2 item size={12}>
             <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
               <CardContent>
                 <Typography variant="h5" component="div">
                   {doI18n("pages:core-dashboard:welcome", i18nRef.current)}
+                </Typography>
+                <Typography sx={{ mt: 2 }} color="gray" variant="body2">
+                  {`${doI18n("branding:software:name", i18nRef.current)} ${doI18n("pages:core-dashboard:welcome_desc1", i18nRef.current)}`}
+                  <br />
+                  {doI18n(
+                    "pages:core-dashboard:welcome_desc2",
+                    i18nRef.current,
+                  )}
+                  <br />
+                  <br />
+                  {`${doI18n("branding:software:name", i18nRef.current)} ${doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current)}`}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  onClick={() => {
+                    setShowWelcome(false);
+                    localStorage.setItem("showWelcome", "welcomeIsDisabled");
+                  }}
+                >
+                  {doI18n("pages:core-dashboard:close", i18nRef.current)}
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid2>
+        )}
+        {!showWelcome && showInitialWorkflow && (
+          <Grid2 item size={12}>
+            <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  {doI18n("pages:core-dashboard:setup", i18nRef.current)}
                 </Typography>
                 <PanStepperPicker
                   steps={steps}
@@ -333,11 +329,13 @@ function App() {
                   isStepValid={isStepValid}
                   handleCreate={handleCreate}
                   handleClose={handleClose}
+                  /* fieldsRequired={false} */
+                  /* variant="tc" */
                 />
               </CardContent>
             </Card>
           </Grid2>
-        }
+        )}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
             <Chip
