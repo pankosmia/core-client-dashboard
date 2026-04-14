@@ -329,8 +329,10 @@ function App() {
                   isStepValid={isStepValid}
                   handleCreate={handleCreate}
                   handleClose={handleClose}
-                  /* fieldsRequired={false} */
-                  /* variant="tc" */
+                  /* requiredFieldsLabel={false}
+                  secondaryButtonVariant="secondary"
+                  secondaryActionKey="back_button" */
+                  // UPDATE pankosmia-rcl for this to be uncommented.
                 />
               </CardContent>
             </Card>
