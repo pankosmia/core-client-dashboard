@@ -471,9 +471,7 @@ function App() {
                     </Menu>
 
                     {createAboutRepo &&
-                      createAboutRepo.some(
-                        (item) => item.category === repo[1].flavor,
-                      ) && (
+                      createAboutRepo.map((item) => (
                         <Tooltip
                           title="Properties"
                           disableInteractive
@@ -481,9 +479,6 @@ function App() {
                         >
                           <IconButton
                             onClick={() => {
-                              const item = createAboutRepo.find(
-                                (i) => i.category === repo[1].flavor,
-                              );
                               if (item) {
                                 const url = item.url.replace(
                                   chooseRepo,
@@ -497,7 +492,7 @@ function App() {
                             <InfoOutlinedIcon />
                           </IconButton>
                         </Tooltip>
-                      )}
+                      ))}
                   </Box>
                 </Box>
               </Card>
