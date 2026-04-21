@@ -113,18 +113,6 @@
     "overview": {
       "en": "Overview",
       "es": "Resumen"
-    },
-    "setup_translation": {
-      "en": "Set up the translation",
-      "es": "Configurar la traducción"
-    },
-    "setup_checks": {
-      "en": "Set up checks",
-      "es": "Configurar alineaciones"
-    },
-    "setup": {
-      "en": "First setup to get going",
-      "es": "Primeros pasos para empezar"
     }
   }
 }

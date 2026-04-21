@@ -26,7 +26,6 @@ import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
 import Markdown from "react-markdown";
-import { contentStep1, contentStep2, contentStep3 } from "./content";
 
 const getEditDocumentKeys = (data) => {
   let map = {};
@@ -53,9 +52,7 @@ function App() {
     localStorage.getItem("showWelcome") === null ? true : false,
   );
   const [showInitialWorkflow, setShowInitialWorkflow] = useState(
-    localStorage.getItem("showInitialWorkflow") === null
-      ? true
-      : localStorage.getItem("showInitialWorkflow"),
+    localStorage.getItem("showInitialWorkflow") === null ? true : false,
   );
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
@@ -74,6 +71,9 @@ function App() {
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
   const [currentLanguages, setCurrentLanguages] = useState();
+  const [walkthrough, setWalkthrough] = useState(null);
+  const [walkthroughIndex, setWalkthroughIndex] = useState(null);
+  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   const createItems = (() => {
     if (!clientInterfaces) return [];
@@ -140,6 +140,52 @@ function App() {
       })
       .catch((err) => console.error("Error :", err));
   }, []);
+
+  const getWalkthroughContent = async (languagesArray) => {
+    for (const lang of languagesArray) {
+      const response = await fetch(
+        `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
+      );
+
+      if (response.ok) {
+        const indexData = await response.json();
+
+        const finalGuide = await Promise.all(
+          indexData.steps.map(async (step) => {
+            const mdResponse = await fetch(
+              `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
+            );
+            const mdText = mdResponse.ok
+              ? await mdResponse.text()
+              : "Content unavailable";
+
+            return {
+              name: step.title,
+              content: mdText,
+            };
+          }),
+        );
+
+        setWalkthroughIndex(indexData);
+        setWalkthrough({
+          title: indexData.name,
+          steps: finalGuide,
+        });
+        setShowWalkthrough(true);
+        return;
+      }
+    }
+
+    console.warn("No walkthrough found in any language.");
+    setShowWalkthrough(false);
+    setWalkthrough(null);
+  };
+
+  useEffect(() => {
+    if (currentLanguages && currentLanguages.length > 0) {
+      getWalkthroughContent(currentLanguages).then();
+    }
+  }, [currentLanguages]);
 
   let createItemExport;
   let createAboutRepo;
@@ -226,21 +272,19 @@ function App() {
   };
 
   const steps = [
-    `${doI18n("pages:core-dashboard:overview", i18nRef.current)}`,
-    `${doI18n("pages:core-dashboard:setup_translation", i18nRef.current)}`,
-    `${doI18n("pages:core-dashboard:setup_checks", i18nRef.current)}`,
+    walkthrough?.steps[0]?.name,
+    walkthrough?.steps[1]?.name,
+    walkthrough?.steps[2]?.name,
   ];
 
   const renderStepContent = (step) => {
-    const lang = currentLanguages?.find((l) => contentStep1[l]) || "en";
-
     switch (step) {
       case 0:
-        return <Markdown fullWidth>{contentStep1[lang]}</Markdown>;
+        return <Markdown fullWidth>{walkthrough?.steps[0]?.content}</Markdown>;
       case 1:
-        return <Markdown fullWidth>{contentStep2[lang]}</Markdown>;
+        return <Markdown fullWidth>{walkthrough?.steps[1]?.content}</Markdown>;
       case 2:
-        return <Markdown fullWidth>{contentStep3[lang]}</Markdown>;
+        return <Markdown fullWidth>{walkthrough?.steps[2]?.content}</Markdown>;
       default:
         return null;
     }
@@ -262,12 +306,12 @@ function App() {
 
   const handleCreate = async () => {
     setShowInitialWorkflow(false);
-    localStorage.setItem("showInitialWorkflow", false);
+    localStorage.setItem("showInitialWorkflow", "initialWorkflowIsDisabled");
   };
 
   const handleClose = () => {
     setShowInitialWorkflow(false);
-    localStorage.setItem("showInitialWorkflow", false);
+    localStorage.setItem("showInitialWorkflow", "initialWorkflowIsDisabled");
   };
 
   return (
@@ -316,12 +360,12 @@ function App() {
             </Card>
           </Grid2>
         )}
-        {!showWelcome && showInitialWorkflow && (
+        {!showWelcome && showInitialWorkflow && walkthrough && (
           <Grid2 item size={12}>
             <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  {doI18n("pages:core-dashboard:setup", i18nRef.current)}
+                  {walkthrough.title}
                 </Typography>
                 <PanStepperPicker
                   steps={steps}
@@ -329,10 +373,11 @@ function App() {
                   isStepValid={isStepValid}
                   handleCreate={handleCreate}
                   handleClose={handleClose}
-                  /* requiredFieldsLabel={false}
+                  requiredFieldsLabel={false}
+                  primaryActionKey="close"
+                  primaryButtonVariant="primary"
+                  secondaryActionKey="back_button"
                   secondaryButtonVariant="secondary"
-                  secondaryActionKey="back_button" */
-                  // UPDATE pankosmia-rcl for this to be uncommented.
                 />
               </CardContent>
             </Card>
