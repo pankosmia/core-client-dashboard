@@ -70,6 +70,7 @@ function App() {
   //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
+  const [openSubMenu, setOpenSubMenu] = useState(null);
   const [currentLanguages, setCurrentLanguages] = useState();
   const [walkthrough, setWalkthrough] = useState(null);
   const [walkthroughIndex, setWalkthroughIndex] = useState(null);
@@ -573,6 +574,7 @@ function App() {
                           onClick={(event) => {
                             handleSubMenuClick(event);
                             setChooseRepo(repo[0]);
+                            setOpenSubMenu(repo[0]);
                           }}
                         >
                           <SaveAsOutlinedIcon />
@@ -582,10 +584,11 @@ function App() {
                     <Menu
                       id="basic-sub-menu"
                       anchorEl={subMenuButtonSave}
-                      open={repo[0] === chooseRepo}
+                      open={repo[0] === openSubMenu}
                       onClose={() => {
                         setSubMenuButtonSave(null);
                         setChooseRepo(null);
+                        setOpenSubMenu(null);
                       }}
                       anchorOrigin={{ vertical: "top", horizontal: "left" }}
                       transformOrigin={{ vertical: "top", horizontal: "right" }}
