@@ -26,7 +26,7 @@ import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
 import Markdown from "react-markdown";
-
+import { Walkthrough } from "./Walkthrough";
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -51,9 +51,7 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
   );
-  const [showInitialWorkflow, setShowInitialWorkflow] = useState(
-    localStorage.getItem("showInitialWorkflow") === null ? true : false,
-  );
+
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
@@ -71,10 +69,6 @@ function App() {
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
   const [openSubMenu, setOpenSubMenu] = useState(null);
-  const [currentLanguages, setCurrentLanguages] = useState();
-  const [walkthrough, setWalkthrough] = useState(null);
-  const [walkthroughIndex, setWalkthroughIndex] = useState(null);
-  const [showWalkthrough, setShowWalkthrough] = useState(false);
 
   const createItems = (() => {
     if (!clientInterfaces) return [];
@@ -105,6 +99,7 @@ function App() {
       setProjectSummaries(summariesResponse.json);
     }
   };
+
   useEffect(() => {
     getProjectSummaries().then();
   }, []);
@@ -119,15 +114,6 @@ function App() {
     }).then();
   }, []);
 
-  useEffect(() => {
-    getJson("/settings/languages")
-      .then((res) => res.json)
-      .then((data) => {
-        setCurrentLanguages(data);
-      })
-      .catch((err) => console.error("Error :", err));
-  }, []);
-
   const handleSubMenuClick = (event) => {
     setSubMenuButtonSave(event.currentTarget);
   };
@@ -136,57 +122,12 @@ function App() {
     getJson("/client-interfaces")
       .then((res) => res.json)
       .then((data) => {
+        PanStepperPicker;
         setEditTable(getEditDocumentKeys(data));
         setClientInterfaces(data);
       })
       .catch((err) => console.error("Error :", err));
   }, []);
-
-  const getWalkthroughContent = async (languagesArray) => {
-    for (const lang of languagesArray) {
-      const response = await fetch(
-        `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
-      );
-
-      if (response.ok) {
-        const indexData = await response.json();
-
-        const finalGuide = await Promise.all(
-          indexData.steps.map(async (step) => {
-            const mdResponse = await fetch(
-              `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
-            );
-            const mdText = mdResponse.ok
-              ? await mdResponse.text()
-              : "Content unavailable";
-
-            return {
-              name: step.title,
-              content: mdText,
-            };
-          }),
-        );
-
-        setWalkthroughIndex(indexData);
-        setWalkthrough({
-          title: indexData.name,
-          steps: finalGuide,
-        });
-        setShowWalkthrough(true);
-        return;
-      }
-    }
-
-    console.warn("No walkthrough found in any language.");
-    setShowWalkthrough(false);
-    setWalkthrough(null);
-  };
-
-  useEffect(() => {
-    if (currentLanguages && currentLanguages.length > 0) {
-      getWalkthroughContent(currentLanguages).then();
-    }
-  }, [currentLanguages]);
 
   let createItemExport;
   let createAboutRepo;
@@ -272,49 +213,6 @@ function App() {
     "x-tcore": "parascriptural",
   };
 
-  const steps = [
-    walkthrough?.steps[0]?.name,
-    walkthrough?.steps[1]?.name,
-    walkthrough?.steps[2]?.name,
-  ];
-
-  const renderStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return <Markdown fullWidth>{walkthrough?.steps[0]?.content}</Markdown>;
-      case 1:
-        return <Markdown fullWidth>{walkthrough?.steps[1]?.content}</Markdown>;
-      case 2:
-        return <Markdown fullWidth>{walkthrough?.steps[2]?.content}</Markdown>;
-      default:
-        return null;
-    }
-  };
-
-  const isStepValid = (step) => {
-    switch (step) {
-      case 0:
-        return showInitialWorkflow;
-
-      case 1:
-        return showInitialWorkflow;
-      case 2:
-        return showInitialWorkflow;
-      default:
-        return true;
-    }
-  };
-
-  const handleCreate = async () => {
-    setShowInitialWorkflow(false);
-    localStorage.setItem("showInitialWorkflow", "initialWorkflowIsDisabled");
-  };
-
-  const handleClose = () => {
-    setShowInitialWorkflow(false);
-    localStorage.setItem("showInitialWorkflow", "initialWorkflowIsDisabled");
-  };
-
   return (
     <Box
       sx={{
@@ -361,29 +259,7 @@ function App() {
             </Card>
           </Grid2>
         )}
-        {!showWelcome && showInitialWorkflow && walkthrough && (
-          <Grid2 item size={12}>
-            <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {walkthrough.title}
-                </Typography>
-                <PanStepperPicker
-                  steps={steps}
-                  renderStepContent={renderStepContent}
-                  isStepValid={isStepValid}
-                  handleCreate={handleCreate}
-                  handleClose={handleClose}
-                  requiredFieldsLabel={false}
-                  primaryActionKey="close"
-                  primaryButtonVariant="primary"
-                  secondaryActionKey="back_button"
-                  secondaryButtonVariant="secondary"
-                />
-              </CardContent>
-            </Card>
-          </Grid2>
-        )}
+        {!showWelcome && <Walkthrough />}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
             <Chip
