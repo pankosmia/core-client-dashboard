@@ -201,6 +201,32 @@ function App() {
     "x-tcore": "parascriptural",
   };
 
+  const handleNext = (nextStep) => {
+    const storedHistory = localStorage.getItem("HistoriqueInitialWorkflow");
+    const historyArray = storedHistory ? JSON.parse(storedHistory) : [];
+    historyArray.push(currentStep);
+    localStorage.setItem(
+      "HistoriqueInitialWorkflow",
+      JSON.stringify(historyArray),
+    );
+    setStepperValue(nextStep);
+  };
+
+  const handleBack = () => {
+    const storedHistory = localStorage.getItem("HistoriqueInitialWorkflow");
+    if (storedHistory) {
+      const historyArray = JSON.parse(storedHistory);
+      if (historyArray.length > 0) {
+        const lastStep = historyArray.pop();
+        setStepperValue(lastStep);
+        localStorage.setItem(
+          "HistoriqueInitialWorkflow",
+          JSON.stringify(historyArray),
+        );
+      }
+    }
+  };
+
   return (
     <Box
       sx={{
