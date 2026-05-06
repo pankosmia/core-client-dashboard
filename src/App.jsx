@@ -16,10 +16,17 @@ import {
   IconButton,
 } from "@mui/material";
 import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
-import { i18nContext, netContext, debugContext } from "pankosmia-rcl";
+import {
+  i18nContext,
+  netContext,
+  debugContext,
+  PanStepperPicker,
+} from "pankosmia-rcl";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
+import Markdown from "react-markdown";
+import { Walkthrough } from "./Walkthrough";
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -44,6 +51,7 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
   );
+
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
@@ -60,6 +68,8 @@ function App() {
   //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
+  const [openSubMenu, setOpenSubMenu] = useState(null);
+
   const createItems = (() => {
     if (!clientInterfaces) return [];
 
@@ -89,6 +99,7 @@ function App() {
       setProjectSummaries(summariesResponse.json);
     }
   };
+
   useEffect(() => {
     getProjectSummaries().then();
   }, []);
@@ -111,6 +122,7 @@ function App() {
     getJson("/client-interfaces")
       .then((res) => res.json)
       .then((data) => {
+        PanStepperPicker;
         setEditTable(getEditDocumentKeys(data));
         setClientInterfaces(data);
       })
@@ -273,6 +285,7 @@ function App() {
             </Card>
           </Grid2>
         )}
+        {!showWelcome && <Walkthrough />}
         <Grid2 item size={12}>
           <Stack direction="row" spacing={1}>
             <Chip
@@ -463,6 +476,7 @@ function App() {
                           onClick={(event) => {
                             handleSubMenuClick(event);
                             setChooseRepo(repo[0]);
+                            setOpenSubMenu(repo[0]);
                           }}
                         >
                           <SaveAsOutlinedIcon />
@@ -472,10 +486,11 @@ function App() {
                     <Menu
                       id="basic-sub-menu"
                       anchorEl={subMenuButtonSave}
-                      open={repo[0] === chooseRepo}
+                      open={repo[0] === openSubMenu}
                       onClose={() => {
                         setSubMenuButtonSave(null);
                         setChooseRepo(null);
+                        setOpenSubMenu(null);
                       }}
                       anchorOrigin={{ vertical: "top", horizontal: "left" }}
                       transformOrigin={{ vertical: "top", horizontal: "right" }}
@@ -497,9 +512,7 @@ function App() {
                     </Menu>
 
                     {createAboutRepo &&
-                      createAboutRepo.some(
-                        (item) => item.category === repo[1].flavor,
-                      ) && (
+                      createAboutRepo.map((item) => (
                         <Tooltip
                           title="Properties"
                           disableInteractive
@@ -507,9 +520,6 @@ function App() {
                         >
                           <IconButton
                             onClick={() => {
-                              const item = createAboutRepo.find(
-                                (i) => i.category === repo[1].flavor,
-                              );
                               if (item) {
                                 const url = item.url.replace(
                                   chooseRepo,
@@ -523,7 +533,7 @@ function App() {
                             <InfoOutlinedIcon />
                           </IconButton>
                         </Tooltip>
-                      )}
+                      ))}
                   </Box>
                 </Box>
               </Card>

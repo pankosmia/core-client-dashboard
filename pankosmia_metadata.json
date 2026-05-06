@@ -3,6 +3,7 @@
   "require": {
     "net": false
   },
+  "minServerVersion": "0.14.12",
   "i18n": {
     "title": {
       "ar": "الفهرس",
@@ -109,6 +110,10 @@
     "go_to_documents": {
       "en": "Go to documents",
       "es": "Ver documentos"
+    },
+    "overview": {
+      "en": "Overview",
+      "es": "Resumen"
     }
   }
 }
