@@ -25,6 +25,7 @@ import {
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
+import Tc4ProjectIcon from "./fileIcon/Tc4ProjectIcon";
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 const getEditDocumentKeys = (data) => {
@@ -62,7 +63,8 @@ function App() {
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
       !repoPath.includes("images") &&
-      editTable[project.flavor],
+      project.flavor != "x-tcore" &&
+      (editTable[project.flavor] || project.flavor === "textTranslation"),
   );
   const [chooseRepo, setChooseRepo] = useState(null);
   //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
@@ -132,6 +134,8 @@ function App() {
   let createItemExport;
   let createAboutRepo;
   let createVersionManager;
+  let createtC4Button;
+  let createImportTc4Button;
   if (clientInterfaces) {
     createAboutRepo = Object.entries(clientInterfaces).flatMap(
       ([category, categoryValue]) => {
@@ -193,8 +197,37 @@ function App() {
         });
       },
     );
-  }
+    createtC4Button = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
 
+        return Object.values(endpoints).flatMap((endpointValue) => {
+          const tCore = endpointValue?.initDocument;
+          if (!Array.isArray(tCore)) return [];
+          return tCore.map((item) => ({
+            category,
+            label: doI18n(item.label, i18nRef.current),
+            url: `/clients/${category}#${item.url}`,
+          }));
+        });
+      },
+    );
+    createImportTc4Button = Object.entries(clientInterfaces).flatMap(
+      ([category, categoryValue]) => {
+        const endpoints = categoryValue?.endpoints ?? {};
+
+        return Object.values(endpoints).flatMap((endpointValue) => {
+          const tCore = endpointValue?.importContent;
+          if (!Array.isArray(tCore)) return [];
+          return tCore.map((item) => ({
+            category,
+            label: doI18n(item.label, i18nRef.current),
+            url: `/clients/${category}#${item.url}`,
+          }));
+        });
+      },
+    );
+  }
   const flavorTypes = {
     texttranslation: "scripture",
     audiotranslation: "scripture",
@@ -317,6 +350,17 @@ function App() {
               variant="outlined"
               onClick={() => (window.location.href = "/clients/content")}
             />
+            {createImportTc4Button.length > 0 && (
+              <Chip
+                label={doI18n(createImportTc4Button[0].label, i18nRef.current)}
+                color="secondary"
+                variant="outlined"
+                onClick={() =>
+                  (window.location.href = createImportTc4Button[0].url)
+                }
+              />
+            )}
+
             <Menu
               id="grouped-menu"
               anchorEl={createAnchorEl}
@@ -354,18 +398,38 @@ function App() {
                         `/burrito/metadata/raw/${repo[0]}`,
                       );
                       if (fullMetadataResponse.ok) {
-                        const bookCodes = Object.entries(
-                          fullMetadataResponse.json.ingredients,
-                        )
-                          .map((i) => Object.keys(i[1].scope || {}))
-                          .reduce((a, b) => [...a, ...b], []);
-                        await postEmptyJson(
-                          `/navigation/bcv/${bookCodes[0]}/1/1`,
-                        );
-                        await postEmptyJson(
-                          `/app-state/current-project/${repo[0]}`,
-                        );
-                        window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
+                        if (editTable[repo[1].flavor]) {
+                          const bookCodes = Object.entries(
+                            fullMetadataResponse.json.ingredients,
+                          )
+                            .map((i) => Object.keys(i[1].scope || {}))
+                            .reduce((a, b) => [...a, ...b], []);
+                          await postEmptyJson(
+                            `/navigation/bcv/${bookCodes[0]}/1/1`,
+                          );
+                          await postEmptyJson(
+                            `/app-state/current-project/${repo[0]}`,
+                          );
+                          window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
+                        } else if (
+                          createAboutRepo &&
+                          createAboutRepo.some(
+                            (item) =>
+                              item.category === repo[1].flavor ||
+                              item.category === "all",
+                          )
+                        ) {
+                          const item = createAboutRepo.find(
+                            (i) =>
+                              i.category === repo[1].flavor ||
+                              i.category === "all",
+                          );
+                          if (item) {
+                            const url = item.url.replace(chooseRepo, repo[0]);
+                            setChooseRepo(repo[0]);
+                            window.location.href = url;
+                          }
+                        }
                       } else {
                         console.log("Metadata fetch failed");
                         console.log(fullMetadataResponse);
@@ -437,6 +501,25 @@ function App() {
                           </IconButton>
                         </Tooltip>
                       )}
+                    {createtC4Button.length > 0 && (
+                      <Tooltip
+                        title="Go check"
+                        disableInteractive
+                        placement="right"
+                      >
+                        <IconButton
+                          onClick={() => {
+                            window.location.href =
+                              createtC4Button[0].url.replace(
+                                "%XXX%",
+                                repo[1].abbreviation,
+                              );
+                          }}
+                        >
+                          <Tc4ProjectIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
 
                     {createItemExport?.filter(
                       (item) => item.endpoint === repo[1].flavor,
@@ -486,7 +569,11 @@ function App() {
                     </Menu>
 
                     {createAboutRepo &&
-                      createAboutRepo.map((item) => (
+                      createAboutRepo.some(
+                        (item) =>
+                          item.category === repo[1].flavor ||
+                          item.category === "all",
+                      ) && (
                         <Tooltip
                           title="Properties"
                           disableInteractive
@@ -494,6 +581,11 @@ function App() {
                         >
                           <IconButton
                             onClick={() => {
+                              const item = createAboutRepo.find(
+                                (i) =>
+                                  i.category === repo[1].flavor ||
+                                  i.category === "all",
+                              );
                               if (item) {
                                 const url = item.url.replace(
                                   chooseRepo,
@@ -507,7 +599,7 @@ function App() {
                             <InfoOutlinedIcon />
                           </IconButton>
                         </Tooltip>
-                      ))}
+                      )}
                   </Box>
                 </Box>
               </Card>
