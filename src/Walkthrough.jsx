@@ -138,6 +138,33 @@ export function Walkthrough() {
     setShowInitialWorkflow(false);
     localStorage.setItem("showInitialWorkflow", "initialWorkflowIsDisabled");
   };
+
+  const handleNext = (nextStep) => {
+    const storedHistory = localStorage.getItem("HistoriqueInitialWorkflow");
+    const historyArray = storedHistory ? JSON.parse(storedHistory) : [];
+    historyArray.push(currentStep);
+    localStorage.setItem(
+      "HistoriqueInitialWorkflow",
+      JSON.stringify(historyArray),
+    );
+    setStepperValue(nextStep);
+  };
+
+  const handleBack = () => {
+    const storedHistory = localStorage.getItem("HistoriqueInitialWorkflow");
+    if (storedHistory) {
+      const historyArray = JSON.parse(storedHistory);
+      if (historyArray.length > 0) {
+        const lastStep = historyArray.pop();
+        setStepperValue(lastStep);
+        localStorage.setItem(
+          "HistoriqueInitialWorkflow",
+          JSON.stringify(historyArray),
+        );
+      }
+    }
+  };
+
   return (
     showInitialWorkflow &&
     walkthrough && (
@@ -159,6 +186,8 @@ export function Walkthrough() {
               primaryButtonVariant="primary"
               secondaryActionKey="back_button"
               secondaryButtonVariant="secondary"
+              primaryAction={handleNext}
+              secondaryAction={handleBack}
             />
           </CardContent>
         </Card>
