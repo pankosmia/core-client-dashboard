@@ -25,7 +25,7 @@ import {
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
-import Tc4ProjectIcon from "./fileIcon/Tc4ProjectIcon";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 const getEditDocumentKeys = (data) => {
@@ -503,7 +503,10 @@ function App() {
                       )}
                     {createtC4Button.length > 0 && (
                       <Tooltip
-                        title="Go check"
+                        title={doI18n(
+                          "pages:core-dashboard:tooltip_checks",
+                          i18nRef.current,
+                        )}
                         disableInteractive
                         placement="right"
                       >
@@ -516,7 +519,7 @@ function App() {
                               );
                           }}
                         >
-                          <Tc4ProjectIcon />
+                          <FactCheckOutlinedIcon />
                         </IconButton>
                       </Tooltip>
                     )}

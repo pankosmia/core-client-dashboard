@@ -114,6 +114,10 @@
     "overview": {
       "en": "Overview",
       "es": "Resumen"
+    },
+    "tooltip_checks": {
+      "en": "Translation checks",
+      "fr": "Vérification de traduction"
     }
   }
 }
