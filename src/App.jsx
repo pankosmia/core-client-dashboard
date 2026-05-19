@@ -338,7 +338,10 @@ function App() {
                 )}
                 color="secondary"
                 variant="outlined"
-                onClick={() => (window.location.href = "/clients/download")}
+                onClick={() =>
+                  (window.location.href =
+                    "/clients/download?returnTypePage=dashboard")
+                }
               />
             )}
             <Chip
