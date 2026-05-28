@@ -3,6 +3,7 @@
   "require": {
     "net": false
   },
+  "minServerVersion": "0.14.12",
   "i18n": {
     "title": {
       "ar": "الفهرس",
@@ -113,6 +114,10 @@
     "overview": {
       "en": "Overview",
       "es": "Resumen"
+    },
+    "tooltip_checks": {
+      "en": "Translation checks",
+      "fr": "Vérification de traduction"
     }
   }
 }
