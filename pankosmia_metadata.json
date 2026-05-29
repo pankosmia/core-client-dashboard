@@ -3,7 +3,7 @@
   "require": {
     "net": false
   },
-  "minServerVersion": "0.14.12",
+  "minServerVersion": "0.16.0",
   "i18n": {
     "title": {
       "ar": "الفهرس",
