@@ -94,7 +94,7 @@ function App() {
   })();
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(
-      `/burrito/metadata/summaries`,
+      `/api/burrito/metadata/summaries`,
       debugRef.current,
     );
     if (summariesResponse.ok) {
@@ -111,7 +111,7 @@ function App() {
   };
   useEffect(() => {
     getAndSetJson({
-      url: "/list-clients",
+      url: "/api/list-clients",
       setter: setClients,
     }).then();
   }, []);
@@ -121,7 +121,7 @@ function App() {
   };
 
   useEffect(() => {
-    getJson("/client-interfaces")
+    getJson("/api/client-interfaces")
       .then((res) => res.json)
       .then((data) => {
         PanStepperPicker;
@@ -398,7 +398,7 @@ function App() {
                   <CardActionArea
                     onClick={async () => {
                       const fullMetadataResponse = await getJson(
-                        `/burrito/metadata/raw/${repo[0]}`,
+                        `/api/burrito/metadata/raw/${repo[0]}`,
                       );
                       if (fullMetadataResponse.ok) {
                         if (editTable[repo[1].flavor]) {
@@ -408,10 +408,10 @@ function App() {
                             .map((i) => Object.keys(i[1].scope || {}))
                             .reduce((a, b) => [...a, ...b], []);
                           await postEmptyJson(
-                            `/navigation/bcv/${bookCodes[0]}/1/1`,
+                            `/api/navigation/bcv/${bookCodes[0]}/1/1`,
                           );
                           await postEmptyJson(
-                            `/app-state/current-project/${repo[0]}`,
+                            `/api/app-state/current-project/${repo[0]}`,
                           );
                           window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
                         } else if (
