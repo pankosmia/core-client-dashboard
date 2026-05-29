@@ -13,7 +13,7 @@ export function Walkthrough() {
     localStorage.getItem("showInitialWorkflow") === null ? true : false,
   );
   useEffect(() => {
-    getJson("/settings/languages")
+    getJson("/api/settings/languages")
       .then((res) => res.json)
       .then((data) => {
         setCurrentLanguages(data);
@@ -23,7 +23,7 @@ export function Walkthrough() {
   const getWalkthroughContent = async (languagesArray) => {
     for (const lang of languagesArray) {
       const response = await fetch(
-        `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
+        `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
       );
 
       if (response.ok) {
@@ -32,7 +32,7 @@ export function Walkthrough() {
         const finalGuide = await Promise.all(
           indexData.steps.map(async (step) => {
             const mdResponse = await fetch(
-              `/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
+              `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
             );
             const mdText = mdResponse.ok
               ? await mdResponse.text()
