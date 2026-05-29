@@ -80,7 +80,7 @@ function App() {
         (ev?.create_document || []).map((doc) => ({
           category,
           label: doI18n(doc.label, i18nRef.current),
-          url: `/clients/${category}#${doc.url}?returnTypePage=dashboard`,
+          url: `/clients/${category}/#${doc.url}?returnTypePage=dashboard`,
         })),
       ),
     );
@@ -207,7 +207,7 @@ function App() {
           return tCore.map((item) => ({
             category,
             label: doI18n(item.label, i18nRef.current),
-            url: `/clients/${category}#${item.url}`,
+            url: `/clients/${category}/#${item.url}`,
           }));
         });
       },
@@ -222,7 +222,7 @@ function App() {
           return tCore.map((item) => ({
             category,
             label: doI18n(item.label, i18nRef.current),
-            url: `/clients/${category}#${item.url}`,
+            url: `/clients/${category}/#${item.url}`,
           }));
         });
       },
