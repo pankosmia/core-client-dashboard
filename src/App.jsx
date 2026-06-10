@@ -145,7 +145,6 @@ function App() {
         return Object.entries(endpoints).flatMap(([key, endpointValue]) => {
           const docs = endpointValue?.about_repo;
           if (!Array.isArray(docs)) return [];
-
           return docs.map((doc) => ({
             category: key,
             label: doI18n(doc.label, i18nRef.current),
@@ -400,7 +399,10 @@ function App() {
                       const fullMetadataResponse = await getJson(
                         `/api/burrito/metadata/raw/${repo[0]}`,
                       );
-                      if (fullMetadataResponse.ok) {
+                      if (
+                        fullMetadataResponse.ok &&
+                        editTable[repo[1].flavor]
+                      ) {
                         const clickedProjectBits = repo[0].split("/");
                         const clickedProjectJson = {
                           source: clickedProjectBits[0],
