@@ -166,16 +166,14 @@ function App() {
               const flavorItems = doc?.subMenu?.[0];
               if (!flavorItems) return [];
 
-              return Object.entries(flavorItems).flatMap(
-                ([key, items]) =>
-                  items.map((item) => ({
-                    category: endpointKey, // top-level category
-                    endpoint: endpointKey, // endpoint name
-                    key, // flavor type (pdf/usfm/zip)
-                    label: doI18n(item.label, i18nRef.current),
-                    url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
-                  })),
-                console.log("flavorItems", flavorItems),
+              return Object.entries(flavorItems).flatMap(([key, items]) =>
+                items.map((item) => ({
+                  category: endpointKey, // top-level category
+                  endpoint: endpointKey, // endpoint name
+                  key, // flavor type (pdf/usfm/zip)
+                  label: doI18n(item.label, i18nRef.current),
+                  url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
+                })),
               );
             });
           },
