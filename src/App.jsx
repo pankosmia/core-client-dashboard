@@ -20,6 +20,7 @@ import {
   i18nContext,
   netContext,
   debugContext,
+  currentProjectContext,
   PanStepperPicker,
 } from "pankosmia-rcl";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
@@ -58,6 +59,7 @@ function App() {
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
+  const { currentProjectRef } = useContext(currentProjectContext);
   const matchPart = "/createDocument/textTranslation";
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
@@ -143,7 +145,6 @@ function App() {
         return Object.entries(endpoints).flatMap(([key, endpointValue]) => {
           const docs = endpointValue?.about_repo;
           if (!Array.isArray(docs)) return [];
-
           return docs.map((doc) => ({
             category: key,
             label: doI18n(doc.label, i18nRef.current),
@@ -164,16 +165,14 @@ function App() {
               const flavorItems = doc?.subMenu?.[0];
               if (!flavorItems) return [];
 
-              return Object.entries(flavorItems).flatMap(
-                ([key, items]) =>
-                  items.map((item) => ({
-                    category: endpointKey, // top-level category
-                    endpoint: endpointKey, // endpoint name
-                    key, // flavor type (pdf/usfm/zip)
-                    label: doI18n(item.label, i18nRef.current),
-                    url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
-                  })),
-                console.log("flavorItems", flavorItems),
+              return Object.entries(flavorItems).flatMap(([key, items]) =>
+                items.map((item) => ({
+                  category: endpointKey, // top-level category
+                  endpoint: endpointKey, // endpoint name
+                  key, // flavor type (pdf/usfm/zip)
+                  label: doI18n(item.label, i18nRef.current),
+                  url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
+                })),
               );
             });
           },
@@ -400,38 +399,58 @@ function App() {
                       const fullMetadataResponse = await getJson(
                         `/api/burrito/metadata/raw/${repo[0]}`,
                       );
-                      if (fullMetadataResponse.ok) {
-                        if (editTable[repo[1].flavor]) {
-                          const bookCodes = Object.entries(
-                            fullMetadataResponse.json.ingredients,
-                          )
-                            .map((i) => Object.keys(i[1].scope || {}))
-                            .reduce((a, b) => [...a, ...b], []);
-                          await postEmptyJson(
-                            `/api/navigation/bcv/${bookCodes[0]}/1/1`,
-                          );
-                          await postEmptyJson(
-                            `/api/app-state/current-project/${repo[0]}`,
-                          );
-                          window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
-                        } else if (
-                          createAboutRepo &&
-                          createAboutRepo.some(
-                            (item) =>
-                              item.category === repo[1].flavor ||
-                              item.category === "all",
-                          )
+                      if (
+                        fullMetadataResponse.ok &&
+                        editTable[repo[1].flavor]
+                      ) {
+                        const clickedProjectBits = repo[0].split("/");
+                        const clickedProjectJson = {
+                          source: clickedProjectBits[0],
+                          organization: clickedProjectBits[1],
+                          project: clickedProjectBits[2],
+                        };
+                        if (
+                          !currentProjectRef.current ||
+                          clickedProjectJson.source !==
+                            currentProjectRef.current.source ||
+                          clickedProjectJson.organization !==
+                            currentProjectRef.current.organization ||
+                          clickedProjectJson.project !==
+                            currentProjectRef.current.project
                         ) {
-                          const item = createAboutRepo.find(
-                            (i) =>
-                              i.category === repo[1].flavor ||
-                              i.category === "all",
-                          );
-                          if (item) {
-                            const url = item.url.replace(chooseRepo, repo[0]);
-                            setChooseRepo(repo[0]);
-                            window.location.href = url;
+                          if (editTable[repo[1].flavor]) {
+                            const bookCodes = Object.entries(
+                              fullMetadataResponse.json.ingredients,
+                            )
+                              .map((i) => Object.keys(i[1].scope || {}))
+                              .reduce((a, b) => [...a, ...b], []);
+                            await postEmptyJson(
+                              `/api/navigation/bcv/${bookCodes[0]}/1/1`,
+                            );
+                            await postEmptyJson(
+                              `/api/app-state/current-project/${repo[0]}`,
+                            );
                           }
+                        }
+
+                        window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
+                      } else if (
+                        createAboutRepo &&
+                        createAboutRepo.some(
+                          (item) =>
+                            item.category === repo[1].flavor ||
+                            item.category === "all",
+                        )
+                      ) {
+                        const item = createAboutRepo.find(
+                          (i) =>
+                            i.category === repo[1].flavor ||
+                            i.category === "all",
+                        );
+                        if (item) {
+                          const url = item.url.replace(chooseRepo, repo[0]);
+                          setChooseRepo(repo[0]);
+                          window.location.href = url;
                         }
                       } else {
                         console.log("Metadata fetch failed");
