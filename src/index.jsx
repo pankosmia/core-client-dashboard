@@ -3,12 +3,12 @@ import { SpSpa, fallbackTheme } from "pankosmia-rcl";
 import App from "./App";
 import "./index.css";
 import { useEffect, useState } from "react";
-import { getAndSetJson } from "pithekos-lib";
+import { getAndSetJson } from "pankosmia-lib/http";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 function AppLayout() {
   const [themeSpec, setThemeSpec] = useState(fallbackTheme);
-  const theme = createTheme(themeSpec);
+
   useEffect(() => {
     if (
       themeSpec.palette &&
@@ -22,7 +22,34 @@ function AppLayout() {
       }).then();
     }
   }, []);
-
+  const theme = createTheme(
+    {
+      components: {
+        MuiFab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiTab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+      },
+    },
+    themeSpec,
+  );
   return (
     <ThemeProvider theme={theme}>
       <SpSpa

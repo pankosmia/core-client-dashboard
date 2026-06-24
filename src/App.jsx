@@ -15,7 +15,8 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
+import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import {
   i18nContext,
   netContext,
