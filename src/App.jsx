@@ -58,13 +58,13 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
   );
-  console.log(editTable);
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const matchPart = "/createDocument/textTranslation";
+
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
@@ -78,7 +78,6 @@ function App() {
       project.flavor === "x-printspec",
   );
   const [chooseRepo, setChooseRepo] = useState(null);
-  //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
 
   const createItems = (() => {
     if (!clientInterfaces) return [];
@@ -118,7 +117,6 @@ function App() {
       setProjectSummaries(summariesResponse.json);
     }
   };
-  console.log(printProject);
   useEffect(() => {
     getProjectSummaries().then();
   }, []);

@@ -34,6 +34,7 @@ const flavorTypes = {
   "x-obsarticles": "peripheral",
   "x-obsimages": "peripheral",
   "x-tcore": "parascriptural",
+  "x-printspec": "peripheral",
 };
 
 export function CardForEditRepo({
