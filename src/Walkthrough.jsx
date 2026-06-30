@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { PanStepperPicker } from "pankosmia-rcl";
-import { getJson } from "pithekos-lib";
+import { getJson } from "pankosmia-lib/http";
 import { Grid2, Card, CardContent, Typography } from "@mui/material";
 export function Walkthrough() {
   const [currentLanguages, setCurrentLanguages] = useState();

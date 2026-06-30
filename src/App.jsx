@@ -15,12 +15,13 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { getAndSetJson, doI18n, postEmptyJson, getJson } from "pithekos-lib";
+import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
+
 import {
   i18nContext,
   netContext,
   debugContext,
-  currentProjectContext,
   PanStepperPicker,
 } from "pankosmia-rcl";
 
@@ -28,6 +29,11 @@ import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 import { CardForEditRepo } from "./Components/CardForEditRepo";
 import { allInterfaces } from "./utils/extractClientInterfaceItems";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
+import SvgVersionManager from "./fileIcon/iconVersionManager";
+
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -52,13 +58,12 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
   );
-
+  console.log(editTable);
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
-  const { currentProjectRef } = useContext(currentProjectContext);
   const matchPart = "/createDocument/textTranslation";
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
@@ -70,7 +75,7 @@ function App() {
   const printProject = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
-      project.flavor === "textTranslation",
+      project.flavor === "x-printspec",
   );
   const [chooseRepo, setChooseRepo] = useState(null);
   //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
@@ -113,7 +118,7 @@ function App() {
       setProjectSummaries(summariesResponse.json);
     }
   };
-
+  console.log(printProject);
   useEffect(() => {
     getProjectSummaries().then();
   }, []);
@@ -276,66 +281,95 @@ function App() {
           </Typography>
         </Grid2>
         {editableRepos.length > 0 || printProject.length > 0 ? (
-          editableRepos.map((repo) => (
-            <CardForEditRepo
-              repo={repo}
-              interfacesProps={{
-                aboutRepoInterface,
-                versionManagerInterface,
-                tC4ProjectInterface,
-                itemExportInterface,
-              }}
-              RightActions={[
-                {
-                  interface: aboutRepoInterface,
-                  icon: <InfoOutlinedIcon />,
-
-                  action: (repo) => {
-                    const item = aboutRepoInterface.find(
-                      (i) =>
-                        i.category === repo[1].flavor || i.category === "all",
-                    );
-                    if (item) {
-                      const url = item.url.replace(chooseRepo, repo[0]);
-                      setChooseRepo(repo[0]);
-                      window.location.href = url;
-                    }
+          [
+            ...editableRepos.map((repo) => (
+              <CardForEditRepo
+                repo={repo}
+                editTable={editTable}
+                interfacesProps={{
+                  aboutRepoInterface,
+                  versionManagerInterface,
+                  tC4ProjectInterface,
+                  itemExportInterface,
+                }}
+                RightActions={[
+                  {
+                    interface: aboutRepoInterface,
+                    icon: <InfoOutlinedIcon />,
+                    type: "button",
+                    action: (repo) => {
+                      const item = aboutRepoInterface.find(
+                        (i) =>
+                          i.category === repo[1].flavor || i.category === "all",
+                      );
+                      if (item) {
+                        const url = item.url.replace(chooseRepo, repo[0]);
+                        setChooseRepo(repo[0]);
+                        window.location.href = url;
+                      }
+                    },
+                    condition:
+                      aboutRepoInterface &&
+                      aboutRepoInterface.some(
+                        (item) =>
+                          item.category === repo[1].flavor ||
+                          item.category === "all",
+                      ),
                   },
-                  condition:
-                    aboutRepoInterface &&
-                    aboutRepoInterface.some(
-                      (item) =>
-                        item.category === repo[1].flavor ||
-                        item.category === "all",
-                    ),
-                },
-                {
-                  interface: itemExportInterface,
-                  icon: <SaveAsOutlinedIcon />,
-                  action: (event) => {
-                    handleSubMenuClick(event);
-                    setChooseRepo(repo[0]);
-                    setOpenSubMenu(repo[0]);
-                  },
-                  condition:
-                    itemExportInterface?.filter(
+                  {
+                    type: "menu",
+                    icon: <SaveAsOutlinedIcon />,
+                    tooltip: "Export",
+                    menuItems: itemExportInterface.filter(
                       (item) => item.endpoint === repo[1].flavor,
-                    ).length > 0,
-                },
-                {
-                  interface: tC4ProjectInterface,
-                  icon: <FactCheckOutlinedIcon />,
-                  action: () => {
-                    window.location.href = tC4ProjectInterface[0].url.replace(
-                      "%XXX%",
-                      repo[1].abbreviation,
-                    );
+                    ),
+                    condition:
+                      itemExportInterface.filter(
+                        (item) => item.endpoint === repo[1].flavor,
+                      ).length > 0,
                   },
-                  condition: tC4ProjectInterface.length > 0,
-                },
-              ]}
-            />
-          ))
+                  {
+                    type: "button",
+
+                    interface: tC4ProjectInterface,
+                    icon: <FactCheckOutlinedIcon />,
+                    action: () => {
+                      window.location.href = tC4ProjectInterface[0].url.replace(
+                        "%XXX%",
+                        repo[1].abbreviation,
+                      );
+                    },
+                    condition: tC4ProjectInterface.length > 0,
+                  },
+                  {
+                    type: "button",
+
+                    interface: versionManagerInterface,
+                    icon: <SvgVersionManager />,
+                    action: () => {
+                      const vm = versionManagerInterface[0];
+                      window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
+                    },
+                    condition:
+                      repo[0].includes("_local_/_local_") &&
+                      versionManagerInterface.length > 0,
+                  },
+                ]}
+              />
+            )),
+            ...printProject.map((printProject) => (
+              <CardForEditRepo
+                repo={printProject}
+                editTable={editTable}
+                interfacesProps={{
+                  aboutRepoInterface,
+                  versionManagerInterface,
+                  tC4ProjectInterface,
+                  itemExportInterface,
+                }}
+              />
+            )),
+          ]
         ) : (
           <Grid2 item>
             <Typography variant="body1" color="gray">

@@ -4,6 +4,7 @@
     "net": false
   },
   "minServerVersion": "0.16.4",
+
   "i18n": {
     "title": {
       "ar": "الفهرس",

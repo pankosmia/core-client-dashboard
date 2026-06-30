@@ -11,13 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import SvgVersionManager from "../fileIcon/iconVersionManager";
-import { getJson, doI18n } from "pithekos-lib";
+import { getJson, postEmptyJson } from "pankosmia-lib/http";
 import { i18nContext } from "pankosmia-rcl";
 import { useContext, useState } from "react";
 import { allInterfaces } from "../utils/extractClientInterfaceItems";
-import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
-import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { currentProjectContext } from "pankosmia-rcl";
+import { doI18n } from "pankosmia-lib/i18n";
 
 const flavorTypes = {
   texttranslation: "scripture",
@@ -37,11 +36,18 @@ const flavorTypes = {
   "x-tcore": "parascriptural",
 };
 
-export function CardForEditRepo({ repo, interfacesProps }) {
+export function CardForEditRepo({
+  repo,
+  interfacesProps,
+  RightActions,
+  editTable,
+}) {
   const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
   const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const { i18nRef } = useContext(i18nContext);
+  const { currentProjectRef } = useContext(currentProjectContext);
+
   let {
     aboutRepoInterface,
     versionManagerInterface,
@@ -69,7 +75,7 @@ export function CardForEditRepo({ repo, interfacesProps }) {
               const fullMetadataResponse = await getJson(
                 `/api/burrito/metadata/raw/${repo[0]}`,
               );
-              if (fullMetadataResponse.ok && editTable[repo[1].flavor]) {
+              if (fullMetadataResponse.ok && repo[1].flavor) {
                 const clickedProjectBits = repo[0].split("/");
                 const clickedProjectJson = {
                   source: clickedProjectBits[0],
@@ -167,58 +173,53 @@ export function CardForEditRepo({ repo, interfacesProps }) {
               margin: "4px",
             }}
           >
-            {repo[0].includes("_local_/_local_") &&
-              versionManagerInterface.length > 0 && (
-                <Tooltip
-                  title="Version manager"
-                  disableInteractive
-                  placement="right"
-                >
-                  <IconButton
-                    onClick={() => {
-                      {
-                        const vm = versionManagerInterface[0];
-                        window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
-                      }
-                    }}
-                    disabled={versionManagerInterface.length === 0}
-                  >
-                    <SvgVersionManager />
+            {RightActions?.filter((a) => a.condition).map((action, index) => {
+              if (action.type === "menu") {
+                return (
+                  <Box key={index}>
+                    <Tooltip title={action.tooltip}>
+                      <IconButton
+                        onClick={(event) => {
+                          setSubMenuButtonSave(event.currentTarget);
+                          setOpenSubMenu(repo[0]);
+                        }}
+                      >
+                        {action.icon}
+                      </IconButton>
+                    </Tooltip>
+
+                    <Menu
+                      anchorEl={subMenuButtonSave}
+                      open={openSubMenu === repo[0]}
+                      onClose={() => {
+                        setSubMenuButtonSave(null);
+                        setOpenSubMenu(null);
+                      }}
+                    >
+                      {action.menuItems.map((item) => (
+                        <MenuItem
+                          key={item.label}
+                          onClick={() => (window.location.href = item.url)}
+                        >
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </Box>
+                );
+              }
+
+              return (
+                <Tooltip key={index} title={action.tooltip}>
+                  <IconButton onClick={(event) => action.action(event, repo)}>
+                    {action.icon}
                   </IconButton>
                 </Tooltip>
-              )}
-            g
-            <Menu
-              id="basic-sub-menu"
-              anchorEl={subMenuButtonSave}
-              open={repo[0] === openSubMenu}
-              onClose={() => {
-                setSubMenuButtonSave(null);
-                setChooseRepo(null);
-                setOpenSubMenu(null);
-              }}
-              anchorOrigin={{ vertical: "top", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-              slotProps={{
-                list: { "aria-labelledby": "basic-button" },
-              }}
-            >
-              {itemExportInterface &&
-                itemExportInterface
-                  .filter((item) => item.endpoint === repo[1].flavor)
-                  .map((item) => (
-                    <MenuItem
-                      key={item.label}
-                      onClick={() => (window.location.href = item.url)}
-                    >
-                      {item.label}
-                    </MenuItem>
-                  ))}
-            </Menu>
+              );
+            })}
           </Box>
         </Box>
       </Card>
     </Grid2>
   );
 }
-b;

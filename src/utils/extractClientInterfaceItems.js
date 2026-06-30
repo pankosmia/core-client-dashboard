@@ -1,4 +1,4 @@
-import { doI18n } from "pithekos-lib";
+import { doI18n } from "pankosmia-lib/i18n";
 
 // Generic extractor: walks clientInterfaces -> endpoints -> a given field,
 // and maps each item to a row. `getItems` controls how items are pulled
