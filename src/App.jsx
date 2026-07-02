@@ -17,19 +17,23 @@ import {
 } from "@mui/material";
 import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
+
 import {
   i18nContext,
   netContext,
   debugContext,
-  currentProjectContext,
   PanStepperPicker,
 } from "pankosmia-rcl";
-import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import SvgVersionManager from "./fileIcon/iconVersionManager";
-import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
+import { CardForEditRepo } from "./Components/CardForEditRepo";
+import { allInterfaces } from "./utils/extractClientInterfaceItems";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
+import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
+import SvgVersionManager from "./fileIcon/iconVersionManager";
+
 const getEditDocumentKeys = (data) => {
   let map = {};
   for (let [l, v] of Object.entries(data)) {
@@ -54,14 +58,13 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(
     localStorage.getItem("showWelcome") === null ? true : false,
   );
-
   const [clientInterfaces, setClientInterfaces] = useState({});
   const [createAnchorEl, setCreateAnchorEl] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
-  const { currentProjectRef } = useContext(currentProjectContext);
   const matchPart = "/createDocument/textTranslation";
+
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
       repoPath.startsWith("_local_/_local_") &&
@@ -69,11 +72,8 @@ function App() {
       project.flavor != "x-tcore" &&
       (editTable[project.flavor] || project.flavor === "textTranslation"),
   );
+
   const [chooseRepo, setChooseRepo] = useState(null);
-  //const [contentRowAnchorEl, setContentRowAnchorEl] = useState(null);
-  const [subMenuButtonSave, setSubMenuButtonSave] = useState(null);
-  const [subMenuAboutRepo, setSubMenuAboutRepo] = useState(null);
-  const [openSubMenu, setOpenSubMenu] = useState(null);
 
   const createItems = (() => {
     if (!clientInterfaces) return [];
@@ -95,6 +95,15 @@ function App() {
 
     return all;
   })();
+
+  let {
+    aboutRepoInterface,
+    versionManagerInterface,
+    tC4ProjectInterface,
+    itemExportInterface,
+    importTc4Interface,
+  } = allInterfaces(clientInterfaces, i18nRef, chooseRepo);
+
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(
       `/api/burrito/metadata/summaries`,
@@ -104,11 +113,9 @@ function App() {
       setProjectSummaries(summariesResponse.json);
     }
   };
-
   useEffect(() => {
     getProjectSummaries().then();
   }, []);
-
   const handleCreateClose = () => {
     setCreateAnchorEl(null);
   };
@@ -118,10 +125,6 @@ function App() {
       setter: setClients,
     }).then();
   }, []);
-
-  const handleSubMenuClick = (event) => {
-    setSubMenuButtonSave(event.currentTarget);
-  };
 
   useEffect(() => {
     getJson("/api/client-interfaces")
@@ -133,118 +136,6 @@ function App() {
       })
       .catch((err) => console.error("Error :", err));
   }, []);
-
-  let createItemExport;
-  let createAboutRepo;
-  let createVersionManager;
-  let createtC4Button;
-  let createImportTc4Button;
-  if (clientInterfaces) {
-    createAboutRepo = Object.entries(clientInterfaces).flatMap(
-      ([category, categoryValue]) => {
-        const endpoints = categoryValue?.endpoints ?? {};
-        return Object.entries(endpoints).flatMap(([key, endpointValue]) => {
-          const docs = endpointValue?.about_repo;
-          if (!Array.isArray(docs)) return [];
-          return docs.map((doc) => ({
-            category: key,
-            label: doI18n(doc.label, i18nRef.current),
-            url: `/clients/${category}#${doc.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
-          }));
-        });
-      },
-    );
-    createItemExport = Object.entries(clientInterfaces).flatMap(
-      ([category, categoryValue]) => {
-        const endpoints = categoryValue?.endpoints ?? {};
-        return Object.entries(endpoints).flatMap(
-          ([endpointKey, endpointValue]) => {
-            const exportsArray = endpointValue?.export;
-            if (!Array.isArray(exportsArray)) return [];
-
-            return exportsArray.flatMap((doc) => {
-              const flavorItems = doc?.subMenu?.[0];
-              if (!flavorItems) return [];
-
-              return Object.entries(flavorItems).flatMap(([key, items]) =>
-                items.map((item) => ({
-                  category: endpointKey, // top-level category
-                  endpoint: endpointKey, // endpoint name
-                  key, // flavor type (pdf/usfm/zip)
-                  label: doI18n(item.label, i18nRef.current),
-                  url: `/clients/${category}#${item.url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`,
-                })),
-              );
-            });
-          },
-        );
-      },
-    );
-    createVersionManager = Object.entries(clientInterfaces).flatMap(
-      ([category, categoryValue]) => {
-        const endpoints = categoryValue?.endpoints ?? {};
-
-        return Object.values(endpoints).flatMap((endpointValue) => {
-          const managerArray = endpointValue?.manager;
-
-          if (!Array.isArray(managerArray)) return [];
-
-          return managerArray.map((item) => ({
-            category,
-            label: doI18n(item.label, i18nRef.current),
-            url: `/clients/${category}#${item.url}`,
-          }));
-        });
-      },
-    );
-    createtC4Button = Object.entries(clientInterfaces).flatMap(
-      ([category, categoryValue]) => {
-        const endpoints = categoryValue?.endpoints ?? {};
-
-        return Object.values(endpoints).flatMap((endpointValue) => {
-          const tCore = endpointValue?.initDocument;
-          if (!Array.isArray(tCore)) return [];
-          return tCore.map((item) => ({
-            category,
-            label: doI18n(item.label, i18nRef.current),
-            url: `/clients/${category}/#${item.url}`,
-          }));
-        });
-      },
-    );
-    createImportTc4Button = Object.entries(clientInterfaces).flatMap(
-      ([category, categoryValue]) => {
-        const endpoints = categoryValue?.endpoints ?? {};
-
-        return Object.values(endpoints).flatMap((endpointValue) => {
-          const tCore = endpointValue?.importContent;
-          if (!Array.isArray(tCore)) return [];
-          return tCore.map((item) => ({
-            category,
-            label: doI18n(item.label, i18nRef.current),
-            url: `/clients/${category}/#${item.url}`,
-          }));
-        });
-      },
-    );
-  }
-  const flavorTypes = {
-    texttranslation: "scripture",
-    audiotranslation: "scripture",
-    "x-bcvnotes": "parascriptural",
-    "x-bnotes": "parascriptural",
-    "x-bcvarticles": "parascriptural",
-    "x-bcvquestions": "parascriptural",
-    "x-bcvimages": "parascriptural",
-    "x-juxtalinear": "scripture",
-    "x-parallel": "parascriptural",
-    textstories: "gloss",
-    "x-obsquestions": "peripheral",
-    "x-obsnotes": "peripheral",
-    "x-obsarticles": "peripheral",
-    "x-obsimages": "peripheral",
-    "x-tcore": "parascriptural",
-  };
 
   return (
     <Box
@@ -353,13 +244,13 @@ function App() {
               variant="outlined"
               onClick={() => (window.location.href = "/clients/content")}
             />
-            {createImportTc4Button.length > 0 && (
+            {importTc4Interface.length > 0 && (
               <Chip
-                label={doI18n(createImportTc4Button[0].label, i18nRef.current)}
+                label={doI18n(importTc4Interface[0].label, i18nRef.current)}
                 color="secondary"
                 variant="outlined"
                 onClick={() =>
-                  (window.location.href = createImportTc4Button[0].url)
+                  (window.location.href = importTc4Interface[0].url)
                 }
               />
             )}
@@ -385,251 +276,79 @@ function App() {
         </Grid2>
         {editableRepos.length > 0 ? (
           editableRepos.map((repo) => (
-            <Grid2 item size={{ xs: 12, md: 6, xl: 4 }}>
-              <Card elevation={1}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexDirection: "row",
-                  }}
-                >
-                  <CardActionArea
-                    onClick={async () => {
-                      const fullMetadataResponse = await getJson(
-                        `/api/burrito/metadata/raw/${repo[0]}`,
-                      );
-                      if (
-                        fullMetadataResponse.ok &&
-                        editTable[repo[1].flavor]
-                      ) {
-                        const clickedProjectBits = repo[0].split("/");
-                        const clickedProjectJson = {
-                          source: clickedProjectBits[0],
-                          organization: clickedProjectBits[1],
-                          project: clickedProjectBits[2],
-                        };
-                        if (
-                          !currentProjectRef.current ||
-                          clickedProjectJson.source !==
-                            currentProjectRef.current.source ||
-                          clickedProjectJson.organization !==
-                            currentProjectRef.current.organization ||
-                          clickedProjectJson.project !==
-                            currentProjectRef.current.project
-                        ) {
-                          if (editTable[repo[1].flavor]) {
-                            const bookCodes = Object.entries(
-                              fullMetadataResponse.json.ingredients,
-                            )
-                              .map((i) => Object.keys(i[1].scope || {}))
-                              .reduce((a, b) => [...a, ...b], []);
-                            await postEmptyJson(
-                              `/api/navigation/bcv/${bookCodes[0]}/1/1`,
-                            );
-                            await postEmptyJson(
-                              `/api/app-state/current-project/${repo[0]}`,
-                            );
-                          }
-                        }
-
-                        window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
-                      } else if (
-                        createAboutRepo &&
-                        createAboutRepo.some(
-                          (item) =>
-                            item.category === repo[1].flavor ||
-                            item.category === "all",
-                        )
-                      ) {
-                        const item = createAboutRepo.find(
-                          (i) =>
-                            i.category === repo[1].flavor ||
-                            i.category === "all",
-                        );
-                        if (item) {
-                          const url = item.url.replace(chooseRepo, repo[0]);
-                          setChooseRepo(repo[0]);
-                          window.location.href = url;
-                        }
-                      } else {
-                        console.log("Metadata fetch failed");
-                        console.log(fullMetadataResponse);
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ flex: "1 0 auto" }}>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <Typography
-                          component="div"
-                          variant="h5"
-                          sx={{ color: "text.primary" }}
-                        >
-                          {repo[1].name}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          component="div"
-                          sx={{ color: "text.secondary" }}
-                        >
-                          {doI18n(
-                            `flavors:names:${flavorTypes[repo[1].flavor.toLowerCase()]}/${repo[1].flavor}`,
-                            i18nRef.current,
-                          )}
-                        </Typography>
-                        <Typography
-                          variant="subtitle1"
-                          component="div"
-                          sx={{ color: "text.secondary" }}
-                        >
-                          {repo[1].abbreviation}
-                        </Typography>
-                        {repo[1].book_codes.length > 0 && (
-                          <Typography
-                            variant="subtitle1"
-                            component="div"
-                            sx={{ color: "text.secondary" }}
-                          >
-                            {`${repo[1].book_codes.length} ${doI18n(`pages:core-dashboard:book${repo[1].book_codes.length === 1 ? "" : "s"}`, i18nRef.current)}`}
-                          </Typography>
-                        )}
-                      </Box>
-                    </CardContent>
-                  </CardActionArea>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      margin: "4px",
-                    }}
-                  >
-                    {repo[0].includes("_local_/_local_") &&
-                      createVersionManager.length > 0 && (
-                        <Tooltip
-                          title="Version manager"
-                          disableInteractive
-                          placement="right"
-                        >
-                          <IconButton
-                            onClick={() => {
-                              {
-                                const vm = createVersionManager[0];
-                                window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
-                              }
-                            }}
-                            disabled={createVersionManager.length === 0}
-                          >
-                            <SvgVersionManager />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                    {createtC4Button.length > 0 && (
-                      <Tooltip
-                        title={doI18n(
-                          "pages:core-dashboard:tooltip_checks",
-                          i18nRef.current,
-                        )}
-                        disableInteractive
-                        placement="right"
-                      >
-                        <IconButton
-                          onClick={() => {
-                            window.location.href =
-                              createtC4Button[0].url.replace(
-                                "%XXX%",
-                                repo[1].abbreviation,
-                              );
-                          }}
-                        >
-                          <FactCheckOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-
-                    {createItemExport?.filter(
+            <CardForEditRepo
+              repo={repo}
+              editTable={editTable}
+              interfacesProps={{
+                aboutRepoInterface,
+                versionManagerInterface,
+                tC4ProjectInterface,
+                itemExportInterface,
+              }}
+              RightActions={[
+                {
+                  interface: aboutRepoInterface,
+                  icon: <InfoOutlinedIcon />,
+                  type: "button",
+                  action: (event, repo) => {
+                    console.log(repo);
+                    const item = aboutRepoInterface.find(
+                      (i) =>
+                        i.category === repo[1].flavor || i.category === "all",
+                    );
+                    if (item) {
+                      const url = item.url.replace(chooseRepo, repo[0]);
+                      setChooseRepo(repo[0]);
+                      window.location.href = url;
+                    }
+                  },
+                  condition:
+                    aboutRepoInterface &&
+                    aboutRepoInterface.some(
+                      (item) =>
+                        item.category === repo[1].flavor ||
+                        item.category === "all",
+                    ),
+                },
+                {
+                  type: "menu",
+                  icon: <SaveAsOutlinedIcon />,
+                  tooltip: "Export",
+                  menuItems: itemExportInterface.filter(
+                    (item) => item.endpoint === repo[1].flavor,
+                  ),
+                  condition:
+                    itemExportInterface.filter(
                       (item) => item.endpoint === repo[1].flavor,
-                    ).length > 0 && (
-                      <Tooltip
-                        title="Save as..."
-                        disableInteractive
-                        placement="right"
-                      >
-                        <IconButton
-                          onClick={(event) => {
-                            handleSubMenuClick(event);
-                            setChooseRepo(repo[0]);
-                            setOpenSubMenu(repo[0]);
-                          }}
-                        >
-                          <SaveAsOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    <Menu
-                      id="basic-sub-menu"
-                      anchorEl={subMenuButtonSave}
-                      open={repo[0] === openSubMenu}
-                      onClose={() => {
-                        setSubMenuButtonSave(null);
-                        setChooseRepo(null);
-                        setOpenSubMenu(null);
-                      }}
-                      anchorOrigin={{ vertical: "top", horizontal: "left" }}
-                      transformOrigin={{ vertical: "top", horizontal: "right" }}
-                      slotProps={{
-                        list: { "aria-labelledby": "basic-button" },
-                      }}
-                    >
-                      {createItemExport &&
-                        createItemExport
-                          .filter((item) => item.endpoint === repo[1].flavor)
-                          .map((item) => (
-                            <MenuItem
-                              key={item.label}
-                              onClick={() => (window.location.href = item.url)}
-                            >
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                    </Menu>
+                    ).length > 0,
+                },
+                {
+                  type: "button",
+                  interface: tC4ProjectInterface,
+                  icon: <FactCheckOutlinedIcon />,
+                  action: () => {
+                    window.location.href = tC4ProjectInterface[0].url.replace(
+                      "%XXX%",
+                      repo[1].abbreviation,
+                    );
+                  },
+                  condition: tC4ProjectInterface.length > 0,
+                },
+                {
+                  type: "button",
 
-                    {createAboutRepo &&
-                      createAboutRepo.some(
-                        (item) =>
-                          item.category === repo[1].flavor ||
-                          item.category === "all",
-                      ) && (
-                        <Tooltip
-                          title="Properties"
-                          disableInteractive
-                          placement="right"
-                        >
-                          <IconButton
-                            onClick={() => {
-                              const item = createAboutRepo.find(
-                                (i) =>
-                                  i.category === repo[1].flavor ||
-                                  i.category === "all",
-                              );
-                              if (item) {
-                                const url = item.url.replace(
-                                  chooseRepo,
-                                  repo[0],
-                                );
-                                setChooseRepo(repo[0]);
-                                window.location.href = url;
-                              }
-                            }}
-                          >
-                            <InfoOutlinedIcon />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                  </Box>
-                </Box>
-              </Card>
-            </Grid2>
+                  interface: versionManagerInterface,
+                  icon: <SvgVersionManager />,
+                  action: () => {
+                    const vm = versionManagerInterface[0];
+                    window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
+                  },
+                  condition:
+                    repo[0].includes("_local_/_local_") &&
+                    versionManagerInterface.length > 0,
+                },
+              ]}
+            />
           ))
         ) : (
           <Grid2 item>
