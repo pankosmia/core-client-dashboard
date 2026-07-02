@@ -72,11 +72,7 @@ function App() {
       project.flavor != "x-tcore" &&
       (editTable[project.flavor] || project.flavor === "textTranslation"),
   );
-  const printProject = Object.entries(projectSummaries).filter(
-    ([repoPath, project]) =>
-      repoPath.startsWith("_local_/_local_") &&
-      project.flavor === "x-printspec",
-  );
+
   const [chooseRepo, setChooseRepo] = useState(null);
 
   const createItems = (() => {
@@ -278,96 +274,82 @@ function App() {
             {doI18n("pages:core-dashboard:my_work", i18nRef.current)}
           </Typography>
         </Grid2>
-        {editableRepos.length > 0 || printProject.length > 0 ? (
-          [
-            ...editableRepos.map((repo) => (
-              <CardForEditRepo
-                repo={repo}
-                editTable={editTable}
-                interfacesProps={{
-                  aboutRepoInterface,
-                  versionManagerInterface,
-                  tC4ProjectInterface,
-                  itemExportInterface,
-                }}
-                RightActions={[
-                  {
-                    interface: aboutRepoInterface,
-                    icon: <InfoOutlinedIcon />,
-                    type: "button",
-                    action: (repo) => {
-                      const item = aboutRepoInterface.find(
-                        (i) =>
-                          i.category === repo[1].flavor || i.category === "all",
-                      );
-                      if (item) {
-                        const url = item.url.replace(chooseRepo, repo[0]);
-                        setChooseRepo(repo[0]);
-                        window.location.href = url;
-                      }
-                    },
-                    condition:
-                      aboutRepoInterface &&
-                      aboutRepoInterface.some(
-                        (item) =>
-                          item.category === repo[1].flavor ||
-                          item.category === "all",
-                      ),
+        {editableRepos.length > 0 ? (
+          editableRepos.map((repo) => (
+            <CardForEditRepo
+              repo={repo}
+              editTable={editTable}
+              interfacesProps={{
+                aboutRepoInterface,
+                versionManagerInterface,
+                tC4ProjectInterface,
+                itemExportInterface,
+              }}
+              RightActions={[
+                {
+                  interface: aboutRepoInterface,
+                  icon: <InfoOutlinedIcon />,
+                  type: "button",
+                  action: (event, repo) => {
+                    console.log(repo);
+                    const item = aboutRepoInterface.find(
+                      (i) =>
+                        i.category === repo[1].flavor || i.category === "all",
+                    );
+                    if (item) {
+                      const url = item.url.replace(chooseRepo, repo[0]);
+                      setChooseRepo(repo[0]);
+                      window.location.href = url;
+                    }
                   },
-                  {
-                    type: "menu",
-                    icon: <SaveAsOutlinedIcon />,
-                    tooltip: "Export",
-                    menuItems: itemExportInterface.filter(
-                      (item) => item.endpoint === repo[1].flavor,
+                  condition:
+                    aboutRepoInterface &&
+                    aboutRepoInterface.some(
+                      (item) =>
+                        item.category === repo[1].flavor ||
+                        item.category === "all",
                     ),
-                    condition:
-                      itemExportInterface.filter(
-                        (item) => item.endpoint === repo[1].flavor,
-                      ).length > 0,
+                },
+                {
+                  type: "menu",
+                  icon: <SaveAsOutlinedIcon />,
+                  tooltip: "Export",
+                  menuItems: itemExportInterface.filter(
+                    (item) => item.endpoint === repo[1].flavor,
+                  ),
+                  condition:
+                    itemExportInterface.filter(
+                      (item) => item.endpoint === repo[1].flavor,
+                    ).length > 0,
+                },
+                {
+                  type: "button",
+                  interface: tC4ProjectInterface,
+                  icon: <FactCheckOutlinedIcon />,
+                  action: () => {
+                    window.location.href = tC4ProjectInterface[0].url.replace(
+                      "%XXX%",
+                      repo[1].abbreviation,
+                    );
                   },
-                  {
-                    type: "button",
+                  condition: tC4ProjectInterface.length > 0,
+                },
+                {
+                  type: "button",
 
-                    interface: tC4ProjectInterface,
-                    icon: <FactCheckOutlinedIcon />,
-                    action: () => {
-                      window.location.href = tC4ProjectInterface[0].url.replace(
-                        "%XXX%",
-                        repo[1].abbreviation,
-                      );
-                    },
-                    condition: tC4ProjectInterface.length > 0,
+                  interface: versionManagerInterface,
+                  icon: <SvgVersionManager />,
+                  action: () => {
+                    const vm = versionManagerInterface[0];
+                    window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
                   },
-                  {
-                    type: "button",
-
-                    interface: versionManagerInterface,
-                    icon: <SvgVersionManager />,
-                    action: () => {
-                      const vm = versionManagerInterface[0];
-                      window.location.href = `${vm.url}?repoPath=${repo[0]}?returnTypePage=dashboard`;
-                    },
-                    condition:
-                      repo[0].includes("_local_/_local_") &&
-                      versionManagerInterface.length > 0,
-                  },
-                ]}
-              />
-            )),
-            ...printProject.map((printProject) => (
-              <CardForEditRepo
-                repo={printProject}
-                editTable={editTable}
-                interfacesProps={{
-                  aboutRepoInterface,
-                  versionManagerInterface,
-                  tC4ProjectInterface,
-                  itemExportInterface,
-                }}
-              />
-            )),
-          ]
+                  condition:
+                    repo[0].includes("_local_/_local_") &&
+                    versionManagerInterface.length > 0,
+                },
+              ]}
+            />
+          ))
         ) : (
           <Grid2 item>
             <Typography variant="body1" color="gray">

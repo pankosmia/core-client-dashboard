@@ -61,17 +61,25 @@ export function CardForEditRepo({
   };
 
   return (
-    <Grid2 item size={{ xs: 12, md: 6, xl: 4 }}>
-      <Card elevation={1}>
+    <Grid2 item size={{ xs: 12, md: 6, xl: 4 }} sx={{ display: "flex" }}>
+      <Card
+        elevation={1}
+        sx={{
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             flexDirection: "row",
+            height: "100%",
           }}
         >
           <CardActionArea
+            sx={{ height: "100%" }}
             onClick={async () => {
               const fullMetadataResponse = await getJson(
                 `/api/burrito/metadata/raw/${repo[0]}`,
