@@ -21,41 +21,41 @@ export function Walkthrough() {
       .catch((err) => console.error("Error :", err));
   }, []);
   const getWalkthroughContent = async (languagesArray) => {
-    for (const lang of languagesArray) {
-      const response = await fetch(
-        `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
-      );
+    // for (const lang of languagesArray) {
+    // const response = await fetch(
+    //   `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/index.json`,
+    // );
 
-      if (response.ok) {
-        const indexData = await response.json();
+    //   if (response.ok) {
+    //     const indexData = await response.json();
 
-        const finalGuide = await Promise.all(
-          indexData.steps.map(async (step) => {
-            const mdResponse = await fetch(
-              `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
-            );
-            const mdText = mdResponse.ok
-              ? await mdResponse.text()
-              : "Content unavailable";
+    //     const finalGuide = await Promise.all(
+    //       indexData.steps.map(async (step) => {
+    //         const mdResponse = await fetch(
+    //           `/api/content-utils/product?resource_path=core-client-dashboard/walk_thru/${lang}/${step.bodyPath}`,
+    //         );
+    //         const mdText = mdResponse.ok
+    //           ? await mdResponse.text()
+    //           : "Content unavailable";
 
-            return {
-              name: step.title,
-              content: mdText,
-            };
-          }),
-        );
+    //         return {
+    //           name: step.title,
+    //           content: mdText,
+    //         };
+    //       }),
+    //     );
 
-        setWalkthroughIndex(indexData);
-        setWalkthrough({
-          title: indexData.name,
-          steps: finalGuide,
-        });
-        setShowWalkthrough(true);
-        return;
-      }
-    }
+    //     setWalkthroughIndex(indexData);
+    //     setWalkthrough({
+    //       title: indexData.name,
+    //       steps: finalGuide,
+    //     });
+    //     setShowWalkthrough(true);
+    //     return;
+    //   }
+    // }
 
-    console.warn("No walkthrough found in any language.");
+    //console.warn("No walkthrough found in any language.");
     setShowWalkthrough(false);
     setWalkthrough(null);
   };
