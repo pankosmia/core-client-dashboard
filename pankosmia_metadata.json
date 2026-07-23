@@ -3,7 +3,7 @@
   "require": {
     "net": false
   },
-  "minServerVersion": "0.16.4",
+  "minServerVersion": "0.18.0",
 
   "i18n": {
     "title": {
