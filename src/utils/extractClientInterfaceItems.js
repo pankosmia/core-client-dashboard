@@ -26,16 +26,17 @@ function extractClientInterfaceItems(clientInterfaces, { getItems, mapItem }) {
 }
 
 export function allInterfaces(clientInterfaces, i18nRef, chooseRepo) {
-  const withReturnParam = (category, url) =>
+  // eliaspinero: Stopped using this function, so I commented it for now
+  /* const withReturnParam = (category, url) =>
     `/clients/${category}#${url.replace("%%REPO_PATH%%", chooseRepo)}?returnTypePage=dashboard`;
-
+ */
   return {
     aboutRepoInterface: extractClientInterfaceItems(clientInterfaces, {
       getItems: (endpointValue) => endpointValue?.about_repo,
       mapItem: ({ item, category, endpointKey }) => ({
         category: endpointKey,
         label: doI18n(item.label, i18nRef.current),
-        url: withReturnParam(category, item.url),
+        url: `/clients/${category}#${item.url}?returnTypePage=dashboard` /* url: withReturnParam(category, item.url), */,
       }),
     }),
 
@@ -85,7 +86,7 @@ export function allInterfaces(clientInterfaces, i18nRef, chooseRepo) {
         endpoint: endpointKey,
         key: item.flavorKey,
         label: doI18n(item.label, i18nRef.current),
-        url: withReturnParam(category, item.url),
+        url: `/clients/${category}#${item.url}?returnTypePage=dashboard` /* withReturnParam(category, item.url) */,
       }),
     }),
   };
