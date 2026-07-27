@@ -116,22 +116,17 @@ export function CardForEditRepo({
                 }
 
                 window.location.href = `/clients/${editTable[repo[1].flavor]}?returnTypePage=dashboard`;
-              } else if (
-                aboutRepoInterface &&
-                aboutRepoInterface.some(
-                  (item) =>
-                    item.category === repo[1].flavor || item.category === "all",
-                )
-              ) {
-                const item = aboutRepoInterface.find(
+              } else {
+                const item = aboutRepoInterface?.find(
                   (i) => i.category === repo[1].flavor || i.category === "all",
                 );
                 if (item) {
-                  const url = item.url.replace(chooseRepo, repo[0]);
-                  setChooseRepo(repo[0]);
-                  window.location.href = url;
+                  window.location.href = item.url.replace(
+                    "%%REPO_PATH%%",
+                    repo[0],
+                  );
+                  return;
                 }
-              } else {
                 console.log("Metadata fetch failed");
                 console.log(fullMetadataResponse);
               }

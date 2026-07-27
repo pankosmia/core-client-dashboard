@@ -73,8 +73,6 @@ function App() {
       (editTable[project.flavor] || project.flavor === "textTranslation"),
   );
 
-  const [chooseRepo, setChooseRepo] = useState(null);
-
   const createItems = (() => {
     if (!clientInterfaces) return [];
 
@@ -102,7 +100,7 @@ function App() {
     tC4ProjectInterface,
     itemExportInterface,
     importTc4Interface,
-  } = allInterfaces(clientInterfaces, i18nRef, chooseRepo);
+  } = allInterfaces(clientInterfaces, i18nRef);
 
   const getProjectSummaries = async () => {
     const summariesResponse = await getJson(
@@ -297,9 +295,10 @@ function App() {
                         i.category === repo[1].flavor || i.category === "all",
                     );
                     if (item) {
-                      const url = item.url.replace(chooseRepo, repo[0]);
-                      setChooseRepo(repo[0]);
-                      window.location.href = url;
+                      window.location.href = item.url.replace(
+                        "%%REPO_PATH%%",
+                        repo[0],
+                      );
                     }
                   },
                   condition:
@@ -314,9 +313,12 @@ function App() {
                   type: "menu",
                   icon: <SaveAsOutlinedIcon />,
                   tooltip: "Export",
-                  menuItems: itemExportInterface.filter(
-                    (item) => item.endpoint === repo[1].flavor,
-                  ),
+                  menuItems: itemExportInterface
+                    .filter((item) => item.endpoint === repo[1].flavor)
+                    .map((item) => ({
+                      ...item,
+                      url: item.url.replace("%%REPO_PATH%%", repo[0]),
+                    })),
                   condition:
                     itemExportInterface.filter(
                       (item) => item.endpoint === repo[1].flavor,
