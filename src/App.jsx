@@ -64,6 +64,13 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const matchPart = "/createDocument/textTranslation";
+  const [storageId, setStorageId] = useState(null);
+
+  useEffect(() => {
+    import("../storage_id.json").then((r) => setStorageId(r.id));
+  }, []);
+
+  storageId && console.log("storage_id", storageId);
 
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
