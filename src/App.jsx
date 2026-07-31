@@ -267,11 +267,6 @@ function App() {
             </Menu>
           </Stack>
         </Grid2>
-        <Grid2 item size={12} sx={{ mt: 2 }}>
-          <Typography variant="h5">
-            {doI18n("pages:core-dashboard:my_work", i18nRef.current)}
-          </Typography>
-        </Grid2>
         {editableRepos.length > 0 ? (
           editableRepos.map((repo) => (
             <CardForEditRepo
@@ -353,11 +348,13 @@ function App() {
             />
           ))
         ) : (
-          <Grid2 item>
-            <Typography variant="body1" color="gray">
-              {doI18n("pages:core-dashboard:my_work_desc", i18nRef.current)}
-            </Typography>
-          </Grid2>
+          <>
+            <Grid2 item>
+              <Typography variant="body1" color="gray">
+                {doI18n("pages:core-dashboard:get_started", i18nRef.current)}
+              </Typography>
+            </Grid2>
+          </>
         )}
       </Grid2>
     </Box>
