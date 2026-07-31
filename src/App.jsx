@@ -349,11 +349,11 @@ function App() {
           ))
         ) : (
           <>
-            {/* <Grid2 item>
-            <Typography variant="body1" color="gray">
-              Here we could add something for when there's nothing in the Documents page.
-            </Typography>
-          </Grid2> */}
+            <Grid2 item>
+              <Typography variant="body1" color="gray">
+                {doI18n("pages:core-dashboard:get_started", i18nRef.current)}
+              </Typography>
+            </Grid2>
           </>
         )}
       </Grid2>

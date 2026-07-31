@@ -110,6 +110,11 @@
     "tooltip_checks": {
       "en": "Translation checks",
       "fr": "Vérification de traduction"
+    },
+    "get_started": {
+      "en": "Create or download a project to get started!",
+      "fr": "Créez ou téléchargez un projet pour commencer !",
+      "es": "¡Crea o descarga un proyecto para empezar!"
     }
   }
 }
