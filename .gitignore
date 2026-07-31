@@ -1,5 +1,6 @@
 .idea/
 build/
+storage_id.json
 # Logs
 logs
 *.log

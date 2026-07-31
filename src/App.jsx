@@ -22,6 +22,7 @@ import {
   i18nContext,
   netContext,
   debugContext,
+  productContext,
   PanStepperPicker,
 } from "pankosmia-rcl";
 
@@ -63,6 +64,7 @@ function App() {
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
+  const { productRef } = useContext(productContext);
   const matchPart = "/createDocument/textTranslation";
 
   const editableRepos = Object.entries(projectSummaries).filter(
@@ -309,7 +311,13 @@ function App() {
                   icon: <SaveAsOutlinedIcon />,
                   tooltip: "Export",
                   menuItems: itemExportInterface
-                    .filter((item) => item.endpoint === repo[1].flavor)
+                    .filter(
+                      (item) =>
+                        item.endpoint === repo[1].flavor &&
+                        (item.key !== "pdf" ||
+                          (productRef.current &&
+                            productRef.current.os !== "android")),
+                    )
                     .map((item) => ({
                       ...item,
                       url: item.url.replace("%%REPO_PATH%%", repo[0]),
