@@ -33,11 +33,14 @@ export function allInterfaces(clientInterfaces, i18nRef, chooseRepo) {
   return {
     aboutRepoInterface: extractClientInterfaceItems(clientInterfaces, {
       getItems: (endpointValue) => endpointValue?.about_repo,
-      mapItem: ({ item, category, endpointKey }) => ({
-        category: endpointKey,
-        label: doI18n(item.label, i18nRef.current),
-        url: `/clients/${category}#${item.url}?returnTypePage=dashboard` /* url: withReturnParam(category, item.url), */,
-      }),
+      mapItem: ({ item, category, endpointKey }) => {
+        const separator = item.url.includes("?") ? "&" : "?";
+        return {
+          category: endpointKey,
+          label: doI18n(item.label, i18nRef.current),
+          url: `/clients/${category}#${item.url}${separator}returnTypePage=dashboard` /* url: withReturnParam(category, item.url), */,
+        };
+      },
     }),
 
     versionManagerInterface: extractClientInterfaceItems(clientInterfaces, {
@@ -81,13 +84,16 @@ export function allInterfaces(clientInterfaces, i18nRef, chooseRepo) {
           );
         });
       },
-      mapItem: ({ item, category, endpointKey }) => ({
-        category: endpointKey,
-        endpoint: endpointKey,
-        key: item.flavorKey,
-        label: doI18n(item.label, i18nRef.current),
-        url: `/clients/${category}#${item.url}?returnTypePage=dashboard` /* withReturnParam(category, item.url) */,
-      }),
+      mapItem: ({ item, category, endpointKey }) => {
+        const separator = item.url.includes("?") ? "&" : "?";
+        return {
+          category: endpointKey,
+          endpoint: endpointKey,
+          key: item.flavorKey,
+          label: doI18n(item.label, i18nRef.current),
+          url: `/clients/${category}#${item.url}${separator}returnTypePage=dashboard`,
+        };
+      },
     }),
   };
 }
