@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
-import ScrollableBody from "./Components/ScrollableBody";
 
 import {
   i18nContext,
@@ -25,8 +24,8 @@ import {
   debugContext,
   productContext,
   PanStepperPicker,
+  ScrollableBody,
 } from "pankosmia-rcl";
-
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 import { CardForEditRepo } from "./Components/CardForEditRepo";
