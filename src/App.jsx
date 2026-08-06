@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
-import ScrollableBody from "./Components/ScrollableBody";
 
 import {
   i18nContext,
@@ -25,8 +24,8 @@ import {
   debugContext,
   productContext,
   PanStepperPicker,
+  ScrollableBody,
 } from "pankosmia-rcl";
-
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 import { CardForEditRepo } from "./Components/CardForEditRepo";
@@ -66,7 +65,10 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const { productRef } = useContext(productContext);
+  console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
+  let isAndroid =
+    productRef && productRef.current && productRef.current.os === "android";
 
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
@@ -139,7 +141,7 @@ function App() {
   }, []);
 
   return (
-    <ScrollableBody>
+    <ScrollableBody isAndroid={isAndroid}>
       <Grid2 container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid2 item size={12}>
