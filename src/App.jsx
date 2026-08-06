@@ -65,7 +65,10 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const { productRef } = useContext(productContext);
+  console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
+  let isAndroid =
+    productRef && productRef.current && productRef.current.os === "android";
 
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
@@ -138,7 +141,7 @@ function App() {
   }, []);
 
   return (
-    <ScrollableBody>
+    <ScrollableBody isAndroid={isAndroid}>
       <Grid2 container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid2 item size={12}>
