@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
+import ScrollableBody from "./Components/ScrollableBody";
 
 import {
   i18nContext,
@@ -138,17 +139,7 @@ function App() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        mb: 2,
-        position: "fixed",
-        top: "64px",
-        bottom: 0,
-        right: 0,
-        overflow: "auto",
-        width: "100%",
-      }}
-    >
+    <ScrollableBody>
       <Grid2 container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid2 item size={12}>
@@ -365,7 +356,7 @@ function App() {
           </>
         )}
       </Grid2>
-    </Box>
+    </ScrollableBody>
   );
 }
 
