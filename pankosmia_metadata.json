@@ -7,11 +7,12 @@
 
   "i18n": {
     "title": {
-      "ar": "الفهرس",
-      "en": "Dashboard",
-      "fr": "Tableau de bord",
-      "id": "Dasbor",
-      "grc": "Πινακίδιον"
+      "ar": "مشاريعي",
+      "en": "My projects",
+      "fr": "Mes projets",
+      "id": "Proyek-proyek saya",
+      "grc": "Τα έργα μου",
+      "es": "Mis proyectos"
     },
     "summary": {
       "en": "This editor is a tool for creating Scripture and related resources. This page gives a summary of what is available. You can also navigate using the menu, top left. For some pages you need internet access, which you can enable by clicking on the switch, top-right. (Only do this if it is safe to do so.)",
@@ -56,16 +57,6 @@
     "welcome_desc3": {
       "en": "is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the header. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
       "es": "es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la cabecera. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
-    },
-    "my_work": {
-      "en": "My work",
-      "fr": "Mon travail",
-      "es": "Mis proyectos"
-    },
-    "my_work_desc": {
-      "en": "Your editable documents will appear here.",
-      "es": "Tus documentos editables aparecerá aquí.",
-      "fr": "Vos documents éditables s'afficheront ici."
     },
     "navigate_to": {
       "en": "Navigate to",
@@ -119,6 +110,11 @@
     "tooltip_checks": {
       "en": "Translation checks",
       "fr": "Vérification de traduction"
+    },
+    "get_started": {
+      "en": "Create or download a project to get started!",
+      "fr": "Créez ou téléchargez un projet pour commencer !",
+      "es": "¡Crea o descarga un proyecto para empezar!"
     }
   }
 }

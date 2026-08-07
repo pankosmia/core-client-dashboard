@@ -22,9 +22,10 @@ import {
   i18nContext,
   netContext,
   debugContext,
+  productContext,
   PanStepperPicker,
+  ScrollableBody,
 } from "pankosmia-rcl";
-
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
 import { CardForEditRepo } from "./Components/CardForEditRepo";
@@ -63,6 +64,8 @@ function App() {
   const { i18nRef } = useContext(i18nContext);
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
+  const { productRef } = useContext(productContext);
+  console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
 
@@ -74,6 +77,9 @@ function App() {
   }, []);
 
   storageId && console.log("storage_id", storageId);
+
+  let isAndroid =
+    productRef && productRef.current && productRef.current.os === "android";
 
   const editableRepos = Object.entries(projectSummaries).filter(
     ([repoPath, project]) =>
@@ -146,17 +152,7 @@ function App() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        mb: 2,
-        position: "fixed",
-        top: "64px",
-        bottom: 0,
-        right: 0,
-        overflow: "auto",
-        width: "100%",
-      }}
-    >
+    <ScrollableBody isAndroid={isAndroid}>
       <Grid2 container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid2 item size={12}>
@@ -277,11 +273,6 @@ function App() {
             </Menu>
           </Stack>
         </Grid2>
-        <Grid2 item size={12} sx={{ mt: 2 }}>
-          <Typography variant="h5">
-            {doI18n("pages:core-dashboard:my_work", i18nRef.current)}
-          </Typography>
-        </Grid2>
         {editableRepos.length > 0 ? (
           editableRepos.map((repo) => (
             <CardForEditRepo
@@ -324,7 +315,13 @@ function App() {
                   icon: <SaveAsOutlinedIcon />,
                   tooltip: "Export",
                   menuItems: itemExportInterface
-                    .filter((item) => item.endpoint === repo[1].flavor)
+                    .filter(
+                      (item) =>
+                        item.endpoint === repo[1].flavor &&
+                        (item.key !== "pdf" ||
+                          (productRef.current &&
+                            productRef.current.os !== "android")),
+                    )
                     .map((item) => ({
                       ...item,
                       url: item.url.replace("%%REPO_PATH%%", repo[0]),
@@ -363,14 +360,16 @@ function App() {
             />
           ))
         ) : (
-          <Grid2 item>
-            <Typography variant="body1" color="gray">
-              {doI18n("pages:core-dashboard:my_work_desc", i18nRef.current)}
-            </Typography>
-          </Grid2>
+          <>
+            <Grid2 item>
+              <Typography variant="body1" color="gray">
+                {doI18n("pages:core-dashboard:get_started", i18nRef.current)}
+              </Typography>
+            </Grid2>
+          </>
         )}
       </Grid2>
-    </Box>
+    </ScrollableBody>
   );
 }
 

@@ -6,9 +6,10 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "6.1.5",
     "@mui/material": "^6.1.5",
     "pankosmia-lib": "^0.0.3",
-    "pankosmia-rcl": "0.4.0",
+    "pankosmia-rcl": "^0.4.22",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-markdown": "^9.1.0"
@@ -45,9 +46,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-darwin-x64": "^4.60.3",
-    "@rollup/rollup-win32-x64-msvc": "^4.60.3"
   }
 }
