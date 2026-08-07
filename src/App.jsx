@@ -67,7 +67,10 @@ function App() {
   const [storageId, setStorageId] = useState(null);
 
   useEffect(() => {
-    import("../storage_id.json").then((r) => setStorageId(r.id));
+    fetch("/storage_id.json")
+      .then((r) => r.json())
+      .then((data) => setStorageId(data.id))
+      .catch(() => {});
   }, []);
 
   storageId && console.log("storage_id", storageId);

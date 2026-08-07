@@ -28,7 +28,11 @@
     "build": "vite build",
     "build:vite": "vite build",
     "dev": "vite",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prestart": "node scripts/write-storage-id.js",
+    "predev": "node scripts/write-storage-id.js",
+    "postbuild": "node scripts/write-storage-id.js",
+    "postbuild:vite": "node scripts/write-storage-id.js"
   },
   "browserslist": {
     "production": [
