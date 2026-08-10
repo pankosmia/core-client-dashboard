@@ -65,16 +65,10 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const { productRef } = useContext(productContext);
-  console.log("🚀 ~ App ~ productRef:", productRef);
+  // console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
-
-  useEffect(() => {
-    fetch("/storage_id.json")
-      .then((r) => r.json())
-      .then((data) => setStorageId(data.id))
-      .catch(() => {});
-  }, []);
+  import("../storage_id.json").then((r) => setStorageId(r.default.id));
 
   storageId && console.log("storage_id", storageId);
 
