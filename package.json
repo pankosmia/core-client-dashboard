@@ -9,7 +9,7 @@
     "@mui/icons-material": "6.1.5",
     "@mui/material": "^6.1.5",
     "pankosmia-lib": "^0.0.3",
-    "pankosmia-rcl": "^0.4.22",
+    "pankosmia-rcl": "^0.6.0",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-markdown": "^9.1.0"
