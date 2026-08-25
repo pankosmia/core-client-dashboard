@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-  Grid2,
+  Grid,
   Card,
   CardContent,
   CardActionArea,
@@ -147,9 +147,9 @@ function App() {
 
   return (
     <ScrollableBody isAndroid={isAndroid}>
-      <Grid2 container spacing={2} sx={{ m: 2 }}>
+      <Grid container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
-          <Grid2 item size={12}>
+          <Grid item size={12}>
             <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -179,10 +179,10 @@ function App() {
                 </Button>
               </CardActions>
             </Card>
-          </Grid2>
+          </Grid>
         )}
         {!showWelcome && <Walkthrough />}
-        <Grid2 item size={12}>
+        <Grid item size={12}>
           <Stack direction="row" spacing={1}>
             <Chip
               label={doI18n(
@@ -266,7 +266,7 @@ function App() {
               ))}
             </Menu>
           </Stack>
-        </Grid2>
+        </Grid>
         {editableRepos.length > 0 ? (
           editableRepos.map((repo) => (
             <CardForEditRepo
@@ -355,14 +355,14 @@ function App() {
           ))
         ) : (
           <>
-            <Grid2 item>
+            <Grid item>
               <Typography variant="body1" color="gray">
                 {doI18n("pages:core-dashboard:get_started", i18nRef.current)}
               </Typography>
-            </Grid2>
+            </Grid>
           </>
         )}
-      </Grid2>
+      </Grid>
     </ScrollableBody>
   );
 }
