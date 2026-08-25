@@ -75,9 +75,9 @@
       "id": "Dokem baru"
     },
     "connect_to_internet": {
-      "en": "Disable offline mode in the header",
-      "es": "Desactivar el modo fuera de línea en el menu de la esquina superior izquierda",
-      "fr": "Désactivez le mode hors-ligne dans l'en-tête"
+      "en": "Switch the app online to use this feature",
+      "es": "Cambia la aplicación a modo en línea para utilizar esta función",
+      "fr": "Passez l'application en ligne pour utiliser cette fonctionnalité"
     },
     "content_description": {
       "en": "Add, manage and open documents, including those created with other people or non-editable resources",
