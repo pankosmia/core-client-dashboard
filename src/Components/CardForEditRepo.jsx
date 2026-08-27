@@ -3,7 +3,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  Grid2,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -61,7 +61,7 @@ export function CardForEditRepo({
   };
 
   return (
-    <Grid2 item size={{ xs: 12, md: 6, xl: 4 }} sx={{ display: "flex" }}>
+    <Grid item size={{ xs: 12, md: 6, xl: 4 }} sx={{ display: "flex" }}>
       <Card
         elevation={1}
         sx={{
@@ -224,6 +224,6 @@ export function CardForEditRepo({
           </Box>
         </Box>
       </Card>
-    </Grid2>
+    </Grid>
   );
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import { PanStepperPicker } from "pankosmia-rcl";
 import { getJson } from "pankosmia-lib/http";
-import { Grid2, Card, CardContent, Typography } from "@mui/material";
+import { Grid, Card, CardContent, Typography } from "@mui/material";
 export function Walkthrough() {
   const [currentLanguages, setCurrentLanguages] = useState();
   const [walkthrough, setWalkthrough] = useState(null);
@@ -141,7 +141,7 @@ export function Walkthrough() {
   return (
     showInitialWorkflow &&
     walkthrough && (
-      <Grid2 item size={12}>
+      <Grid item size={12}>
         <Card elevation={1} sx={{ backgroundColor: "#E5F6FD" }}>
           <CardContent>
             <Typography variant="h5" component="div">
@@ -162,7 +162,7 @@ export function Walkthrough() {
             />
           </CardContent>
         </Card>
-      </Grid2>
+      </Grid>
     )
   );
 }
