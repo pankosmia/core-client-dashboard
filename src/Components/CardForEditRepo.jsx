@@ -178,6 +178,7 @@ export function CardForEditRepo({
             }}
           >
             {RightActions?.filter((a) => a.condition).map((action, index) => {
+              console.log(action);
               if (action.type === "menu") {
                 return (
                   <Box key={index}>
@@ -203,7 +204,13 @@ export function CardForEditRepo({
                       {action.menuItems.map((item) => (
                         <MenuItem
                           key={item.label}
-                          onClick={() => (window.location.href = item.url)}
+                          onClick={() => {
+                            if (item.url) {
+                              window.location.href = item.url;
+                            } else {
+                              item();
+                            }
+                          }}
                         >
                           {item.label}
                         </MenuItem>

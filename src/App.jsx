@@ -34,6 +34,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
+import { ExportBurrito } from "./Components/ExportBurrito";
 
 const getEditDocumentKeys = (data) => {
   let map = {};
@@ -68,6 +69,7 @@ function App() {
   // console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
+  const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
   import("../storage_id.json").then((r) => setStorageId(r.default.id));
 
   storageId && console.log("storage_id", storageId);
@@ -147,6 +149,13 @@ function App() {
 
   return (
     <ScrollableBody isAndroid={isAndroid}>
+      {/* <ExportBurrito
+        repoInfo={repoInfo}
+        open={exportBurritoOpen}
+        closeFn={() => setExportBurritoAnchorEl(null)}
+        reposModCount={reposModCount}
+        setReposModCount={setReposModCount}
+      /> */}
       <Grid container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid item size={12}>
@@ -322,7 +331,9 @@ function App() {
                     })),
                   condition:
                     itemExportInterface.filter(
-                      (item) => item.endpoint === repo[1].flavor,
+                      (item) =>
+                        item.endpoint === repo[1].flavor ||
+                        item.url === undefined,
                     ).length > 0,
                 },
                 {
