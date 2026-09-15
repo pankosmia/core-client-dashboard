@@ -69,7 +69,11 @@ function App() {
   // console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
+
+  const [repoInfo, setRepoInfo] = useState(null);
   const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
+  const [reposModCount, setReposModCount] = useState(0);
+
   import("../storage_id.json").then((r) => setStorageId(r.default.id));
 
   storageId && console.log("storage_id", storageId);
@@ -149,13 +153,15 @@ function App() {
 
   return (
     <ScrollableBody isAndroid={isAndroid}>
-      {/* <ExportBurrito
-        repoInfo={repoInfo}
-        open={exportBurritoOpen}
-        closeFn={() => setExportBurritoAnchorEl(null)}
-        reposModCount={reposModCount}
-        setReposModCount={setReposModCount}
-      /> */}
+      {repoInfo && (
+        <ExportBurrito
+          repoInfo={repoInfo}
+          open={exportBurritoOpen}
+          closeFn={() => setExportBurritoOpen(false)}
+          reposModCount={reposModCount}
+          setReposModCount={setReposModCount}
+        />
+      )}
       <Grid container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid item size={12}>
@@ -293,7 +299,6 @@ function App() {
                   icon: <InfoOutlinedIcon />,
                   type: "button",
                   action: (event, repo) => {
-                    console.log(repo);
                     const item = aboutRepoInterface.find(
                       (i) =>
                         i.category === repo[1].flavor || i.category === "all",
@@ -317,18 +322,30 @@ function App() {
                   type: "menu",
                   icon: <SaveAsOutlinedIcon />,
                   tooltip: "Export",
-                  menuItems: itemExportInterface
-                    .filter(
-                      (item) =>
-                        item.endpoint === repo[1].flavor &&
-                        (item.key !== "pdf" ||
-                          (productRef.current &&
-                            productRef.current.os !== "android")),
-                    )
-                    .map((item) => ({
-                      ...item,
-                      url: item.url.replace("%%REPO_PATH%%", repo[0]),
-                    })),
+                  menuItems: [
+                    ...itemExportInterface
+                      .filter(
+                        (item) =>
+                          item.endpoint === repo[1].flavor &&
+                          (item.key !== "pdf" ||
+                            (productRef.current &&
+                              productRef.current.os !== "android")),
+                      )
+                      .map((item) => ({
+                        ...item,
+                        url: item.url.replace("%%REPO_PATH%%", repo[0]),
+                      })),
+                    /// We add PDF to export menu
+                    {
+                      category: "usfm",
+                      key: "PDF",
+                      label: `${doI18n("pages:core-dashboard:save_as_pdf", i18nRef)}`,
+                      action: () => {
+                        setRepoInfo({ ...repo[1], path: repo[0] });
+                        setExportBurritoOpen(true);
+                      },
+                    },
+                  ],
                   condition:
                     itemExportInterface.filter(
                       (item) =>

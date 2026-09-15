@@ -115,6 +115,10 @@
       "en": "Create or download a project to get started!",
       "fr": "Créez ou téléchargez un projet pour commencer !",
       "es": "¡Crea o descarga un proyecto para empezar!"
+    },
+    "save_as_pdf": {
+      "en": "Save as PDF",
+      "fr": "Sauvegarder PDF"
     }
   }
 }

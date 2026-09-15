@@ -48,7 +48,6 @@ export function CardForEditRepo({
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { currentProjectRef } = useContext(currentProjectContext);
-
   let {
     aboutRepoInterface,
     versionManagerInterface,
@@ -178,7 +177,6 @@ export function CardForEditRepo({
             }}
           >
             {RightActions?.filter((a) => a.condition).map((action, index) => {
-              console.log(action);
               if (action.type === "menu") {
                 return (
                   <Box key={index}>
@@ -208,7 +206,7 @@ export function CardForEditRepo({
                             if (item.url) {
                               window.location.href = item.url;
                             } else {
-                              item();
+                              item.action();
                             }
                           }}
                         >
