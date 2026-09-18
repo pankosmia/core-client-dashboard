@@ -22,5 +22,5 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
   },
-  base: "/clients/main/",
+  base: "/clients/dashboard/",
 });

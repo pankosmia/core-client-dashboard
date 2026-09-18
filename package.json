@@ -2,16 +2,24 @@
   "name": "react-app",
   "version": "0.2.0",
   "private": true,
-  "homepage": "/clients/main",
+  "homepage": "/clients/dashboard",
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": "11.20.0"
+  },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^6.1.5",
-    "pankosmia-rcl": "0.2.0",
-    "pithekos-lib": "^0.11.20",
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
-    "react-markdown": "^9.1.0"
+    "@mui/icons-material": "^9.3.1",
+    "@mui/material": "^9.3.1",
+    "pankosmia-lib": "^0.0.3",
+    "pankosmia-rcl": "^0.7.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^9.1.0",
+    "file-saver": "^2.0.5",
+    "notistack": "^3.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
@@ -20,15 +28,19 @@
     "vite": "^6.0.7"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build",
     "build:vite": "vite build",
     "dev": "vite",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prestart": "node scripts/write-storage-id.js",
+    "predev": "node scripts/write-storage-id.js",
+    "prebuild": "node scripts/write-storage-id.js",
+    "prebuild:vite": "node scripts/write-storage-id.js"
   },
   "browserslist": {
     "production": [
@@ -41,9 +53,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-darwin-x64": "^4.60.3",
-    "@rollup/rollup-win32-x64-msvc": "^4.60.3"
   }
 }
