@@ -73,7 +73,6 @@ function App() {
   const [repoInfo, setRepoInfo] = useState(null);
   const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
   const [reposModCount, setReposModCount] = useState(0);
-
   import("../storage_id.json").then((r) => setStorageId(r.default.id));
 
   storageId && console.log("storage_id", storageId);
@@ -339,7 +338,10 @@ function App() {
                     {
                       category: "usfm",
                       key: "PDF",
-                      label: `${doI18n("pages:core-dashboard:save_as_pdf", i18nRef)}`,
+                      label: doI18n(
+                        `pages:core-dashboard:saveAsPdf`,
+                        i18nRef.current,
+                      ),
                       action: () => {
                         setRepoInfo({ ...repo[1], path: repo[0] });
                         setExportBurritoOpen(true);
