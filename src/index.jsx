@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { getAndSetJson } from "pankosmia-lib/http";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
+import { MaterialDesignContent, SnackbarProvider } from "notistack";
+import styled from "@emotion/styled";
+
 function AppLayout() {
   const [themeSpec, setThemeSpec] = useState(fallbackTheme);
 
@@ -50,15 +53,43 @@ function AppLayout() {
     },
     themeSpec,
   );
+  const CustomSnackbarContent = styled(MaterialDesignContent)(() => ({
+    "&.notistack-MuiContent-error": {
+      backgroundColor: "#FDEDED",
+      color: "#D32F2F",
+    },
+    "&.notistack-MuiContent-info": {
+      backgroundColor: "#E5F6FD",
+      color: "#0288D1",
+    },
+    "&.notistack-MuiContent-warning": {
+      backgroundColor: "#FFF4E5",
+      color: "#EF6C00",
+    },
+    "&.notistack-MuiContent-success": {
+      backgroundColor: "#EDF7ED",
+      color: "#2E7D32",
+    },
+  }));
   return (
     <ThemeProvider theme={theme}>
-      <SpSpa
-        requireNet={false}
-        titleKey="pages:core-dashboard:title"
-        currentId="core-dashboard"
+      <SnackbarProvider
+        Components={{
+          error: CustomSnackbarContent,
+          info: CustomSnackbarContent,
+          warning: CustomSnackbarContent,
+          success: CustomSnackbarContent,
+        }}
+        maxSnack={6}
       >
-        <App />
-      </SpSpa>
+        <SpSpa
+          requireNet={false}
+          titleKey="pages:core-dashboard:title"
+          currentId="core-dashboard"
+        >
+          <App />
+        </SpSpa>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

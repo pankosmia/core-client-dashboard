@@ -48,7 +48,6 @@ export function CardForEditRepo({
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const { i18nRef } = useContext(i18nContext);
   const { currentProjectRef } = useContext(currentProjectContext);
-
   let {
     aboutRepoInterface,
     versionManagerInterface,
@@ -203,7 +202,13 @@ export function CardForEditRepo({
                       {action.menuItems.map((item) => (
                         <MenuItem
                           key={item.label}
-                          onClick={() => (window.location.href = item.url)}
+                          onClick={() => {
+                            if (item.url) {
+                              window.location.href = item.url;
+                            } else {
+                              item.action();
+                            }
+                          }}
                         >
                           {item.label}
                         </MenuItem>
