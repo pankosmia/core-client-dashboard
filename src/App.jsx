@@ -210,7 +210,7 @@ function App() {
               variant="outlined"
               onClick={(event) => setCreateAnchorEl(event.currentTarget)}
             />
-            {!enabledRef?.current ? (
+            {internetAccess && (
               <Tooltip
                 slotProps={{
                   popper: {
@@ -219,10 +219,13 @@ function App() {
                     ],
                   },
                 }}
-                title={doI18n(
-                  "pages:core-dashboard:connect_to_internet",
-                  i18nRef.current,
-                )}
+                title={
+                  !enabledRef?.current &&
+                  doI18n(
+                    "pages:core-dashboard:connect_to_internet",
+                    i18nRef.current,
+                  )
+                }
               >
                 <span>
                   <Chip
@@ -232,24 +235,16 @@ function App() {
                     )}
                     color="secondary"
                     variant="outlined"
-                    disabled
+                    disabled={!enabledRef?.current}
+                    onClick={() =>
+                      (window.location.href =
+                        "/clients/download?returnTypePage=dashboard")
+                    }
                   />
                 </span>
               </Tooltip>
-            ) : (
-              <Chip
-                label={doI18n(
-                  "pages:core-dashboard:download_from_internet",
-                  i18nRef.current,
-                )}
-                color="secondary"
-                variant="outlined"
-                onClick={() =>
-                  (window.location.href =
-                    "/clients/download?returnTypePage=dashboard")
-                }
-              />
             )}
+
             <Chip
               label={doI18n(
                 "pages:core-dashboard:go_to_documents",
