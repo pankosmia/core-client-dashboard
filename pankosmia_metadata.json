@@ -120,9 +120,9 @@
       "fr": "Créez ou téléchargez un projet pour commencer !",
       "es": "¡Crea o descarga un proyecto para empezar!"
     },
-    "saveAsPdf": {
-      "en": "Save as PDF",
-      "fr": "Sauvegarder PDF"
+    "saveAsBurrito": {
+      "en": "Save as Burrito",
+      "fr": "Sauvegarder Burrito"
     }
   }
 }
