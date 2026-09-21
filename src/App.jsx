@@ -339,7 +339,7 @@ function App() {
                       category: "usfm",
                       key: "PDF",
                       label: doI18n(
-                        `pages:core-dashboard:saveAsPdf`,
+                        `pages:core-dashboard:saveAsBurrito`,
                         i18nRef.current,
                       ),
                       action: () => {
