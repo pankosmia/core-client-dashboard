@@ -58,6 +58,10 @@
       "en": "is an offline-first tool. If it is safe for you to do so, you can connect to the internet in the header. It enables some functionalities (e.g., download content from online repositories, backup your work online, etc.).",
       "es": "es una herramienta primeramente fuera de línea. Si es seguro para ti, puedes conectarte a la internet en el menu situado en la cabecera. Eso habilita algunas funcionalidades (ej: descargar recursos de repositorios remotos, resguardar tu trabajo en la nube, entre otros)."
     },
+    "welcome_desc3-app-offline": {
+      "en": "is an offline tool.",
+      "es": "es una herramienta primeramente fuera de línea."
+    },
     "navigate_to": {
       "en": "Navigate to",
       "fr": "Naviguer vers",

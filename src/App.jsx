@@ -25,6 +25,7 @@ import {
   productContext,
   PanStepperPicker,
   ScrollableBody,
+  clientConfigContext,
 } from "pankosmia-rcl";
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
@@ -66,10 +67,9 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const { productRef } = useContext(productContext);
-  // console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
-
+  const { clientConfigRef } = useContext(clientConfigContext);
   const [repoInfo, setRepoInfo] = useState(null);
   const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
   const [reposModCount, setReposModCount] = useState(0);
@@ -149,7 +149,10 @@ function App() {
       })
       .catch((err) => console.error("Error :", err));
   }, []);
-
+  const internetAccess =
+    clientConfigRef.current["_global"]
+      ?.find((e) => e.id === "internetConfig")
+      ?.fields.find((e) => e.id === "internetConnectionAccess")?.value ?? true;
   return (
     <ScrollableBody isAndroid={isAndroid}>
       {repoInfo && (
@@ -178,7 +181,7 @@ function App() {
                   )}
                   <br />
                   <br />
-                  {`${doI18n("branding:software:name", i18nRef.current)} ${doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current)}`}
+                  {`${doI18n("branding:software:name", i18nRef.current)} ${internetAccess ? doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current) : doI18n("pages:core-dashboard:welcome_desc3-app-offline", i18nRef.current)} `}{" "}
                 </Typography>
               </CardContent>
               <CardActions>
