@@ -25,6 +25,7 @@ import {
   productContext,
   PanStepperPicker,
   ScrollableBody,
+  clientConfigContext,
 } from "pankosmia-rcl";
 import Markdown from "react-markdown";
 import { Walkthrough } from "./Walkthrough";
@@ -66,10 +67,9 @@ function App() {
   const { enabledRef } = useContext(netContext);
   const { debugRef } = useContext(debugContext);
   const { productRef } = useContext(productContext);
-  // console.log("🚀 ~ App ~ productRef:", productRef);
   const matchPart = "/createDocument/textTranslation";
   const [storageId, setStorageId] = useState(null);
-
+  const { clientConfigRef } = useContext(clientConfigContext);
   const [repoInfo, setRepoInfo] = useState(null);
   const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
   const [reposModCount, setReposModCount] = useState(0);
@@ -149,7 +149,10 @@ function App() {
       })
       .catch((err) => console.error("Error :", err));
   }, []);
-
+  const internetAccess =
+    clientConfigRef.current["_global"]
+      ?.find((e) => e.id === "internetConfig")
+      ?.fields.find((e) => e.id === "internetConnectionAccess")?.value ?? true;
   return (
     <ScrollableBody isAndroid={isAndroid}>
       {repoInfo && (
@@ -178,7 +181,7 @@ function App() {
                   )}
                   <br />
                   <br />
-                  {`${doI18n("branding:software:name", i18nRef.current)} ${doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current)}`}
+                  {`${doI18n("branding:software:name", i18nRef.current)} ${internetAccess ? doI18n("pages:core-dashboard:welcome_desc3", i18nRef.current) : doI18n("pages:core-dashboard:welcome_desc3-app-offline", i18nRef.current)} `}{" "}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -207,7 +210,7 @@ function App() {
               variant="outlined"
               onClick={(event) => setCreateAnchorEl(event.currentTarget)}
             />
-            {!enabledRef?.current ? (
+            {internetAccess && (
               <Tooltip
                 slotProps={{
                   popper: {
@@ -216,10 +219,13 @@ function App() {
                     ],
                   },
                 }}
-                title={doI18n(
-                  "pages:core-dashboard:connect_to_internet",
-                  i18nRef.current,
-                )}
+                title={
+                  !enabledRef?.current &&
+                  doI18n(
+                    "pages:core-dashboard:connect_to_internet",
+                    i18nRef.current,
+                  )
+                }
               >
                 <span>
                   <Chip
@@ -229,24 +235,16 @@ function App() {
                     )}
                     color="secondary"
                     variant="outlined"
-                    disabled
+                    disabled={!enabledRef?.current}
+                    onClick={() =>
+                      (window.location.href =
+                        "/clients/download?returnTypePage=dashboard")
+                    }
                   />
                 </span>
               </Tooltip>
-            ) : (
-              <Chip
-                label={doI18n(
-                  "pages:core-dashboard:download_from_internet",
-                  i18nRef.current,
-                )}
-                color="secondary"
-                variant="outlined"
-                onClick={() =>
-                  (window.location.href =
-                    "/clients/download?returnTypePage=dashboard")
-                }
-              />
             )}
+
             <Chip
               label={doI18n(
                 "pages:core-dashboard:go_to_documents",
@@ -339,7 +337,7 @@ function App() {
                       category: "usfm",
                       key: "PDF",
                       label: doI18n(
-                        `pages:core-dashboard:saveAsPdf`,
+                        `pages:core-dashboard:saveAsBurrito`,
                         i18nRef.current,
                       ),
                       action: () => {
