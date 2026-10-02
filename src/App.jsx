@@ -47,7 +47,7 @@ const getEditDocumentKeys = (data) => {
           map[k] = [];
         }
 
-        map[k].push(`${l}#${t.edit.url}`);
+        map[k].push(`${t.edit.url}`);
       }
     }
   }
