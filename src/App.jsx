@@ -35,7 +35,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import SvgVersionManager from "./fileIcon/iconVersionManager";
-import { ExportBurrito } from "./Components/ExportBurrito";
 
 const getEditDocumentKeys = (data) => {
   let map = {};
@@ -71,7 +70,6 @@ function App() {
   const [storageId, setStorageId] = useState(null);
   const { clientConfigRef } = useContext(clientConfigContext);
   const [repoInfo, setRepoInfo] = useState(null);
-  const [exportBurritoOpen, setExportBurritoOpen] = useState(false);
   const [reposModCount, setReposModCount] = useState(0);
   import("../storage_id.json").then((r) => setStorageId(r.default.id));
 
@@ -155,15 +153,6 @@ function App() {
       ?.fields.find((e) => e.id === "internetConnectionAccess")?.value ?? true;
   return (
     <ScrollableBody isAndroid={isAndroid}>
-      {repoInfo && (
-        <ExportBurrito
-          repoInfo={repoInfo}
-          open={exportBurritoOpen}
-          closeFn={() => setExportBurritoOpen(false)}
-          reposModCount={reposModCount}
-          setReposModCount={setReposModCount}
-        />
-      )}
       <Grid container spacing={2} sx={{ m: 2 }}>
         {showWelcome && (
           <Grid item size={12}>
@@ -332,19 +321,6 @@ function App() {
                         ...item,
                         url: item.url.replace("%%REPO_PATH%%", repo[0]),
                       })),
-                    /// We add PDF to export menu
-                    {
-                      category: "usfm",
-                      key: "PDF",
-                      label: doI18n(
-                        `pages:core-dashboard:saveAsBurrito`,
-                        i18nRef.current,
-                      ),
-                      action: () => {
-                        setRepoInfo({ ...repo[1], path: repo[0] });
-                        setExportBurritoOpen(true);
-                      },
-                    },
                   ],
                   condition:
                     itemExportInterface.filter(
