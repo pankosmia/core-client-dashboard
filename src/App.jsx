@@ -312,7 +312,8 @@ function App() {
                     ...itemExportInterface
                       .filter(
                         (item) =>
-                          item.endpoint === repo[1].flavor &&
+                          (item.endpoint === repo[1].flavor ||
+                            item.endpoint === "all") &&
                           (item.key !== "pdf" ||
                             (productRef.current &&
                               productRef.current.os !== "android")),
