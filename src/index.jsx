@@ -1,58 +1,12 @@
 import { createRoot } from "react-dom/client";
-import { SpSpa, fallbackTheme } from "pankosmia-rcl";
+import { SpSpa } from "pankosmia-rcl";
 import App from "./App";
 import "./index.css";
-import { useEffect, useState } from "react";
-import { getAndSetJson } from "pankosmia-lib/http";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme } from "@mui/material";
 import { MaterialDesignContent, SnackbarProvider } from "notistack";
 import styled from "@emotion/styled";
 
 function AppLayout() {
-  const [themeSpec, setThemeSpec] = useState(fallbackTheme);
-
-  useEffect(() => {
-    if (
-      themeSpec.palette &&
-      themeSpec.palette.primary &&
-      themeSpec.palette.primary.main &&
-      themeSpec.palette.primary.main === "#666"
-    ) {
-      getAndSetJson({
-        url: "/api/app-resources/themes/default.json",
-        setter: setThemeSpec,
-      }).then();
-    }
-  }, []);
-  const theme = createTheme(
-    {
-      components: {
-        MuiFab: {
-          styleOverrides: {
-            root: {
-              textTransform: "capitalize",
-            },
-          },
-        },
-        MuiButton: {
-          styleOverrides: {
-            root: {
-              textTransform: "capitalize",
-            },
-          },
-        },
-        MuiTab: {
-          styleOverrides: {
-            root: {
-              textTransform: "capitalize",
-            },
-          },
-        },
-      },
-    },
-    themeSpec,
-  );
   const CustomSnackbarContent = styled(MaterialDesignContent)(() => ({
     "&.notistack-MuiContent-error": {
       backgroundColor: "#FDEDED",
@@ -72,25 +26,23 @@ function AppLayout() {
     },
   }));
   return (
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        Components={{
-          error: CustomSnackbarContent,
-          info: CustomSnackbarContent,
-          warning: CustomSnackbarContent,
-          success: CustomSnackbarContent,
-        }}
-        maxSnack={6}
+    <SnackbarProvider
+      Components={{
+        error: CustomSnackbarContent,
+        info: CustomSnackbarContent,
+        warning: CustomSnackbarContent,
+        success: CustomSnackbarContent,
+      }}
+      maxSnack={6}
+    >
+      <SpSpa
+        requireNet={false}
+        titleKey="pages:core-dashboard:title"
+        currentId="core-dashboard"
       >
-        <SpSpa
-          requireNet={false}
-          titleKey="pages:core-dashboard:title"
-          currentId="core-dashboard"
-        >
-          <App />
-        </SpSpa>
-      </SnackbarProvider>
-    </ThemeProvider>
+        <App />
+      </SpSpa>
+    </SnackbarProvider>
   );
 }
 
