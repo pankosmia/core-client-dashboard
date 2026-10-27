@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import SvgVersionManager from "../fileIcon/iconVersionManager";
-import { getJson, postEmptyJson } from "pankosmia-lib/http";
+import { getJson, postEmpty } from "pankosmia-lib/http";
 import { i18nContext } from "pankosmia-rcl";
 import { useContext, useState } from "react";
 import { allInterfaces } from "../utils/extractClientInterfaceItems";
@@ -105,10 +105,8 @@ export function CardForEditRepo({
                     )
                       .map((i) => Object.keys(i[1].scope || {}))
                       .reduce((a, b) => [...a, ...b], []);
-                    await postEmptyJson(
-                      `/api/navigation/bcv/${bookCodes[0]}/1/1`,
-                    );
-                    await postEmptyJson(
+                    await postEmpty(`/api/navigation/bcv/${bookCodes[0]}/1/1`);
+                    await postEmpty(
                       `/api/app-state/current-project/${repo[0]}`,
                     );
                   }
