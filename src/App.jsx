@@ -15,7 +15,7 @@ import {
   MenuItem,
   IconButton,
 } from "@mui/material";
-import { getAndSetJson, postEmptyJson, getJson } from "pankosmia-lib/http";
+import { getAndSetJson, postEmpty, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
 
 import {
