@@ -41,12 +41,14 @@ const getEditDocumentKeys = (data) => {
   for (let [l, v] of Object.entries(data)) {
     if (!v.endpoints) continue;
     for (let [k, t] of Object.entries(v.endpoints)) {
-      if (t.edit) {
+      if (t.edit?.length > 0) {
         if (!map[k]) {
           map[k] = [];
         }
 
-        map[k].push(`${t.edit.url}`);
+        for (const editItem of t.edit) {
+          map[k].push(`${editItem.url}`);
+        }
       }
     }
   }
